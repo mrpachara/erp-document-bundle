@@ -1,0 +1,9 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseRequest:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail>

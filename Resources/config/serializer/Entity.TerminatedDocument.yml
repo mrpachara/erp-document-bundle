@@ -1,0 +1,7 @@
+Erp\Bundle\DocumentBundle\Entity\TerminatedDocument:
+  access_type: property
+  properties:
+    tstmp:
+      type: DateTimeImmutable
+    creator:
+      type: Erp\Bundle\SystemBundle\Entity\SystemUser

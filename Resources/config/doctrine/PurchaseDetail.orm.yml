@@ -1,0 +1,52 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseDetailRepository
+  table: document_purchasedetail
+  inheritanceType: JOINED
+  id:
+    id:
+      type: bigint
+      generator:
+        strategy: IDENTITY
+  manyToOne:
+    purchase:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Purchase
+      inversedBy: details
+      joinColumn:
+        name: id_document_purchase
+        nullable: false
+        onDelete: CASCADE
+      fetch: EAGER
+    costItem:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\CostItem
+      joinColumn:
+        name: id_master_costitem
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+    boqData:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
+      joinColumn:
+        name: id_master_projectboqdata
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    price:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    quantity:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    total:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: false
+    remark:
+      type: text
+      nullable: true

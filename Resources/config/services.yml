@@ -1,0 +1,68 @@
+parameters:
+    container.autowiring.strict_mode: true
+
+services:
+
+  _defaults:
+    # automatically injects dependencies in your services
+    autowire: true
+    # automatically registers your services as commands, event subscribers, etc.
+    autoconfigure: true
+    # this means you cannot fetch services directly from the container via $container->get()
+    # if you need to do this, you can override this setting on individual services
+    public: false
+
+  #Erp\Bundle\CoreBundle\Domain\CQRS\SimpleCommandHandler: "@erp_master.service.command.simple_handler"
+
+  Erp\Bundle\DocumentBundle\:
+    resource: '../../*'
+    # you can exclude directories or files
+    # but if a service is unused, it's removed anyway
+    exclude: '../../{Collection,Entity,Infrastructure/ORM/Repository}'
+
+  # MUST call setContainer when using jms/di-extra-bundle
+  # BUG: https://github.com/symfony/symfony/issues/23200
+  Erp\Bundle\DocumentBundle\Controller\:
+    resource: '../../Controller'
+    tags: ['controller.service_arguments']
+    calls:
+      - [setContainer, ["@service_container"]]
+
+  #Service
+  Erp\Bundle\DocumentBundle\Service\PDFService:
+    #class: Erp\Bundle\DocumentBundle\Service\PDFService
+    arguments:
+      -
+        tempDir: "%kernel.cache_dir%"
+        fontDir: ["@=service('file_locator').locate('@ErpDocumentBundle/Resources/fonts')"]
+        fontdata:
+          thsarabun:
+            R: 'THSarabun.ttf'
+            B: 'THSarabun Bold.ttf'
+            I: 'THSarabun Italic.ttf'
+            BI: 'THSarabun Bold Italic.ttf'
+    public: true
+
+  # --------------- domain service
+  # domain service
+  Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\DocumentQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseRequestQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseRequestQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseOrderQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\ProjectBoqSummaryQueryService'
+
+  #Entity Listerner
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\TerminatedDocument, event: preFlush }
+
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\PurchaseRequestListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\PurchaseRequestListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest, event: preFlush }
+
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\PurchaseOrderListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\PurchaseOrderListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder, event: preFlush }

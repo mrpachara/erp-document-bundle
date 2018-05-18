@@ -1,0 +1,11 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseOrder:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail>
+    dueDate:
+      type: DateTimeImmutable

@@ -1,0 +1,55 @@
+Erp\Bundle\DocumentBundle\Entity\Document:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\DocumentRepository
+  table: document_document
+  inheritanceType: JOINED
+  manyToOne:
+    creator:
+      targetEntity: Erp\Bundle\SystemBundle\Entity\SystemUser
+      joinColumn:
+        name: id_system_user
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+    updateOf:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Document
+      inversedBy: updatedBys
+      joinColumns:
+        joinColumn:
+          name: id_document_updateOf
+          nullable: true
+          unique: false
+          onDelete: RESTRICT
+    transferOf:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Document
+      inversedBy: transferedBys
+      joinColumns:
+        joinColumn:
+          name: id_document_transferOf
+          nullable: true
+          unique: false
+          onDelete: RESTRICT
+    terminated:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\TerminatedDocument
+      joinColumns:
+        joinColumn:
+          name: id_document_terminateddocument
+          nullable: true
+          unique: false
+          onDelete: "SET NULL"
+  oneToMany:
+    updatedBys:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Document
+      mappedBy: updateOf
+    transferedBys:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Document
+      mappedBy: transferOf
+  fields:
+    tstmp:
+      type: datetime_immutable
+      nullable: false
+      options:
+        default: CURRENT_TIMESTAMP
+    approved:
+      type: boolean
+      nullable: false

@@ -1,0 +1,28 @@
+Erp\Bundle\DocumentBundle\Entity\Purchase:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\Purchase
+    updatedBys:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Purchase>
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseDetail>
+    project:
+      type: Erp\Bundle\MasterBundle\Entity\Project
+    vendor:
+      type: Erp\Bundle\MasterBundle\Entity\Vendor
+    requester:
+      type: Erp\Bundle\MasterBundle\Entity\Employee
+    boq:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoq
+      max_depth: 1
+    budgetType:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType
+    wantedDate:
+      type: DateTimeImmutable
+    startDate:
+      type: DateTimeImmutable
+    finishDate:
+      type: DateTimeImmutable
+    deliveryDate:
+      type: DateTimeImmutable

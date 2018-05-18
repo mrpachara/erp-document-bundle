@@ -1,0 +1,83 @@
+Erp\Bundle\DocumentBundle\Entity\Purchase:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseRepository
+  table: document_purchase
+  inheritanceType: JOINED
+  associationOverride:
+    updateOf:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Purchase
+    updatedBys:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Purchase
+  manyToOne:
+    vendor:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Vendor
+      joinColumn:
+        name: id_master_vendor
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+    project:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Project
+      joinColumn:
+        name: id_master_project
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+    requester:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Employee
+      joinColumn:
+        name: id_master_employee
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+    boq:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
+      joinColumn:
+        name: id_master_projectboqdata
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+    budgetType:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType
+      joinColumn:
+        name: id_master_projectboqbudgettype
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+  oneToMany:
+    details:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseDetail
+      cascade: ["persist", "refresh"]
+      mappedBy: purchase
+  fields:
+    vendorContactInformation:
+      type: string
+      length: 255
+      nullable: true
+    vendorAddress:
+      type: text
+      nullable: true
+    shippingAddress:
+      type: text
+      nullable: false
+    contactInformation:
+      type: string
+      length: 255
+      nullable: false
+    wantedDate:
+      type: date_immutable
+      nullable: false
+    startDate:
+      type: date_immutable
+      nullable: true
+    finishDate:
+      type: date_immutable
+      nullable: true
+    deliveryDate:
+      type: datetime_immutable
+      nullable: true
+    total:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true

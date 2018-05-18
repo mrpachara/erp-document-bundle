@@ -1,0 +1,23 @@
+Erp\Bundle\DocumentBundle\Entity\Document:
+  access_type: property
+  virtual_properties:
+    getStatus:
+      serialized_name: status
+      type: string
+  properties:
+    tstmp:
+      type: DateTimeImmutable
+    creator:
+      type: Erp\Bundle\SystemBundle\Entity\SystemUser
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\Document
+      max_depth: 1
+    updatedBys:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Document>
+      max_depth: 1
+    transferOf:
+      type: Erp\Bundle\DocumentBundle\Entity\Document
+      max_depth: 1
+    transferedBys:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Document>
+      max_depth: 1

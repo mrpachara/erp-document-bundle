@@ -1,0 +1,10 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
+  access_type: property
+  properties:
+    purchase:
+      type: Erp\Bundle\DocumentBundle\Entity\Purchase
+      max_depth: 1
+    costItem:
+      type: Erp\Bundle\MasterBundle\Entity\CostItem
+    boqData:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoqData

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+@page {
+  size: auto;
+  header: html_DefaultHeader;
+  footer: html_DefaultFooter;
+}
+
+body {
+  font-family: thsarabun;
+}
+
+.cl-header {
+  text-align: right;
+  border-bottom: 1px solid #000000;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+table.data-list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.data-list th,
+table.data-list td {
+  border: 1px solid black;
+}
+
+.cl-number {
+  font-family: monospace;
+  text-align: right;
+  font-size: 0.60em;
+}
+    </style>
+  </head>
+  <body>
+      <htmlpageheader name="DefaultHeader">
+          <div class="cl-header">{{ model.code }}</div>
+      </htmlpageheader>
+
+      <htmlpagefooter name="DefaultFooter" class="cl-footer">
+          <table width="100%" style="vertical-align: bottom; font-family: serif; font-size: 8pt; color: #000000; font-weight: bold; font-style: italic;">
+              <tr>
+                  <td width="33%"><span style="font-weight: bold; font-style: italic;">{DATE j-m-Y}</span></td>
+                  <td width="33%" align="center" style="font-weight: bold; font-style: italic;">{PAGENO}/{nbpg}</td>
+                  <td width="33%" style="text-align: right; ">My document</td>
+              </tr>
+          </table>
+      </htmlpagefooter>
+
+      <h1>{{ model.code }}</h1>
+      <table class="data-list">
+        <thead>
+          <tr>
+            <th style="width: 2em;">#No</th>
+            <th>Cost Item</th>
+            <th style="width: 4em;">Unit</th>
+            <th style="width: 6em;">Price/Unit</th>
+            <th style="width: 6em;">Quantity</th>
+            <th style="width: 6em;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for detail in model.details %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ detail.name }}</td>
+            <td>{{ detail.unit }}</td>
+            <td class="cl-number">{{ detail.price|number_format(2) }}</td>
+            <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
+            <td class="cl-number">{{ (detail.price * detail.quantity)|number_format(2) }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+  </body>
+</html>

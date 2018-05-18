@@ -1,0 +1,72 @@
+<?php
+
+namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service;
+
+use Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery as QueryInterface;
+
+use Doctrine\ORM\EntityRepository;
+
+class ProjectBoqSummaryQuery implements QueryInterface
+{
+    /** @var EntityRepository */
+    protected $projectBoqDataRepository;
+
+    /** @var PurchaseQuery */
+    protected $purchaseQuery;
+
+    public function getProjectBoqDataSummary($id)
+    {
+        /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoqData */
+        $boqData = $this->projectBoqDataRepository->find($id);
+
+        $activePurchaseQb = $this->purchaseQuery->getActiveDocumentQueryBuilder();
+        $purchaseDetailQb = $this->purchaseQuery->createDetailQueryBuilder('_purchaseDetail');
+        $purchaseDetailQb
+            ->innerJoin(
+                '_purchaseDetail.purchase',
+                '_purchase',
+                'WITH',
+                $purchaseDetailQb->expr()->in(
+                    '_purchase.id',
+                    $activePurchaseQb->select('_activeDocument.id')->getDQL()
+                )
+            )
+            ->andWhere('_purchaseDetail.boqData = :boqDataId')
+            ->setParameter('boqDataId', $boqData->getId())
+        ;
+
+        $purchaseDetails = $purchaseDetailQb->getQuery()->getResult();
+
+        foreach ($boqData->getBudgets() as $budget) {
+            $budget->cost = [
+                'request' => 0,
+                'order' => 0
+            ];
+        }
+
+        foreach ($purchaseDetails as $purchaseDetail) {
+            $purchase = $purchaseDetail->getPurchase();
+            $budgets = $boqData->getBudgets();
+
+            if ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail) {
+                if ($purchase->updatable()) {
+                    $budgets[$purchase->getBudgetType()->getId()]->cost['request'] += $purchaseDetail->getTotal();
+                }
+            } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail) {
+                $budgets[$purchase->getBudgetType()->getId()]->cost['order'] += $purchaseDetail->getTotal();
+            }
+        }
+
+        foreach ($boqData->getChildren() as $child) {
+            $childResult = $this->getProjectBoqDataSummary($child->getId());
+
+            foreach ($childResult->getBudgets() as $childBudget) {
+                foreach ($childBudget->cost as $costKey => $costValue) {
+                    $boqData->getBudgets()[$childBudget->getBoqBudgetType()->getId()]->cost[$costKey] += $costValue;
+                }
+            }
+        }
+
+        return $boqData;
+    }
+}

@@ -1,0 +1,26 @@
+Erp\Bundle\DocumentBundle\Entity\TerminatedDocument:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\TerminatedDocumentRepository
+  table: document_terminateddocument
+  inheritanceType: JOINED
+  manyToOne:
+    creator:
+      targetEntity: Erp\Bundle\SystemBundle\Entity\SystemUser
+      joinColumn:
+        name: id_system_user
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    tstmp:
+      type: datetime_immutable
+      nullable: false
+      options:
+        default: CURRENT_TIMESTAMP
+    type:
+      type: string
+      length: 32
+      nullable: false
+    description:
+      type: text
+      nullable: false
