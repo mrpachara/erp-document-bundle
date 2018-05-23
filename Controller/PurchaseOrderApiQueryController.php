@@ -52,6 +52,24 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
         $this->settingQuery = $settingQuery;
     }
 
+    /**
+     * @var \Erp\Bundle\CoreBundle\Domain\CQRS\TempFileItemQuery
+     */
+    protected $fileQuery = null;
+
+    /** @required */
+    public function setFileQuery(\Erp\Bundle\CoreBundle\Domain\CQRS\TempFileItemQuery $fileQuery)
+    {
+        $this->fileQuery = $fileQuery;
+    }
+
+    protected function getResponse($data, $context)
+    {
+        $context = parent::getResponse($data, $context);
+        $context['actions'][] = 'print';
+        return $context;
+    }
+
     protected function listPurchaseRequestRemainResponse($data, $context)
     {
         $context = $this->prepareContext($context);
@@ -110,6 +128,8 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
         $origin = $this->domainQuery->origin($purchase);
 
         $profile = $this->settingQuery->findOneByCode('profile')->getValue();
+        
+        $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
 
         $view = $this->render('@ErpDocument/pdf/purchase-order.pdf.twig', [
             'profile' => $profile,
@@ -117,13 +137,15 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
             'model' => $purchase,
         ]);
 
-        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($purchase) {
+        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($purchase, $logo) {
             $status = $purchase->getStatus();
 
             if(!empty($status)) {
                 $mpdf->SetWatermarkText($status);
                 $mpdf->showWatermarkText = true;
             }
+            
+            $mpdf->imageVars['logo'] = $logo;
         });
 
         return new \TFox\MpdfPortBundle\Response\PDFResponse($output);
