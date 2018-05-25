@@ -98,7 +98,9 @@ table.cl-layout-cell {
       <table style="width: 100%;">
         <tr>
           <td style="width: 100px;">
+{% if profile.logo %}
             <img class="cl-logo" src="var:logo" />
+{% endif %}
           </td>
           <td>
             <table>
@@ -202,12 +204,16 @@ table.cl-layout-cell {
       <table class="data-list">
         <thead>
           <tr>
-            <th style="width: 2em;">#No</th>
-            <th>Cost Item</th>
-            <th style="width: 4em;">Unit</th>
-            <th style="width: 6em;">Price/Unit</th>
-            <th style="width: 6em;">Quantity</th>
-            <th style="width: 6em;">Total</th>
+            <td colspan="5" style="border: none;"></td>
+            <th style="border: none; width: 6em;">(ราคา : บาท)</td>
+          </tr>
+          <tr>
+            <th style="width: 2em;">ลำดับ</th>
+            <th>รายการ</th>
+            <th style="width: 4em;">หน่วย</th>
+            <th style="width: 5em;">ราคา/หน่วย</th>
+            <th style="width: 5em;">ปริมาณ</th>
+            <th style="width: 6em;">ราคารวม</th>
           </tr>
         </thead>
         <tbody>
@@ -223,36 +229,32 @@ table.cl-layout-cell {
 {% endfor %}
         </tbody>
       </table>
-      <table class="cl-layout-cell" style="width: 100%;">
+      <table class="cl-layout-cell" style="width: 100%; page-break-inside: avoid;" nobr="true">
         <tr>
           <td colspan="2"></td>
         </tr>
         <tr>
           <td class="cl-layout-cell" style="vertical-align: top;">
-            <table class="cl-layout-cell" style="width: 100%;">
+            <table class="cl-layout-cell" style="width: 100%; border: 1px solid black;">
+              <caption class="cl-strong">เงื่อนไขการชำระเงิน</caption>
               <tr>
-                <td class="cl-labeled-cell cl-strong" style="width: 25%;">ค่าประกันสินค้า :</td>
-                <td style="width: 25%; text-align: right;">{{ (model.productWarranty)? ('<span class="cl-number">' ~ model.productWarrantyCost|number_format(2) ~ '</span> บาท')|raw : 'ไม่มี' }}</td>
-                <td class="cl-labeled-cell cl-strong" style="width: 25%;">ค่ามัดจำสินค้า :</td>
-                <td style="width: 25%; text-align: right;">{{ (model.payTerm)? ('<span class="cl-number">' ~ model.payDeposit|number_format(2) ~ '</span> บาท')|raw : 'ไม่มี' }}</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 18%;">ค่าประกันสินค้า :</td>
+                <td style="width: 17%;">{{ (model.productWarranty)? ('<span class="cl-number">' ~ model.productWarrantyCost|number_format(2) ~ '</span>')|raw : 'ไม่มี' }}</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 18%;">ค่ามัดจำสินค้า :</td>
+                <td style="width: 17%;">{{ (model.payTerm)? ('<span class="cl-number">' ~ model.payDeposit|number_format(2) ~ '</span>')|raw : 'ไม่มี' }}</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 17%;">การชำระเงิน :</td>
+                <td>{% autoescape false %}{{ (model.payMethod)? ('เครดิต '|e ~ '<span class="cl-number">' ~ model.creditDay ~ '</span>' ~ ' วัน'|e) : 'เงินสด'|e }}{% endautoescape %}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong" style="width: 25%;">การชำระเงิน :</td>
-                <td style="width: 25%; text-align: right;">{{ (model.payMethod)? (model.creditDay ~ ' วัน') : 'เงินสด' }}</td>
-                <td class="cl-labeled-cell cl-strong" style="width: 25%;">{% autoescape false %}{{ (model.payMethod)? 'วันครบกำหนดชำระ :'|e :'&nbsp;' }}{% endautoescape %}</td>
-                <td style="width: 25%; text-align: right;">{{ (model.payMethod)? model.dueDate|date('d/m/Y') : '' }}</td>
-              </tr>
-              <tr>
-                <th class="cl-labeled-cell cl-strong" style="width: 25%;">หมายเหตุ :</th>
-                <td colspan="3">{{ model.remark }}</td>
+                <th class="cl-labeled-cell cl-strong">หมายเหตุ :</th>
+                <td colspan="5">{{ model.remark }}</td>
               </tr>
             </table>
           </td>
-          <td style="width: 4em;"></td>
-          <td class="cl-layout-cell" style="width: 18em;">
+          <td class="cl-layout-cell" style="width: 16em;">
             <table class="cl-layout-cell" style="width: 100%;">
               <tr>
-                <td class="cl-labeled-cell cl-strong" style="width: 12em;">รวมราคาก่อนลด :</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 10em;">รวมราคาก่อนลด :</td>
                 <td class="cl-number cl-bordered-cell">{{ model.total|number_format(2) }}</td>
               </tr>
               <tr>
@@ -266,10 +268,12 @@ table.cl-layout-cell {
               <tr>
                 <td style="height: 0.5em;"></td>
               </tr>
+{% if model.vatFactor %}
               <tr>
                 <td class="cl-labeled-cell">{% autoescape false %}{{ (model.vatFactor)? ('ภาษีมูลค่าเพิ่ม ' ~ model.vat ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
                 <td class="cl-number cl-bordered-cell">{{ ((model.vatFactor)? model.vatCost|number_format(2) : '') }}</td>
               </tr>
+{% endif %}
               <tr>
                 <td class="cl-labeled-cell">{{ ((model.vatFactor)? 'มูลค่าสินค้าไม่รวม Vat' : 'มูลค่าสินค้าไม่มี Vat') }} :</td>
                 <td class="cl-number cl-bordered-cell">{{ model.excludeVat|number_format(2) }}</td>
@@ -278,6 +282,7 @@ table.cl-layout-cell {
                 <td class="cl-labeled-cell cl-strong">มูลค่าสินค้ารวม :</td>
                 <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.docTotal|number_format(2) }}</td>
               </tr>
+{% if model.taxFactor %}
               <tr>
                 <td style="height: 0.5em;"></td>
               </tr>
@@ -289,6 +294,7 @@ table.cl-layout-cell {
                 <td class="cl-labeled-cell cl-strong">{% autoescape false %}{{ (model.taxFactor)? ('มูลค่าสินค้ารวมชำระ :')|e : '&nbsp;' }}{% endautoescape %}</td>
                 <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ (model.taxFactor)? model.payTotal|number_format(2) : '' }}</td>
               </tr>
+{% endif %}
             </table>
           </td>
         </tr>

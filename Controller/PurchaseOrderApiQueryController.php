@@ -129,7 +129,10 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
 
         $profile = $this->settingQuery->findOneByCode('profile')->getValue();
         
-        $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
+        $logo = null;
+        if(!empty($profile['logo'])) {
+            $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
+        }
 
         $view = $this->render('@ErpDocument/pdf/purchase-order.pdf.twig', [
             'profile' => $profile,
