@@ -3,6 +3,9 @@ Erp\Bundle\DocumentBundle\Entity\Document:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\DocumentRepository
   table: document_document
   inheritanceType: JOINED
+  indexes:
+    document_document_tstmp_inx:
+      columns: tstmp
   manyToOne:
     creator:
       targetEntity: Erp\Bundle\SystemBundle\Entity\SystemUser
