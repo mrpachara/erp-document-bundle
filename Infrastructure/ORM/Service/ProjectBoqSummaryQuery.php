@@ -11,24 +11,38 @@ class ProjectBoqSummaryQuery implements QueryInterface
     /** @var EntityRepository */
     protected $projectBoqDataRepository;
 
+    /** @var EntityRepository */
+    protected $projectBoqRepository;
+
     /** @var PurchaseQuery */
     protected $purchaseQuery;
 
-    public function getProjectBoqDataSummary($id)
+    public function getProjectBoqDataSummary($id, $excepts = null)
     {
+        $excepts = (array)$excepts;
         /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoqData */
         $boqData = $this->projectBoqDataRepository->find($id);
 
         $activePurchaseQb = $this->purchaseQuery->getActiveDocumentQueryBuilder();
         $purchaseDetailQb = $this->purchaseQuery->createDetailQueryBuilder('_purchaseDetail');
+        $excepts = array_map(function($value) use ($purchaseDetailQb) {
+            return $purchaseDetailQb->expr()->literal($value);
+        }, $excepts);
         $purchaseDetailQb
             ->innerJoin(
                 '_purchaseDetail.purchase',
                 '_purchase',
                 'WITH',
-                $purchaseDetailQb->expr()->in(
-                    '_purchase.id',
-                    $activePurchaseQb->select('_activeDocument.id')->getDQL()
+                $purchaseDetailQb->expr()->andX(
+                    $purchaseDetailQb->expr()->in(
+                        '_purchase.id',
+                        $activePurchaseQb->select('_activeDocument.id')->getDQL()
+                    ),
+                    (empty($excepts))? '1 = 1' :
+                    $purchaseDetailQb->expr()->notIn(
+                        '_purchase.id',
+                        $excepts
+                    )
                 )
             )
             ->andWhere('_purchaseDetail.boqData = :boqDataId')
@@ -68,5 +82,16 @@ class ProjectBoqSummaryQuery implements QueryInterface
         }
 
         return $boqData;
+    }
+
+    function getProjectBoqsSummary($idProject, $excepts = null)
+    {
+        $projectBoqs = $this->projectBoqRepository->findByProject($idProject);
+
+        foreach($projectBoqs as $projectBoq) {
+            $this->getProjectBoqDataSummary($projectBoq->getId(), $excepts);
+        }
+
+        return $projectBoqs;
     }
 }

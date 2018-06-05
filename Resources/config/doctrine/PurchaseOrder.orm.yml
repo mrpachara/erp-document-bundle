@@ -90,3 +90,6 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrder:
       precision: 15
       scale: 2
       nullable: true
+    remarkFinance:
+      type: text
+      nullable: true

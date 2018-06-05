@@ -31,6 +31,23 @@ class ProjectBoqSummaryApiQueryController extends FOSRestController
     /**
      * get action
      *
+     * @Rest\Get("/project/{idProject}")
+     *
+     * @param string $id
+     * @param ServerRequestInterface $request
+     */
+    public function listAction($idProject, ServerRequestInterface $request)
+    {
+        $query = $request->getQueryParams();
+        $excepts = (empty($query['excepts']))? null : $query['excepts'];
+        $items = $this->domainQuery->getProjectBoqsSummary($idProject, $excepts);
+
+        return $this->view(['data' => $items], 200);
+    }
+
+    /**
+     * get action
+     *
      * @Rest\Get("/{id}")
      *
      * @param string $id
@@ -38,8 +55,10 @@ class ProjectBoqSummaryApiQueryController extends FOSRestController
      */
     public function getAction($id, ServerRequestInterface $request)
     {
-        $items = $this->domainQuery->getProjectBoqDataSummary($id);
+        $query = $request->getQueryParams();
+        $excepts = (empty($query['excepts']))? null : $query['excepts'];
+        $item = $this->domainQuery->getProjectBoqDataSummary($id, $excepts);
 
-        return $this->view(['data' => $items], 200);
+        return $this->view(['data' => $item], 200);
     }
 }

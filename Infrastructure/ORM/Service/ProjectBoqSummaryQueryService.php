@@ -9,7 +9,13 @@ class ProjectBoqSummaryQueryService extends ProjectBoqSummaryQuery
     {
         $this->projectBoqDataRepository = $doctrine->getRepository('ErpMasterBundle:ProjectBoqData');
     }
-    
+
+    /** @required */
+    public function setProjectBoqRepository(\Symfony\Bridge\Doctrine\RegistryInterface $doctrine)
+    {
+        $this->projectBoqRepository = $doctrine->getRepository('ErpMasterBundle:ProjectBoq');
+    }
+
     /** @required */
     public function setPurchaseQueryService(PurchaseQueryService $purchaseQueryService)
     {
