@@ -108,7 +108,7 @@ table.cl-layout-cell {
                 <td style="font-weight: bold;">{{ profile.profileData.name }}</td>
               </tr>
               <tr>
-                <td>{{
+                <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
                   [
                     profile.profileData.address.address ?? false,
                     (profile.profileData.address.subdistrict ?? false)|sformat('ต.%s'),
@@ -119,10 +119,10 @@ table.cl-layout-cell {
                 }}</td>
               </tr>
               <tr>
-                <td><span style="font-weight: bold;">โทรศัพท์ :</span>{{ profile.phone }} <span style="font-weight: bold;">โทรสาร :</span>{{ profile.fax }}</td>
+                <td><span style="font-weight: bold;">โทรศัพท์ :</span> {{ profile.phone }} <span style="font-weight: bold;">โทรสาร :</span> {{ profile.fax }}</td>
               </tr>
               <tr>
-                <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span></td>
+                <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span> {{ profile.profileData.code }}</td>
               </tr>
             </table>
           </td>
@@ -144,7 +144,7 @@ table.cl-layout-cell {
           </td>
         </tr>
       </table>
-      <table>
+      <table style="width: 100%;">
         <tr>
           <td style="width: 50%; vertical-align: top;">
             <table style="width: 100%;">
