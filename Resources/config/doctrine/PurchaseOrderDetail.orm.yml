@@ -3,11 +3,6 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseRequestDetailRepository
   table: document_purchaseorderdetail
   inheritanceType: JOINED
-  associationOverride:
-    purchase:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
-    costItem:
-      cascade: ["persist", "refresh"]
   oneToOne:
     statusChanged:
       targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetailStatusChanged

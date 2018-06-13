@@ -24,6 +24,7 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
         nullable: true
         onDelete: RESTRICT
       fetch: EAGER
+      cascade: ["persist", "refresh"]
     boqData:
       targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
       joinColumn:
