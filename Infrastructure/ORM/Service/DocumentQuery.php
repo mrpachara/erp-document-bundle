@@ -33,10 +33,15 @@ abstract class DocumentQuery extends ParentQuery implements QueryInterface
     {
         /** @var QueryBuilder */
         $qb = $this->repository->createQueryBuilder($alias);
+        return $this->assignActiveDocumentQuery($qb, $alias);
+    }
+
+    public function assignActiveDocumentQuery(QueryBuilder $qb, $alias)
+    {
         return $qb
-            ->leftJoin("{$alias}.updatedBys", '_activeDocumentUpdatedBy', 'WITH', '_activeDocumentUpdatedBy.terminated IS NULL')
+            ->leftJoin("{$alias}.updatedBys", "{$alias}_activeDocumentUpdatedBy", 'WITH', "{$alias}_activeDocumentUpdatedBy.terminated IS NULL")
             ->andWhere("{$alias}.terminated IS NULL")
-            ->andWhere('_activeDocumentUpdatedBy IS NULL')
+            ->andWhere("{$alias}_activeDocumentUpdatedBy IS NULL")
         ;
     }
 }
