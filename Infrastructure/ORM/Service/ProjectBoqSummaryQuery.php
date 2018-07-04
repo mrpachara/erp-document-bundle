@@ -6,7 +6,7 @@ use Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery as QueryInterfa
 
 use Doctrine\ORM\EntityRepository;
 
-class ProjectBoqSummaryQuery implements QueryInterface
+abstract class ProjectBoqSummaryQuery implements QueryInterface
 {
     /** @var EntityRepository */
     protected $projectBoqDataRepository;
