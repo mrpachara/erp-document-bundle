@@ -190,12 +190,7 @@ table.cl-layout-cell {
               </tr>
               <tr>
                 <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
-                <td>{{
-                  [
-                    model.vendor.owner.contact.alias ?? false,
-                    model.vendor.owner.contact.phone[0] ?? false,
-                  ]|vfilter(false, true)|join(' ')
-                }}</td>
+                <td>{{ model.vendorContactInformation }}</td>
               </tr>
             </table>
           </td>

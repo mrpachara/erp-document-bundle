@@ -3,9 +3,9 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseRequestDetailRepository
   table: document_purchaserequestdetail
   inheritanceType: JOINED
-  associationOverride:
-    purchase:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
+  # associationOverride:
+  #   purchase:
+  #     targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
   fields:
     name:
       type: string
