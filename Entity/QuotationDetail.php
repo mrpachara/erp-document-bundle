@@ -2,26 +2,12 @@
 
 namespace Erp\Bundle\DocumentBundle\Entity;
 
-class RequestForQuotationDetail extends PurchaseDetail {
+class QuotationDetail extends PurchaseDetail {
   /**
    * @var PurchaseRequestDetail
    */
   protected $purchaseRequstDetail;
 
-  /** @var string */
-  protected $stockQuantity;
-
-  public function getStockQuantity()
-  {
-      return $this->stockQuantity;
-  }
-
-  public function setStockQuantity($stockQuantity)
-  {
-      $this->stockQuantity = $stockQuantity;
-
-      return $this;
-  }  
 
   /**
    * constructor

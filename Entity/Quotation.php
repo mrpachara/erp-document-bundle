@@ -15,7 +15,7 @@ use Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType;
 /**
  * PurchaseOrder Entity
  */
-class RequestForQuotation extends Purchase
+class Quotation extends Purchase
 {
     /**
      * @var string

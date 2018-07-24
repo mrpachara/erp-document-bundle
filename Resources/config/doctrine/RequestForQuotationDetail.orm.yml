@@ -1,0 +1,11 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RequestForQuotationDetailRepository
+  table: document_requestforquotationdetail
+  inheritanceType: JOINED
+  fields:
+    stockQuantity:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
