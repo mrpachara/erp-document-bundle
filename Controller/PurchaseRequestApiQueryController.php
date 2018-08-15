@@ -7,8 +7,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Erp\Bundle\DocumentBundle\Collection\DocumentRestResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
-use Erp\Bundle\CoreBundle\Controller\CQRSQueryApi;
-
 /**
  * PurchaseRequest Api Controller
  *

@@ -8,8 +8,6 @@ use Erp\Bundle\DocumentBundle\Collection\DocumentRestResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-use Erp\Bundle\CoreBundle\Controller\CQRSQueryApi;
-
 /**
  * PurchaseOrder Api Controller
  *

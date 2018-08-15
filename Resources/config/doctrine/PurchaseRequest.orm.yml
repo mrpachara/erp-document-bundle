@@ -3,10 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseRequest:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseRequestRepository
   table: document_purchaserequest
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail
