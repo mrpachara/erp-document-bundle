@@ -1,113 +1,142 @@
 <?php
-
 namespace Erp\Bundle\DocumentBundle\Entity;
 
-use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
-use Erp\Bundle\CoreBundle\Entity\CoreAccount;
 use Erp\Bundle\CoreBundle\Entity\Thing;
-
+use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
 use Erp\Bundle\MasterBundle\Entity\Vendor;
-use Erp\Bundle\MasterBundle\Entity\Project;
-use Erp\Bundle\MasterBundle\Entity\Employee;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoq;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType;
 
 /**
  * PurchaseOrder Entity
  */
 class RequestForQuotation extends Purchase
 {
+
     /**
+     *
+     * @var ArrayCollection
+     */
+    protected $requestedVendors;
+
+    /**
+     *
      * @var string
      */
     protected $discount;
 
     /**
+     *
      * @var string
      */
-    protected $costItemTotal; // total - discount
+    protected $costItemTotal;
+
+    // total - discount
 
     /**
+     *
      * @var bool
      */
-    protected $vatFactor;    // is vat?
+    protected $vatFactor;
+
+    // is vat?
 
     /**
+     *
      * @var bool
      */
-    protected $vatIncluded;  // is vat include?
+    protected $vatIncluded;
+
+    // is vat include?
 
     /**
+     *
      * @var string
      */
     protected $vat;
 
     /**
+     *
      * @var string
      */
     protected $vatCost;
 
     /**
+     *
      * @var string
      */
-    protected $excludeVat;   // exclude vat
+    protected $excludeVat;
+
+    // exclude vat
 
     /**
+     *
      * @var string
      */
-    protected $docTotal;     // include vat
+    protected $docTotal;
+
+    // include vat
 
     /**
+     *
      * @var string
      */
     protected $tax;
 
     /**
+     *
      * @var bool
      */
     protected $taxFactor;
 
     /**
+     *
      * @var string
      */
     protected $taxCost;
 
     /**
+     *
      * @var string
      */
     protected $payTotal;
 
     /**
+     *
      * @var bool
      */
     protected $productWarranty;
 
     /**
+     *
      * @var string
      */
     protected $productWarrantyCost;
 
     /**
+     *
      * @var bool
      */
     protected $payMethod;
 
     /**
+     *
      * @var int
      */
     protected $creditDay;
 
     /**
+     *
      * @var \DateTimeImmutable
      */
     protected $dueDate;
 
     /**
+     *
      * @var bool
      */
     protected $payTerm;
 
     /**
+     *
      * @var string
      */
     protected $payDeposit;
@@ -121,7 +150,6 @@ class RequestForQuotation extends Purchase
     /** @var string */
     protected $conditions;
 
-
     /**
      * constructor
      *
@@ -130,8 +158,44 @@ class RequestForQuotation extends Purchase
     public function __construct(Thing $thing = null)
     {
         parent::__construct($thing);
+        $this->requestedVendors = new ArrayCollection();
     }
 
+    /**
+     *
+     * @return Vendor[]
+     */
+    public function getRequestedVendors()
+    {
+        return $this->requestedVendors->toArray();
+    }
+
+    /**
+     * Add requestedVendor
+     *
+     * @param Vendor $vendor
+     *
+     * @return static
+     */
+    public function addRequestedVendor(Vendor $vendor)
+    {
+        if (!$this->requestedVendors->contains($vendor)) {
+            $this->requestedVendors[] = $vendor;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Remove requestedVendor
+     *
+     * @param Vendor $vendor
+     */
+    public function removeRequestedVendor(Vendor $vendor)
+    {
+        $this->requestedVendors->removeElement($vendor);
+    }
+    
     public function getDiscount()
     {
         return $this->discount;
@@ -373,8 +437,9 @@ class RequestForQuotation extends Purchase
     /**
      * Set the value of Remark Finance
      *
-     * @param mixed remarkFinance
-     *
+     * @param
+     *            mixed remarkFinance
+     *            
      * @return static
      */
     public function setRemarkFinance($remarkFinance)
@@ -407,6 +472,4 @@ class RequestForQuotation extends Purchase
 
         return $this;
     }
-
-
 }

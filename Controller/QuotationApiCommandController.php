@@ -2,10 +2,7 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * PurchaseRequest Api Controller
@@ -59,14 +56,12 @@ class QuotationApiCommandController extends PurchaseApiCommand {
       if(isset($detail['id'])) unset($detail['id']);
       if(!empty($detail['boqData']))
         $detail['boqData'] = array_intersect_key($detail['boqData'], array_flip(['id', 'dtype']));
-      if(!empty($detail['statusChanged'])) {
-        if(isset($detail['statusChanged']['id'])) unset($detail['statusChanged']['id']);
-        if(!empty($detail['statusChanged']['purchaseRequestDetail'])) {
-          $detail['statusChanged']['purchaseRequestDetail'] = array_intersect_key($detail['statusChanged']['purchaseRequestDetail'], array_flip(['id', 'dtype']));
-        }
-      }
 
-      if(empty($detail['_total'])) throw new \Exception("Invalid data format!!!");
+        if(!empty($detail['requestForQuotationDetail'])) {
+            $detail['requestForQuotationDetail'] = array_intersect_key($detail['requestForQuotationDetail'], array_flip(['id', 'dtype']));
+        }
+        
+        if(empty($detail['_total'])) throw new \Exception("Invalid data format!!!");
 
       $detail['total'] = ($detail['_total'] / $total) * $docTotal;
 

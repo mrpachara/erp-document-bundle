@@ -3,6 +3,21 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RequestForQuotationRepository
   table: document_requestforquotation
   inheritanceType: JOINED
+  manyToMany:
+    requestedVendors:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Vendor
+      joinTable:
+        name: document_requestforquotation_vendor
+        joinColumns:
+          joinColumn:
+            name: id_document_requestforquotation
+            nullable: false
+            onDelete: CASCADE
+        inverseJoinColumns:
+          joinColumn:
+            name: id_master_vendor
+            nullable: false
+            onDelete: RESTRICT
   fields:
     discount:
       type: decimal

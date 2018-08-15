@@ -1,30 +1,45 @@
 <?php
-
 namespace Erp\Bundle\DocumentBundle\Entity;
 
-class QuotationDetail extends PurchaseDetail {
-  /**
-   * @var PurchaseRequestDetail
-   */
-  protected $purchaseRequstDetail;
+/**
+ * @author Asus
+ *
+ */
+class QuotationDetail extends PurchaseDetail
+{
 
+    /**
+     *
+     * @var RequestForQuotationDetail
+     */
+    protected $requestForQuotationDetail;
 
-  /**
-   * constructor
-   *
-   * @param PurchaseOrder|null $purchase
-   */
-  public function __construct(PurchaseOrder $purchase = null) {
-    parent::__construct($purchase);
-  }
+    /**
+     * constructor
+     *
+     * @param PurchaseOrder|null $purchase
+     */
+    public function __construct(PurchaseOrder $purchase = null)
+    {
+        parent::__construct($purchase);
+    }
 
-  public function getPurchaseRequestDetail() {
-    return $this->purchaseRequstDetail;
-  }
+    /**
+     * @return \Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail
+     */
+    public function getRequestForQuotationDetail()
+    {
+        return $this->requestForQuotationDetail;
+    }
 
-  public function setPurchaseRequestDetail(PurchaseRequestDetail $purchaseRequstDetail) {
-    $this->purchaseRequstDetail = $purchaseRequstDetail;
-
-    return $this;
-  }
+    /**
+     * @param RequestForQuotationDetail $requestForQuotationDetail
+     * @return static
+     */
+    public function setRequestForQuotationDetail(?RequestForQuotationDetail $requestForQuotationDetail)
+    {
+        $this->requestForQuotationDetail = $requestForQuotationDetail;
+        
+        return $this;
+    }
 }
