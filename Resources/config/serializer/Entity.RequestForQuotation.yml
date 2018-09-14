@@ -1,0 +1,13 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail>
+    dueDate:
+      type: DateTimeImmutable
+    requestedVendors:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\MasterBundle\Entity\Vendor>

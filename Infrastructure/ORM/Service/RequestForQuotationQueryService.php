@@ -2,7 +2,7 @@
 
 namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service;
 
-class RequestForQuotationQueryService extends PurchaseQuery
+class RequestForQuotationQueryService extends RequestForQuotationQuery
 {
     /** @required */
     public function setRepository(\Symfony\Bridge\Doctrine\RegistryInterface $doctrine)
@@ -17,4 +17,10 @@ class RequestForQuotationQueryService extends PurchaseQuery
     {
         $this->purchaseRequestQueryService = $purchaseRequestQueryService;
     }
+    public function searchPurchaseRequestRemain(array $params, array &$context = null)
+    {}
+
+    public function getPurchaseRequestRemain($id)
+    {}
+
 }

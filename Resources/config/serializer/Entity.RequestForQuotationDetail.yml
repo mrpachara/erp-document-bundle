@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
+  access_type: property
+  properties:
+    purchase:
+      type: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation

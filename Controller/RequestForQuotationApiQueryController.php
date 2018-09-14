@@ -27,12 +27,12 @@ class RequestForQuotationApiQueryController extends PurchaseApiQuery
     }
 
     /**
-     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery
+     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\RequestForQuotationQuery
      */
     protected $domainQuery;
 
     /** @required */
-    public function setDomainQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery $domainQuery)
+    public function setDomainQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\RequestForQuotationQuery $domainQuery)
     {
         $this->domainQuery = $domainQuery;
     }

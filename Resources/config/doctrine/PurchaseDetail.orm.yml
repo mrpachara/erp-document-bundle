@@ -29,7 +29,7 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
       targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
       joinColumn:
         name: id_master_projectboqdata
-        nullable: false
+        nullable: true
         onDelete: RESTRICT
       fetch: EAGER
   fields:
@@ -47,7 +47,7 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
       type: decimal
       precision: 15
       scale: 2
-      nullable: false
+      nullable: true
     remark:
       type: text
       nullable: true
