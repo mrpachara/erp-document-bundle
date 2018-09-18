@@ -3,15 +3,51 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RequestForQuotationDetailRepository
   table: document_requestforquotationdetail
   inheritanceType: JOINED
+  id:
+    id:
+      type: bigint
+      generator:
+        strategy: IDENTITY
   manyToOne:
-    purchaseRequstDetail:
+    requestForQuotation:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation
+      inversedBy: details
+      joinColumn:
+        name: id_document_requestforquotation
+        nullable: false
+        onDelete: CASCADE
+      fetch: EAGER
+    purchaseRequestDetail:
       targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail
       joinColumn:
         name: id_document_purchaserequestdetail
         nullable: true
         onDelete: RESTRICT
       fetch: EAGER
+    costItem:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\CostItem
+      joinColumn:
+        name: id_master_costitem
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+      cascade: ["persist", "refresh"]
+    boqData:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
+      joinColumn:
+        name: id_master_projectboqdata
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
   fields:
+    quantity:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    remark:
+      type: text
+      nullable: true
     stockQuantity:
       type: decimal
       precision: 15

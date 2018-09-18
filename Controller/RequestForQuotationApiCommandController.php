@@ -9,7 +9,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
  * @Rest\Version("1.0")
  * @Rest\Route("/api/request-for-quotation")
  */
-class RequestForQuotationApiCommandController extends PurchaseApiCommand
+class RequestForQuotationApiCommandController extends DocumentApiCommand
 {
 
     /**
@@ -29,7 +29,7 @@ class RequestForQuotationApiCommandController extends PurchaseApiCommand
 
     /**
      *
-     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery
+     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\RequestForQuotationQuery
      */
     protected $domainQuery;
 

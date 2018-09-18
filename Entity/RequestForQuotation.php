@@ -3,12 +3,16 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 
 use Erp\Bundle\CoreBundle\Entity\Thing;
 use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
+use Erp\Bundle\MasterBundle\Entity\ProjectBoq;
+use Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType;
 use Erp\Bundle\MasterBundle\Entity\Vendor;
+use Erp\Bundle\MasterBundle\Entity\Project;
+use Erp\Bundle\MasterBundle\Entity\Employee;
 
 /**
- * PurchaseOrder Entity
+ * RequestForQuotation Entity
  */
-class RequestForQuotation extends Purchase
+class RequestForQuotation extends Document
 {
 
     /**
@@ -16,15 +20,317 @@ class RequestForQuotation extends Purchase
      * @var ArrayCollection
      */
     protected $requestedVendors;
-
-   
     /**
+     * vendorContactInformation
+     *
+     * @var string
+     */
+    protected $vendorContactInformation;
+    
+    /**
+     * vendorAddress
+     *
+     * @var string
+     */
+    protected $vendorAddress;
+    
+    /**
+     * project
+     *
+     * @var Project
+     */
+    protected $project;
+    
+    
+    /**
+     * requester
+     *
+     * @var Employee
+     */
+    protected $requester;
+    
+    /**
+     * contactInformation
+     *
+     * @var string
+     */
+    protected $contactInformation;
+    
+    /**
+     * wantedDate
      *
      * @var \DateTimeImmutable
      */
-    protected $dueDate;
-
-
+    protected $wantedDate;
+    
+    /**
+     * wantedDate
+     *
+     * @var \DateTimeImmutable
+     */
+    protected $deliveryDate;
+    
+    /**
+     * boq
+     *
+     * @var ProjectBoq
+     */
+    protected $boq;
+    
+    /**
+     * budgetType
+     *
+     * @var ProjectBoqBudgetType
+     */
+    protected $budgetType;
+  
+    /**
+     * details
+     *
+     * @var ArrayCollection
+     */
+    protected $details;
+    
+    
+    /**
+     * get vendorContactInformation
+     *
+     * @return string
+     */
+    public function getVendorContactInformation()
+    {
+        return $this->vendorContactInformation;
+    }
+    
+    /**
+     * set vendorContactInformation
+     *
+     * @param string $vendorContactInformation
+     *
+     * @return static
+     */
+    public function setVendorContactInformation(string $vendorContactInformation)
+    {
+        $this->vendorContactInformation = $vendorContactInformation;
+        
+        return $this;
+    }
+    
+    /**
+     * get vendorAddress
+     *
+     * @return string
+     */
+    public function getVendorAddress()
+    {
+        return $this->vendorAddress;
+    }
+    
+    /**
+     * set vendorAddress
+     *
+     * @param string $vendorAddress
+     *
+     * @return static
+     */
+    public function setVendorAddress(string $vendorAddress)
+    {
+        $this->vendorAddress = $vendorAddress;
+        
+        return $this;
+    }
+    
+    /**
+     * get project
+     *
+     * @return Project
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+    
+    /**
+     * set project
+     *
+     * @param Project $project
+     *
+     * @return static
+     */
+    public function setProject(Project $project)
+    {
+        $this->project = $project;
+        
+        return $this;
+    }
+    
+    /**
+     * get requester
+     *
+     * @return Employee
+     */
+    public function getRequester()
+    {
+        return $this->requester;
+    }
+    
+    /**
+     * set requester
+     *
+     * @param Employee $requester
+     *
+     * @return static
+     */
+    public function setRequester(Employee $requester)
+    {
+        $this->requester = $requester;
+        
+        return $this;
+    }
+    
+    /**
+     * get contactInformation
+     *
+     * @return string
+     */
+    public function getContactInformation()
+    {
+        return $this->contactInformation;
+    }
+    
+    /**
+     * set contactInformation
+     *
+     * @param string $contactInformation
+     *
+     * @return static
+     */
+    public function setContactInformation(string $contactInformation)
+    {
+        $this->contactInformation = $contactInformation;
+        
+        return $this;
+    }
+    
+    /**
+     * get wantedDate
+     *
+     * @return \DateTimeImmutable
+     */
+    public function getWantedDate()
+    {
+        return $this->wantedDate;
+    }
+    
+    /**
+     * set wantedDate
+     *
+     * @param \DateTimeImmutable $wantedDate
+     *
+     * @return static
+     */
+    public function setWantedDate(\DateTimeImmutable $wantedDate)
+    {
+        $this->wantedDate = $wantedDate;
+        
+        return $this;
+    }
+    
+    public function getDeliveryDate()
+    {
+        return $this->deliveryDate;
+    }
+    
+    public function setDeliveryDate($deliveryDate)
+    {
+        $this->deliveryDate = $deliveryDate;
+        
+        return $this;
+    }
+    
+    /**
+     * get boq
+     *
+     * @return ProjectBoq
+     */
+    public function getBoq()
+    {
+        return $this->boq;
+    }
+    
+    /**
+     * set boq
+     *
+     * @param ProjectBoq $boq
+     *
+     * @return static
+     */
+    public function setBoq(ProjectBoq $boq)
+    {
+        $this->boq = $boq;
+        
+        return $this;
+    }
+    
+    /**
+     * get budgetType
+     *
+     * @return ProjectBoqBudgetType
+     */
+    public function getBudgetType()
+    {
+        return $this->budgetType;
+    }
+    
+    /**
+     * set budgetType
+     *
+     * @param ProjectBoqBudgetType $budgetType
+     *
+     * @return static
+     */
+    public function setBudgetType(ProjectBoqBudgetType $budgetType)
+    {
+        $this->budgetType = $budgetType;
+        
+        return $this;
+    }
+    
+    /**
+     * get details
+     *
+     * @return RequestForQuotationDetail[]
+     */
+    public function getDetails()
+    {
+        return $this->details->toArray();
+    }
+    
+    /**
+     * add detail
+     *
+     * @param RequestForQuotationDetail $detail
+     *
+     * @return static
+     */
+    public function addDetail(RequestForQuotationDetail $detail)
+    {
+        if (!$this->details->contains($detail)) {
+            $this->details[] = $detail;
+        }
+        
+        return this;
+    }
+    
+    /**
+     * remove detail
+     *
+     * @param RequestForQuotationDetail $detail
+     */
+    public function removeDetail(RequestForQuotationDetail $detail)
+    {
+        $this->details->removeElement($detail);
+    }
 
     /**
      * constructor
@@ -71,21 +377,6 @@ class RequestForQuotation extends Purchase
     {
         $this->requestedVendors->removeElement($vendor);
     }
-    
-
-
-    public function getDueDate()
-    {
-        return $this->dueDate;
-    }
-
-    public function setDueDate($dueDate)
-    {
-        $this->dueDate = $dueDate;
-
-        return $this;
-    }
-
   
 
 }
