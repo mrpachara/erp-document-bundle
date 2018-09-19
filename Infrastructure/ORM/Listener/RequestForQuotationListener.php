@@ -28,7 +28,7 @@ class RequestForQuotationListener
             }
             
             foreach($entity->getDetails() as $detail) {
-                $detail->setPurchase($entity);
+                $detail->setrequestForQuotation($entity);
             }
         }
     }

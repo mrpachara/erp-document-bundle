@@ -7,7 +7,20 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
       type: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail>
-    dueDate:
-      type: DateTimeImmutable
     requestedVendors:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\MasterBundle\Entity\Vendor>
+    project:
+      type: Erp\Bundle\MasterBundle\Entity\Project
+    vendor:
+      type: Erp\Bundle\MasterBundle\Entity\Vendor
+    requester:
+      type: Erp\Bundle\MasterBundle\Entity\Employee
+    boq:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoq
+      max_depth: 1
+    budgetType:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType
+    wantedDate:
+      type: DateTimeImmutable
+    deliveryDate:
+      type: DateTimeImmutable

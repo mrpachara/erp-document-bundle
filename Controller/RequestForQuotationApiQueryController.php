@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * PurchaseOrder Api Controller
+ * RequestForQuotation Api Controller
  *
  * @Rest\Version("1.0")
  * @Rest\Route("/api/request-for-quotation")
@@ -118,10 +118,10 @@ class RequestForQuotationApiQueryController extends DocumentApiQuery
         $response = $this->getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Purchase */
-        $purchase = $responseData['data'];
+        /** @var Erp\Bundle\DocumentBundle\Entity\RequestForQuotation */
+        $requestForQuotation = $responseData['data'];
 
-        $origin = $this->domainQuery->origin($purchase);
+        $origin = $this->domainQuery->origin($requestForQuotation);
 
         $profile = $this->settingQuery->findOneByCode('profile')->getValue();
 
@@ -133,11 +133,11 @@ class RequestForQuotationApiQueryController extends DocumentApiQuery
         $view = $this->render('@ErpDocument/pdf/request-for-quotation.pdf.twig', [
             'profile' => $profile,
             'origin' => $origin,
-            'model' => $purchase,
+            'model' => $requestForQuotation,
         ]);
 
-        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($purchase, $logo) {
-            $status = $purchase->getStatus();
+        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($requestForQuotation, $logo) {
+            $status = $requestForQuotation->getStatus();
 
             if(!empty($status)) {
                 $mpdf->SetWatermarkText($status);

@@ -4,11 +4,11 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 use Erp\Bundle\MasterBundle\Entity\CostItem;
 use Erp\Bundle\MasterBundle\Entity\ProjectBoqData;
 
-class RequestForQuotationDetail {
+abstract class RequestForQuotationDetail {
   /**
    * @var PurchaseRequestDetail
    */
-  protected $purchaseRequstDetail;
+  protected $purchaseRequestDetail;
 
   /** @var string */
   protected $stockQuantity;
@@ -197,12 +197,12 @@ class RequestForQuotationDetail {
 
 
   public function getPurchaseRequestDetail() {
-    return $this->purchaseRequstDetail;
+    return $this->purchaseRequestDetail;
   }
 
   
-  public function setPurchaseRequestDetail(PurchaseRequestDetail $purchaseRequstDetail) {
-    $this->purchaseRequstDetail = $purchaseRequstDetail;
+  public function setPurchaseRequestDetail(PurchaseRequestDetail $purchaseRequestDetail) {
+    $this->purchaseRequestDetail = $purchaseRequestDetail;
 
     return $this;
   }

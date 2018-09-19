@@ -51,7 +51,7 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
     details:
       targetEntity: Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail
       cascade: ["persist", "refresh"]
-      mappedBy: purchase
+      mappedBy: requestForQuotation
   fields:
     vendorContactInformation:
       type: string

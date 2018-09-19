@@ -1,5 +1,11 @@
 Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
   access_type: property
   properties:
-    purchase:
+    requestForQuotation:
       type: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation
+    purchaseRequestDetail:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail
+    costItem:
+      type: Erp\Bundle\MasterBundle\Entity\CostItem
+    boqData:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
