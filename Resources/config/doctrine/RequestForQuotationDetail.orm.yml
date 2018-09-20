@@ -32,13 +32,6 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
         onDelete: RESTRICT
       fetch: EAGER
       cascade: ["persist", "refresh"]
-    boqData:
-      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
-      joinColumn:
-        name: id_master_projectboqdata
-        nullable: true
-        onDelete: RESTRICT
-      fetch: EAGER
   fields:
     quantity:
       type: decimal

@@ -7,5 +7,3 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
       type: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail
     costItem:
       type: Erp\Bundle\MasterBundle\Entity\CostItem
-    boqData:
-      type: Erp\Bundle\MasterBundle\Entity\ProjectBoqData

@@ -57,6 +57,13 @@ class RequestForQuotation extends Document
     protected $contactInformation;
     
     /**
+     * shippingAddress
+     * 
+     * @var string
+     */
+    protected $shippingAddress;
+    
+    /**
      * wantedDate
      *
      * @var \DateTimeImmutable
@@ -141,6 +148,31 @@ class RequestForQuotation extends Document
     }
     
     /**
+     * get shippingAddress
+     *
+     * @return string
+     */
+    public function getShippingAddress()
+    {
+        return $this->shippingAddress;
+    }
+    
+    /**
+     * set shippingAddress
+     *
+     * @param string $shippingAddress
+     *
+     * @return static
+     */
+    public function setShippingAddress(string $shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
+        
+        return $this;
+    }
+    
+    
+    /**
      * get project
      *
      * @return Project
@@ -187,6 +219,7 @@ class RequestForQuotation extends Document
         
         return $this;
     }
+    
     
     /**
      * get contactInformation

@@ -15,11 +15,6 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
       type: Erp\Bundle\MasterBundle\Entity\Vendor
     requester:
       type: Erp\Bundle\MasterBundle\Entity\Employee
-    boq:
-      type: Erp\Bundle\MasterBundle\Entity\ProjectBoq
-      max_depth: 1
-    budgetType:
-      type: Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType
     wantedDate:
       type: DateTimeImmutable
     deliveryDate:

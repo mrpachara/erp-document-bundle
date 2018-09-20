@@ -33,20 +33,6 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
         nullable: false
         onDelete: RESTRICT
       fetch: EAGER
-    boq:
-      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
-      joinColumn:
-        name: id_master_projectboqdata
-        nullable: false
-        onDelete: RESTRICT
-      fetch: EAGER
-    budgetType:
-      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType
-      joinColumn:
-        name: id_master_projectboqbudgettype
-        nullable: false
-        onDelete: RESTRICT
-      fetch: EAGER
   oneToMany:
     details:
       targetEntity: Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail
@@ -58,6 +44,9 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
       length: 255
       nullable: true
     vendorAddress:
+      type: text
+      nullable: true
+    shippingAddress:
       type: text
       nullable: true
     contactInformation:

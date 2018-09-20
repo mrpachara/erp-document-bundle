@@ -7,5 +7,4 @@ use Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery as QueryInterface;
 abstract class QuotationQuery extends PurchaseQuery implements QueryInterface
 {
 
-
 }

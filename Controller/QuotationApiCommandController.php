@@ -23,12 +23,12 @@ class QuotationApiCommandController extends PurchaseApiCommand {
     }
 
     /**
-     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery
+     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery
      */
     protected $domainQuery;
 
     /** @required */
-    public function setDomainQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery $domainQuery)
+    public function setDomainQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery $domainQuery)
     {
         $this->domainQuery = $domainQuery;
     }

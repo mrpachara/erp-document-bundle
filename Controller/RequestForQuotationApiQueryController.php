@@ -168,30 +168,5 @@ class RequestForQuotationApiQueryController extends DocumentApiQuery
         return $this->view(['data' => $item], 200);
     }
     
-    /** @var \Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery-*/
-    protected $projectBoqSummaryQuery;
     
-    /** @required */
-    public function setProjectBoqSummaryQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery $projectBoqSummaryQuery)
-    {
-        $this->projectBoqSummaryQuery = $projectBoqSummaryQuery;
-    }
-    
-    /**
-     * get action
-     *
-     * @Rest\Get("/{id}")
-     *
-     * @param string $id
-     * @param ServerRequestInterface $request
-     */
-    public function getAction($id, ServerRequestInterface $request)
-    {
-        $response = parent::getAction($id, $request);
-        
-     
-        
-        return $response;
-    }
-
 }

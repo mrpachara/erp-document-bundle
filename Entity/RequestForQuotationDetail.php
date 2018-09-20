@@ -4,7 +4,7 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 use Erp\Bundle\MasterBundle\Entity\CostItem;
 use Erp\Bundle\MasterBundle\Entity\ProjectBoqData;
 
-abstract class RequestForQuotationDetail {
+class RequestForQuotationDetail {
   /**
    * @var PurchaseRequestDetail
    */
@@ -40,12 +40,6 @@ abstract class RequestForQuotationDetail {
   protected $quantity;
   
   
-  /**
-   * boqData
-   *
-   * @var ProjectBoqData
-   */
-  protected $boqData;
   
   /**
    * remark
@@ -88,7 +82,7 @@ abstract class RequestForQuotationDetail {
    *
    * @return static
    */
-  public function setPurchase(RequestForQuotation $requestForQuotation) {
+  public function setRequestForQuotation(RequestForQuotation $requestForQuotation) {
       $this->requestForQuotation = $requestForQuotation;
       
       return $this;
@@ -135,28 +129,6 @@ abstract class RequestForQuotationDetail {
    */
   public function setQuantity(string $quantity) {
       $this->quantity = $quantity;
-      
-      return $this;
-  }
-  
-  /**
-   * get boqData
-   *
-   * @return ProjectBoqData
-   */
-  public function getBoqData() {
-      return $this->boqData;
-  }
-  
-  /**
-   * set boqData
-   *
-   * @param ProjectBoqData $boqData
-   *
-   * @return static
-   */
-  public function setBoqData(ProjectBoqData $boqData) {
-      $this->boqData = $boqData;
       
       return $this;
   }

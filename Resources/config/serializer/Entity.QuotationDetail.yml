@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\QuotationDetail:
+  access_type: property
+  properties:
+    purchase:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder

@@ -29,12 +29,12 @@ class QuotationApiQueryController extends PurchaseApiQuery
     }
 
     /**
-     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery
+     * @var \Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery
      */
     protected $domainQuery;
 
     /** @required */
-    public function setDomainQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery $domainQuery)
+    public function setDomainQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery $domainQuery)
     {
         $this->domainQuery = $domainQuery;
     }
@@ -68,43 +68,7 @@ class QuotationApiQueryController extends PurchaseApiQuery
         return $context;
     }
 
-    protected function listPurchaseRequestRemainResponse($data, $context)
-    {
-        $context = $this->prepareContext($context);
 
-        // if (!isset($context['searchable'])) {
-        //     $context['searchable'] = true;
-        // }
-
-        foreach (['add'] as $action) {
-            if (!in_array($action, $context['actions'])) {
-                $context['actions'][] = $action;
-            }
-        }
-
-        $context['actions'] = $this->prepareActions($context['actions'], $data);
-        $context['data'] = $data;
-
-        return $context;
-    }
-
-    /**
-     * list purchaseRequestRemain action
-     *
-     * @Rest\Get("/purchase-request-remain")
-     *
-     * @param ServerRequestInterface $request
-     */
-    public function listPurchaseRequestRemainAction(ServerRequestInterface $request)
-    {
-        $queryParams = $request->getQueryParams();
-        $items = [];
-        $context = [];
-
-        $items = $this->domainQuery->searchPurchaseRequestRemain($queryParams, $context);
-
-        return $this->view($this->listPurchaseRequestRemainResponse($items, $context), 200);
-    }
 
     /**
      * get action
@@ -152,21 +116,5 @@ class QuotationApiQueryController extends PurchaseApiQuery
         return new \TFox\MpdfPortBundle\Response\PDFResponse($output);
     }
 
-    /**
-     * get purchaseRequestRemain action
-     *
-     * @Rest\Get("/purchase-request-remain/{id}")
-     *
-     * @param string $id
-     * @param ServerRequestInterface $request
-     */
-    public function getPurchaseRequestRemainAction($id, ServerRequestInterface $request)
-    {
-        $item = $this->domainQuery->getPurchaseRequestRemain($id);
-        if (empty($item)) {
-            throw new HttpException(404, "Entity not found.");
-        }
-
-        return $this->view(['data' => $item], 200);
-    }
+   
 }
