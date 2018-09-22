@@ -7,6 +7,8 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
       type: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail>
+    requestForQuotationVendors:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\RequestForQuotationVendor>
     requestedVendors:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\MasterBundle\Entity\Vendor>
     project:

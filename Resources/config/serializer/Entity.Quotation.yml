@@ -2,10 +2,10 @@ Erp\Bundle\DocumentBundle\Entity\Quotation:
   access_type: property
   properties:
     updateOf:
-      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
+      type: Erp\Bundle\DocumentBundle\Entity\Quotation
     updatedBy:
-      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
+      type: Erp\Bundle\DocumentBundle\Entity\Quotation
     details:
-      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail>
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\QuotationDetail>
     dueDate:
       type: DateTimeImmutable

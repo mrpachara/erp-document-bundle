@@ -60,8 +60,6 @@ abstract class RequestForQuotationQuery extends DocumentQuery implements QueryIn
             return $purchaseRequest;
         }
         
-       
-        
         $qb = $this->purchaseRequestQueryService->createDetailQueryBuilder('_purchaseRequestDetail');
         $qb
         ->innerJoin(
@@ -79,9 +77,4 @@ abstract class RequestForQuotationQuery extends DocumentQuery implements QueryIn
                 
                 return $purchaseRequest;
     }
-    
-
-    
-    
-
 }

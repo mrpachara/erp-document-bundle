@@ -86,9 +86,3 @@ Erp\Bundle\DocumentBundle\Entity\Quotation:
     remarkFinance:
       type: text
       nullable: true
-    conditionsOfRequestPrice:
-      type: text
-      nullable: true
-    conditions:
-      type: text
-      nullable: true

@@ -2,15 +2,7 @@
 
 namespace Erp\Bundle\DocumentBundle\Entity;
 
-use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
-use Erp\Bundle\CoreBundle\Entity\CoreAccount;
 use Erp\Bundle\CoreBundle\Entity\Thing;
-
-use Erp\Bundle\MasterBundle\Entity\Vendor;
-use Erp\Bundle\MasterBundle\Entity\Project;
-use Erp\Bundle\MasterBundle\Entity\Employee;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoq;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType;
 
 /**
  * PurchaseOrder Entity
@@ -114,12 +106,6 @@ class Quotation extends Purchase
 
     /** @var string */
     protected $remarkFinance;
-
-    /** @var string */
-    protected $conditionsOfRequestPrice;
-
-    /** @var string */
-    protected $conditions;
 
 
     /**
@@ -383,30 +369,5 @@ class Quotation extends Purchase
 
         return $this;
     }
-
-    public function getConditionsOfRequestPrice()
-    {
-        return $this->conditionsOfRequestPrice;
-    }
-
-    public function setConditionsOfRequestPrice($conditionsOfRequestPrice)
-    {
-        $this->conditionsOfRequestPrice = $conditionsOfRequestPrice;
-
-        return $this;
-    }
-
-    public function getConditions()
-    {
-        return $this->conditions;
-    }
-
-    public function setConditions($conditions)
-    {
-        $this->conditions = $conditions;
-
-        return $this;
-    }
-
 
 }

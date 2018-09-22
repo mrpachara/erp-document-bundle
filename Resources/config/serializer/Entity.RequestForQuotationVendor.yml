@@ -1,0 +1,9 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotationVendor:
+  access_type: property
+  properties:
+    vendor:
+      type: Erp\Bundle\MasterBundle\Entity\Vendor
+    expiresDate:
+      type: DateTimeImmutable
+    uuid:
+      type: string

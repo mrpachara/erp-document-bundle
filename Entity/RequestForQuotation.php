@@ -20,6 +20,13 @@ class RequestForQuotation extends Document
      * @var ArrayCollection
      */
     protected $requestedVendors;
+    
+    /**
+     *
+     * @var ArrayCollection
+     */
+    protected $requestForQuotationVendors;
+    
     /**
      * vendorContactInformation
      *
@@ -365,16 +372,6 @@ class RequestForQuotation extends Document
         $this->details->removeElement($detail);
     }
 
-    /**
-     * constructor
-     *
-     * @param Thing|null $thing
-     */
-    public function __construct(Thing $thing = null)
-    {
-        parent::__construct($thing);
-        $this->requestedVendors = new ArrayCollection();
-    }
 
     /**
      *
@@ -409,6 +406,54 @@ class RequestForQuotation extends Document
     public function removeRequestedVendor(Vendor $vendor)
     {
         $this->requestedVendors->removeElement($vendor);
+    }
+    
+    
+    /**
+     * constructor
+     *
+     * @param Thing|null $thing
+     */
+    public function __construct(Thing $thing = null)
+    {
+        parent::__construct($thing);
+        $this->requestedVendors = new ArrayCollection();
+        $this->requestForQuotationVendors = new ArrayCollection();
+    }
+    
+    /**
+     *
+     * @return Vendor[]
+     */
+    public function getRequestForQuotationVendors()
+    {
+        return $this->requestForQuotationVendors->toArray();
+    }
+    
+    /**
+     * Add requestForQuotationVendors
+     *
+     * @param Vendor $vendor
+     *
+     * @return static
+     */
+    public function addRequestForQuotationVendor(RequestForQuotationVendor $rqvendor)
+    {
+        if (!$this->requestForQuotationVendors->contains($rqvendor)) {
+            $this->requestForQuotationVendors[] = $rqvendor;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Remove requestForQuotationVendors
+     *
+     * @param Vendor $vendor
+     */
+    public function removeRequestForQuotationVendor(RequestForQuotationVendor $rqvendor)
+    {
+        $this->requestForQuotationVendors->removeElement($rqvendor);
     }
   
 

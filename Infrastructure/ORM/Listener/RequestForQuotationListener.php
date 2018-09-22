@@ -3,6 +3,7 @@ namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener;
 
 use Erp\Bundle\DocumentBundle\Entity\RequestForQuotation;
 use Doctrine\ORM\Event\PreFlushEventArgs;
+use Erp\Bundle\DocumentBundle\Entity\RequestForQuotationVendor;
 
 /**
  *
@@ -29,6 +30,12 @@ class RequestForQuotationListener
             
             foreach($entity->getDetails() as $detail) {
                 $detail->setRequestForQuotation($entity);
+            }
+            
+            foreach($entity->getRequestedVendors() as $vendor) {
+                $rqvendor = new RequestForQuotationVendor($vendor);
+                $rqvendor->setUuid(\Erp\Bundle\CoreBundle\Util\Uuid::uuidv4());
+                $entity->addRequestForQuotationVendor($rqvendor);
             }
         }
     }

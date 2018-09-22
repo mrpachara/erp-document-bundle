@@ -1,0 +1,21 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotationVendor:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RequestForQuotationVendorRepository
+  table: document_requestforquotationvendor
+  inheritanceType: JOINED
+  manyToOne:
+    vendor:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Vendor
+      joinColumn:
+        name: id_master_vendor
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    expiresDate:
+      type: datetime_immutable
+      nullable: true
+    uuid:
+      type: string
+      length: 255
+      nullable: true

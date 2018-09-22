@@ -17,11 +17,11 @@ class QuotationDetail extends PurchaseDetail
     /**
      * constructor
      *
-     * @param PurchaseOrder|null $purchase
+     * @param Quotation|null $quotation
      */
-    public function __construct(PurchaseOrder $purchase = null)
+    public function __construct(Quotation $quotation = null)
     {
-        parent::__construct($purchase);
+        parent::__construct($quotation);
     }
 
     /**

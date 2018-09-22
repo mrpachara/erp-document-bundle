@@ -68,7 +68,43 @@ class QuotationApiQueryController extends PurchaseApiQuery
         return $context;
     }
 
-
+    protected function listRequestForQuotationRemainResponse($data, $context)
+    {
+        $context = $this->prepareContext($context);
+        
+        // if (!isset($context['searchable'])) {
+        //     $context['searchable'] = true;
+        // }
+        
+        foreach (['add'] as $action) {
+            if (!in_array($action, $context['actions'])) {
+                $context['actions'][] = $action;
+            }
+        }
+        
+        $context['actions'] = $this->prepareActions($context['actions'], $data);
+        $context['data'] = $data;
+        
+        return $context;
+    }
+    
+    /**
+     * list requestForQuotationRemain action
+     *
+     * @Rest\Get("/request-for-quotation-remain")
+     *
+     * @param ServerRequestInterface $request
+     */
+    public function listRequestForQuotationRemainAction(ServerRequestInterface $request)
+    {
+        $queryParams = $request->getQueryParams();
+        $items = [];
+        $context = [];
+        
+        $items = $this->domainQuery->searchRequestForQuotationRemain($queryParams, $context);
+        
+        return $this->view($this->listRequestForQuotationRemainResponse($items, $context), 200);
+    }
 
     /**
      * get action
@@ -116,5 +152,21 @@ class QuotationApiQueryController extends PurchaseApiQuery
         return new \TFox\MpdfPortBundle\Response\PDFResponse($output);
     }
 
-   
+    /**
+     * get requestForQuotationRemain action
+     *
+     * @Rest\Get("/purchase-request-remain/{id}")
+     *
+     * @param string $id
+     * @param ServerRequestInterface $request
+     */
+    public function getRequestForQuotationRemainAction($id, ServerRequestInterface $request)
+    {
+        $item = $this->domainQuery->getRequestForQuotationRemain($id);
+        if (empty($item)) {
+            throw new HttpException(404, "Entity not found.");
+        }
+        
+        return $this->view(['data' => $item], 200);
+    }
 }

@@ -11,5 +11,10 @@ class QuotationQueryService extends QuotationQuery
         $this->detailRepository = $doctrine->getRepository('ErpDocumentBundle:QuotationDetail');
 
     }
-
+    
+    /** @required */
+    public function setRequestForQuotationQueryService(RequestForQuotationQueryService $requestForQuotationQueryService)
+    {
+        $this->requestForQuotationQueryService = $requestForQuotationQueryService;
+    }
 }

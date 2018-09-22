@@ -18,6 +18,22 @@ Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
             name: id_master_vendor
             nullable: false
             onDelete: RESTRICT
+    requestForQuotationVendors:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\RequestForQuotationVendor
+      cascade: ["persist", "refresh"]
+      joinTable:
+        name: document_requestforquotation_requestforquotationvendor
+        joinColumns:
+          joinColumn:
+            name: id_document_requestforquotation
+            nullable: false
+            onDelete: CASCADE
+        inverseJoinColumns:
+          joinColumn:
+            name: id_document_requestforquotationvendor
+            nullable: false
+            unique: true
+            onDelete: CASCADE
   manyToOne:
     project:
       targetEntity: Erp\Bundle\MasterBundle\Entity\Project
