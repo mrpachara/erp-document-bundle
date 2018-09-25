@@ -1,0 +1,11 @@
+Erp\Bundle\DocumentBundle\Entity\GoodsReceipt:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail>
+    dueDate:
+      type: DateTimeImmutable

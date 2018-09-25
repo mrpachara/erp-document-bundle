@@ -2,9 +2,8 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use JMS\DiExtraBundle\Annotation as DI;
+
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Erp\Bundle\DocumentBundle\Collection\DocumentRestResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -155,7 +154,7 @@ class QuotationApiQueryController extends PurchaseApiQuery
     /**
      * get requestForQuotationRemain action
      *
-     * @Rest\Get("/purchase-request-remain/{id}")
+     * @Rest\Get("/request-for-quotation-remain/{id}")
      *
      * @param string $id
      * @param ServerRequestInterface $request

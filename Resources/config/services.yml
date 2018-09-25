@@ -50,7 +50,8 @@ services:
   Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseRequestQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseRequestQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseOrderQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\ProjectBoqSummaryQueryService'
-
+  Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\QuotationQueryService'
+  
   #Entity Listerner
   Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener:
     #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener
@@ -71,3 +72,13 @@ services:
     #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\RequestForQuotationListener
     tags:
       - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\RequestForQuotation, event: preFlush }
+      
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\QuotationListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\QuotationListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\Quotation, event: preFlush }
+      
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\GoodsReceiptListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\GoodsReceiptListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt, event: preFlush }

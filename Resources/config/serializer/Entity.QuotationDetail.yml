@@ -1,5 +1,5 @@
 Erp\Bundle\DocumentBundle\Entity\QuotationDetail:
   access_type: property
   properties:
-    quotation:
+    purchase:
       type: Erp\Bundle\DocumentBundle\Entity\Quotation

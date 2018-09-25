@@ -483,4 +483,10 @@ abstract class Purchase extends Document
     {
         $this->details->removeElement($detail);
     }
+    
+    public function setDetails(ArrayCollection $details) {
+        $this->details = $details;
+        
+        return $this;
+    }
 }

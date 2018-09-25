@@ -3,6 +3,13 @@ Erp\Bundle\DocumentBundle\Entity\Quotation:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\QuotationRepository
   table: document_quotation
   inheritanceType: JOINED
+  associationOverride:
+    updateOf:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Quotation
+    updatedBys:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Quotation
+    details:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\QuotationDetail
   fields:
     discount:
       type: decimal

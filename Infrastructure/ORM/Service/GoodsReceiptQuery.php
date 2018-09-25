@@ -18,8 +18,8 @@ abstract class GoodsReceiptQuery extends PurchaseQuery implements QueryInterface
         $statusChangedQb = $this->purchaseOrderDetailStatusChangedRepository->createQueryBuilder('_statusChanged');
         return $statusChangedQb
             ->innerJoin(
-                'ErpDocumentBundle:GoodsReceiptDetail', '_goodsreceiptDetail',
-                'WITH', '_statusChanged = _goodsreceiptDetail.statusChanged'
+                'ErpDocumentBundle:GoodsReceiptDetail', '_goodsReceiptDetail',
+                'WITH', '_statusChanged = _goodsReceiptDetail.statusChanged'
             )
             ->innerJoin(
                 'ErpDocumentBundle:GoodsReceipt',

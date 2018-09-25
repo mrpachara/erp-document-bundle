@@ -1,0 +1,7 @@
+Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail:
+  access_type: property
+  properties:
+    purchase:
+      type: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
+    statusChanged:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetailStatusChanged

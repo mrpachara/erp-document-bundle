@@ -39,7 +39,7 @@ abstract class QuotationQuery extends PurchaseQuery implements QueryInterface
         $qb
         ->innerJoin(
             'ErpDocumentBundle:RequestForQuotation', '_requestForQuotation',
-            'WITH', '_requestForQuotationDetail.quotation = _requestForQuotation'
+            'WITH', '_requestForQuotationDetail.purchase = _requestForQuotation'
             )
                 
                 ->andWhere('_requestForQuotation = :requestForQuotationId')
