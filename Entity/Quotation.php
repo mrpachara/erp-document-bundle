@@ -5,7 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 use Erp\Bundle\CoreBundle\Entity\Thing;
 
 /**
- * PurchaseOrder Entity
+ * Quotation Entity
  */
 class Quotation extends Purchase
 {

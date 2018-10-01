@@ -3,7 +3,7 @@
 namespace Erp\Bundle\DocumentBundle\Domain\CQRS;
 
 /**
- * PurchaseOrder Query (CQRS)
+ * Quotation Query (CQRS)
  */
 interface QuotationQuery extends PurchaseQuery{
     public function searchRequestForQuotationRemain(array $params, array &$context = null);

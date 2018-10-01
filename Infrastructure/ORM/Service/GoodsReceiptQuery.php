@@ -12,6 +12,29 @@ abstract class GoodsReceiptQuery extends PurchaseQuery implements QueryInterface
     /** @var PurchaseOrderQueryService */
     protected $purchaseOrderQueryService;
 
+    public function find($id)
+    {
+        /**
+         * @var \Erp\Bundle\DocumentBundle\Entity\GoodsReceipt $entity
+         */
+        $entity = parent::find($id);
+        
+        if($entity->getTransferOf() !== null) {
+            $qb = $this->getActiveDocumentQueryBuilder('_activeDocument')
+                ->andWhere('_activeDocument.transferOf = :transferOf')
+                ->orderBy('_activeDocument.tstmp', 'DESC')
+            ;
+            
+            $qb->setParameter('transferOf', $entity->getTransferOf()->getId());
+            $qb->setMaxResults(1);
+            $lastEntities = $qb->getQuery()->getResult();
+            
+            $entity->setLastGoodsReceipt((count($lastEntities) > 0)? $lastEntities[0] : null );
+        }
+        
+        return $entity;
+    }
+    
     public function getPurchaseOrderDetailStatusChangedQueryBuilder($alias)
     {
         $activeGoodsReceiptQb = $this->getActiveDocumentQueryBuilder();
@@ -34,6 +57,7 @@ abstract class GoodsReceiptQuery extends PurchaseQuery implements QueryInterface
                 )
             )
             ->where($statusChangedQb->expr()->eq('_statusChanged.purchaseOrderDetail', $alias))
+            ->andWhere('_statusChanged.finish = TRUE')
         ;
     }
 

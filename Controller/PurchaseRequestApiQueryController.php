@@ -2,9 +2,7 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Erp\Bundle\DocumentBundle\Collection\DocumentRestResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -37,7 +35,37 @@ class PurchaseRequestApiQueryController extends PurchaseApiQuery
     {
         $this->domainQuery = $domainQuery;
     }
+    
+    /**
+     * @var \Erp\Bundle\SettingBundle\Domain\CQRS\SettingQuery
+     */
+    protected $settingQuery = null;
+    
+    /** @required */
+    public function setSettingQuery(\Erp\Bundle\SettingBundle\Domain\CQRS\SettingQuery $settingQuery)
+    {
+        $this->settingQuery = $settingQuery;
+    }
+    
+    /**
+     * @var \Erp\Bundle\CoreBundle\Domain\CQRS\TempFileItemQuery
+     */
+    protected $fileQuery = null;
+    
+    /** @required */
+    public function setFileQuery(\Erp\Bundle\CoreBundle\Domain\CQRS\TempFileItemQuery $fileQuery)
+    {
+        $this->fileQuery = $fileQuery;
+    }
+    
 
+    protected function getResponse($data, $context)
+    {
+        $context = parent::getResponse($data, $context);
+        $context['actions'][] = 'print';
+        return $context;
+    }
+    
     /**
      * get action
      *
@@ -54,13 +82,33 @@ class PurchaseRequestApiQueryController extends PurchaseApiQuery
         $responseData = $response->getData();
         /** @var Erp\Bundle\DocumentBundle\Entity\Purchase */
         $purchase = $responseData['data'];
-
+        
+        $origin = $this->domainQuery->origin($purchase);
+        
+        $profile = $this->settingQuery->findOneByCode('profile')->getValue();
+        
+        $logo = null;
+        if(!empty($profile['logo'])) {
+            $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
+        }
+        
         $view = $this->render('@ErpDocument/pdf/purchase-request.pdf.twig', [
+            'profile' => $profile,
+            'origin' => $origin,
             'model' => $purchase,
+        
         ]);
 
-        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4']);
+        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($purchase, $logo) {
+            $status = $purchase->getStatus();
 
+            if(!empty($status)) {
+                $mpdf->SetWatermarkText($status);
+                $mpdf->showWatermarkText = true;
+            }
+            
+            $mpdf->imageVars['logo'] = $logo;
+        });
         return new \TFox\MpdfPortBundle\Response\PDFResponse($output);
     }
 }

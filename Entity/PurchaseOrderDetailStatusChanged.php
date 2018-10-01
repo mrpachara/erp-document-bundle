@@ -12,6 +12,12 @@ class PurchaseOrderDetailStatusChanged extends DocumentObjectValue {
    * @var bool
    */
   protected $removed;
+  
+  /**
+   * is finish
+   * @var bool
+   */
+  protected $finish;
 
   /**
    * constructor
@@ -37,4 +43,19 @@ class PurchaseOrderDetailStatusChanged extends DocumentObjectValue {
 
     return $this;
   }
+  
+    public function getFinish()
+    {
+        return $this->finish;
+    }
+
+    public function setFinish($finish)
+    {
+        $this->finish = $finish;
+        
+        return $this;
+    }
+
+  
+  
 }

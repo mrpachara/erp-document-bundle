@@ -6,7 +6,6 @@ use Doctrine\ORM\Event\PreFlushEventArgs;
 use Erp\Bundle\DocumentBundle\Entity\GoodsReceipt;
 
 class GoodsReceiptListener {
-
     public function preFlush(GoodsReceipt $entity, PreFlushEventArgs $event) {
     //$entity->setThing($entity->getIndividual()->getThing());
     if(empty($entity->getId())){

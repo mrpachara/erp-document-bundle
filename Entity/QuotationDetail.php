@@ -36,7 +36,7 @@ class QuotationDetail extends PurchaseDetail
      * @param RequestForQuotationDetail $requestForQuotationDetail
      * @return static
      */
-    public function setRequestForQuotationDetail(?RequestForQuotationDetail $requestForQuotationDetail)
+    public function setRequestForQuotationDetail(RequestForQuotationDetail $requestForQuotationDetail)
     {
         $this->requestForQuotationDetail = $requestForQuotationDetail;
         

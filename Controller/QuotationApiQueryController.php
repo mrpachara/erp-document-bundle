@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * PurchaseOrder Api Controller
+ * Quotation Api Controller
  *
  * @Rest\Version("1.0")
  * @Rest\Route("/api/quotation")

@@ -12,11 +12,19 @@ body {
   font-family: thsarabun;
 }
 
+.cl-title {
+  text-align: center;
+}
+
 .cl-header {
   text-align: right;
   border-bottom: 1px solid #000000;
   font-weight: bold;
   font-size: 10pt;
+}
+
+.cl-logo {
+  width: 120px;
 }
 
 table.data-list {
@@ -29,46 +37,192 @@ table.data-list td {
   border: 1px solid black;
 }
 
+.cl-code,
 .cl-number {
   font-family: monospace;
-  text-align: right;
   font-size: 0.60em;
+}
+
+.cl-number {
+  text-align: right;
+}
+
+.cl-layout-cell {
+  margin: 0;
+  padding: 0;
+}
+
+table.cl-collapse,
+table.cl-layout-cell {
+  border-collapse: collapse;
+}
+
+.cl-labeled-cell {
+  text-align: right;
+  font-weight: normal;
+}
+
+.cl-bordered-cell {
+  border: 1px solid black;
+}
+
+.cl-strong {
+  font-weight: bold;
 }
     </style>
   </head>
   <body>
       <htmlpageheader name="DefaultHeader">
-          <div class="cl-header">{{ model.code }}</div>
+          <div class="cl-header cl-code">
+          <table width="100%" style="vertical-align: bottom; color: #000000; font-weight: bold;">
+            <tr>
+              <td style="width: 33%; text-align: left;"><span style="font-weight: bold;">created by CONSOL</span></td>
+              <td style="text-align: center; font-weight: bold;">{{ model.status }}</td>
+              <td style="width: 33%; text-align: right;"><span class="cl-code">{{ model.code }}</span></td>
+            </tr>
+          </table>
+        </div>
       </htmlpageheader>
 
       <htmlpagefooter name="DefaultFooter" class="cl-footer">
-          <table width="100%" style="vertical-align: bottom; font-family: serif; font-size: 8pt; color: #000000; font-weight: bold; font-style: italic;">
+          <table width="100%" style="vertical-align: bottom; color: #000000; font-weight: bold;">
               <tr>
-                  <td width="33%"><span style="font-weight: bold; font-style: italic;">{DATE j-m-Y}</span></td>
-                  <td width="33%" align="center" style="font-weight: bold; font-style: italic;">{PAGENO}/{nbpg}</td>
-                  <td width="33%" style="text-align: right; ">My document</td>
+                  <td style="width: 33%; text-align: left;"><span style="font-weight: bold;">{{ "now"|date('d/m/Y H:i:s') }}</span></td>
+                  <td style="text-align: center; font-weight: bold;">{PAGENO}/{nbpg}</td>
+                  <td style="width: 33%; text-align: right;">FM-PO-rev1.0</td>
               </tr>
           </table>
       </htmlpagefooter>
-
-      <h1>{{ model.code }}</h1>
+      
+      <h1 class="cl-title">ใบขอซื้อ (PURCHASE REQUEST)</h1>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 100px;">
+{% if profile.logo %}
+            <img class="cl-logo" src="var:logo" />
+{% endif %}
+          </td>
+          <td>
+            <table>
+              <tr>
+                <td style="font-weight: bold;">{{ profile.profileData.name }}</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
+                  [
+                    profile.profileData.address.address ?? false,
+                    (profile.profileData.address.subdistrict ?? false)|sformat('ต.%s'),
+                    (profile.profileData.address.district ?? false)|sformat('อ.%s'),
+                    (profile.profileData.address.province ?? false)|sformat('จ.%s'),
+                    profile.profileData.address.postalcode ?? false,
+                  ]|vfilter(false, true)|join(' ')
+                }}</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight: bold;">โทรศัพท์ :</span> {{ profile.phone }} <span style="font-weight: bold;">โทรสาร :</span> {{ profile.fax }}</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span> {{ profile.profileData.code }}</td>
+              </tr>
+            </table>
+          </td>
+          <td style="width: 180px;">
+            <table style="width: 100%;">
+              <tr>
+                <td class="cl-labeled-cell cl-strong">เลขที่เอกสาร :</td>
+                <td class="cl-code">{{ model.code }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">วัน/เดือน/ปี :</td>
+                <td class="cl-code">{{ model.tstmp|date('d/m/Y') }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">กำหนดส่งสินค้า :</td>
+                <td class="cl-code">{{ model.deliveryDate|date('d/m/Y') }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 50%; vertical-align: top;">
+            <table style="width: 100%;">
+              <tr>
+                <td style="font-weight: bold; text-align: right;">อ้างอิง :</td>
+                <td>{{ model.transferOf.code ?? '-' }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">โครงการ :</td>
+                <td>{{ [model.project.code ?? false, model.project.name ?? false]|vfilter(false, true)|join(' ') }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ที่อยู่จัดส่ง :</td>
+                <td>{{ model.shippingAddress }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
+                <td>{{ model.contactInformation }}</td>
+              </tr>
+            </table>
+          </td>
+          <td style="width: 50%; vertical-align: top;">
+            <table style="width: 100%;">
+              <tr>
+                <td style="font-weight: bold; text-align: right;">อ้างอิง :</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ผู้ขาย :</td>
+                <td>{{ ([ model.vendor.code ?? false, model.vendor.name ?? false ]|vfilter(false, true)|join(' '))? [ model.vendor.code ?? false, model.vendor.name ?? false ]|vfilter(false, true)|join(' '):'-' }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ที่อยู่ผู้ขาย :</td>
+                <td>{{
+                  ([
+                    model.vendor.owner.address.address ?? false,
+                    (model.vendor.owner.address.subdistrict ?? false)|sformat('ต.%s'),
+                    (model.vendor.owner.address.district ?? false)|sformat('อ.%s'),
+                    (model.vendor.owner.address.province ?? false)|sformat('จ.%s'),
+                    model.vendor.owner.address.postalcode ?? false,
+                  ]|vfilter(false, true)|join(' '))? [
+                    model.vendor.owner.address.address ?? false,
+                    (model.vendor.owner.address.subdistrict ?? false)|sformat('ต.%s'),
+                    (model.vendor.owner.address.district ?? false)|sformat('อ.%s'),
+                    (model.vendor.owner.address.province ?? false)|sformat('จ.%s'),
+                    model.vendor.owner.address.postalcode ?? false,
+                  ]|vfilter(false, true)|join(' ') : '-'
+                }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
+                <td>{{ (model.vendorContactInformation)? model.vendorContactInformation:'-' }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
       <table class="data-list">
         <thead>
           <tr>
-            <th style="width: 2em;">#No</th>
-            <th>Cost Item</th>
-            <th style="width: 4em;">Unit</th>
-            <th style="width: 6em;">Price/Unit</th>
-            <th style="width: 6em;">Quantity</th>
-            <th style="width: 6em;">Total</th>
+            <td colspan="5" style="border: none;"></td>
+            <th style="border: none; width: 6em;">(ราคา : บาท)</td>
+          </tr>
+          <tr>
+            <th style="width: 2em;">ลำดับ</th>
+            <th>รายการ</th>
+            <th style="width: 4em;">หน่วย</th>
+            <th style="width: 5em;">ราคา/หน่วย</th>
+            <th style="width: 5em;">ปริมาณ</th>
+            <th style="width: 6em;">ราคารวม</th>
           </tr>
         </thead>
         <tbody>
 {% for detail in model.details %}
           <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ detail.name }}</td>
-            <td>{{ detail.unit }}</td>
+            <td style="text-align: center;">{{ loop.index }}</td>
+            <td>{{ (detail.costItem.name) ?? detail.name }}</td>
+            <td style="text-align: center;">{{ detail.costItem.unit ?? detail.unit }}</td>
             <td class="cl-number">{{ detail.price|number_format(2) }}</td>
             <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
             <td class="cl-number">{{ (detail.price * detail.quantity)|number_format(2) }}</td>
@@ -76,5 +230,52 @@ table.data-list td {
 {% endfor %}
         </tbody>
       </table>
+      <h3>**หมายเหตุ : ราคานี้เป็นราคาประมาณการ</h3>
+      <table class="cl-layout-cell" style="width: 100%; page-break-inside: avoid;" nobr="true">
+        <tr>
+          <td colspan="2"></td>
+        </tr>
+        
+      </table>
+      <div style="position: fixed; bottom: 0px;">
+        <table class="cl-layout-cell" style="width: 100%;">
+          <tr>
+            <td class="cl-layout-cell" style="width: 50%; text-align: center">
+              <table class="cl-layout-cell">
+                <tr>
+                  <td>ผู้จัดทำ</td>
+                </tr>
+                <tr>
+                  <td>_________________________</td>
+                </tr>
+                <tr>
+                  <td>({{ origin.creator.name ?? '_________________________' }})</td>
+                </tr>
+                <tr>
+                  <td>{{ (origin.tstmp ?? false)? origin.tstmp|date('d/m/Y') : '____/____/____' }}</td>
+                </tr>
+              </table>
+            </td>
+            <td class="cl-layout-cell" style="width: 50%; text-align: center">
+{% if model.approved %}
+              <table class="cl-layout-cell">
+                <tr>
+                  <td>ผู้อนุมัติ</td>
+                </tr>
+                <tr>
+                  <td>_________________________</td>
+                </tr>
+                <tr>
+                  <td>({{ model.creator.name ?? '_________________________' }})</td>
+                </tr>
+                <tr>
+                  <td>{{ (model.tstmp ?? false)? origin.tstmp|date('d/m/Y') : '____/____/____' }}</td>
+                </tr>
+              </table>
+{% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
   </body>
 </html>

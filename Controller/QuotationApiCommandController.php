@@ -5,7 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 /**
- * PurchaseRequest Api Controller
+ * RequestForQuotation Api Controller
  *
  * @Rest\Version("1.0")
  * @Rest\Route("/api/quotation")

@@ -51,6 +51,7 @@ services:
   Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseOrderQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\ProjectBoqSummaryQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\QuotationQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\GoodsReceiptQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\GoodsReceiptQueryService'
   
   #Entity Listerner
   Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener:

@@ -202,9 +202,7 @@ table.cl-layout-cell {
             <th style="width: 2em;">#No</th>
             <th>Cost Item</th>
             <th style="width: 4em;">Unit</th>
-            <th style="width: 6em;">Price/Unit</th>
             <th style="width: 6em;">Quantity</th>
-            <th style="width: 6em;">Total</th>
           </tr>
         </thead>
         <tbody>
@@ -213,9 +211,7 @@ table.cl-layout-cell {
             <td>{{ loop.index }}</td>
             <td>{{ detail.costItem.name }}</td>
             <td>{{ detail.costItem.unit }}</td>
-            <td class="cl-number">0000</td>
             <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
-            <td class="cl-number">0000</td>
           </tr>
 {% endfor %}
         </tbody>

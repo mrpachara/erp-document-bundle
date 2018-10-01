@@ -15,3 +15,6 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetailStatusChanged:
     removed:
       type: boolean
       nullable: false
+    finish:
+      type: boolean
+      nullable: false

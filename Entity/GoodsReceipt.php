@@ -369,4 +369,26 @@ class GoodsReceipt extends Purchase
 
         return $this;
     }
+    
+    /**
+     * Last GoodsReceipt
+     * @var GoodsReceipt
+     */
+    protected $lastGoodsReceipt = null;
+    
+    public function setLastGoodsReceipt($lastGoodsReceipt)
+    {
+        $this->lastGoodsReceipt = $lastGoodsReceipt;
+        
+        return $this;
+    }
+
+    public function updatable()
+    {
+        if(!parent::updatable()) return false;
+        // TODO: must check null too
+        if($this->lastGoodsReceipt !== null && $this->lastGoodsReceipt !== $this) return false;
+        
+        return true;
+    }
 }
