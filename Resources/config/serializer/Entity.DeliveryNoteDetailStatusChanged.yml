@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\DeliveryNoteDetailStatusChanged:
+  access_type: property
+  properties:
+    deliveryNoteDetail:
+      type: Erp\Bundle\DocumentBundle\Entity\DeliveryNoteDetail

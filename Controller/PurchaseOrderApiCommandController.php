@@ -2,13 +2,10 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * PurchaseRequest Api Controller
+ * PurchaseOrder Api Controller
  *
  * @Rest\Version("1.0")
  * @Rest\Route("/api/purchase-order")

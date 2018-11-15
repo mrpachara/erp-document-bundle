@@ -7,5 +7,3 @@ Erp\Bundle\DocumentBundle\Entity\GoodsReceipt:
       type: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail>
-    dueDate:
-      type: DateTimeImmutable

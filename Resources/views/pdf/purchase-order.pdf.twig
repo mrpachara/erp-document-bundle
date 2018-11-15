@@ -133,11 +133,11 @@ table.cl-layout-cell {
                 <td class="cl-code">{{ model.code }}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong">วัน/เดือน/ปี :</td>
+                <td class="cl-labeled-cell cl-strong">วันที่ออกเอกสาร :</td>
                 <td class="cl-code">{{ model.tstmp|date('d/m/Y') }}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong">กำหนดส่งสินค้า :</td>
+                <td class="cl-labeled-cell cl-strong">วันที่ส่งสินค้า :</td>
                 <td class="cl-code">{{ model.deliveryDate|date('d/m/Y') }}</td>
               </tr>
             </table>
@@ -205,20 +205,20 @@ table.cl-layout-cell {
           <tr>
             <th style="width: 2em;">ลำดับ</th>
             <th>รายการ</th>
+            <th style="width: 5em;">ปริมาณ</th>
             <th style="width: 4em;">หน่วย</th>
             <th style="width: 5em;">ราคา/หน่วย</th>
-            <th style="width: 5em;">ปริมาณ</th>
             <th style="width: 6em;">ราคารวม</th>
           </tr>
         </thead>
         <tbody>
-{% for detail in model.details %}
+{% for detail in model.details if (detail.statusChanged|default is null) or (not detail.statusChanged.removed) %}
           <tr>
             <td style="text-align: center;">{{ loop.index }}</td>
             <td>{{ detail.costItem.name ?? '' }}</td>
+            <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
             <td style="text-align: center;">{{ detail.costItem.unit ?? '' }}</td>
             <td class="cl-number">{{ detail.price|number_format(2) }}</td>
-            <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
             <td class="cl-number">{{ (detail.price * detail.quantity)|number_format(2) }}</td>
           </tr>
 {% endfor %}

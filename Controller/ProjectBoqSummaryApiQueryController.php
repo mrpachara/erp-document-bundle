@@ -2,8 +2,6 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use Erp\Bundle\CoreBundle\Collection\RestResponse;
-use JMS\DiExtraBundle\Annotation as DI;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Psr\Http\Message\ServerRequestInterface;

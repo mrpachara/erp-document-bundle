@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\DeliveryNote:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\DeliveryNoteRepository
+  table: document_deliverynote
+  inheritanceType: JOINED

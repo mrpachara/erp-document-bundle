@@ -2,9 +2,6 @@
 
 namespace Erp\Bundle\DocumentBundle\Entity;
 
-use Erp\Bundle\MasterBundle\Entity\CostItem;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoqData;
-
 class PurchaseRequestDetail extends PurchaseDetail {
   /**
    * name

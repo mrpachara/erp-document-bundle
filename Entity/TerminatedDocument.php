@@ -2,10 +2,6 @@
 
 namespace Erp\Bundle\DocumentBundle\Entity;
 
-use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
-use Erp\Bundle\CoreBundle\Entity\CoreAccount;
-use Erp\Bundle\CoreBundle\Entity\Thing;
-
 use Erp\Bundle\SystemBundle\Entity\SystemUser;
 
 /**

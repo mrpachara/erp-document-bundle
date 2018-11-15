@@ -3,14 +3,7 @@
 namespace Erp\Bundle\DocumentBundle\Entity;
 
 use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
-use Erp\Bundle\CoreBundle\Entity\CoreAccount;
 use Erp\Bundle\CoreBundle\Entity\Thing;
-
-use Erp\Bundle\MasterBundle\Entity\Vendor;
-use Erp\Bundle\MasterBundle\Entity\Project;
-use Erp\Bundle\MasterBundle\Entity\Employee;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoq;
-use Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType;
 
 /**
  * PurchaseRequest Entity

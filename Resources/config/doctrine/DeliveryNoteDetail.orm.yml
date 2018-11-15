@@ -1,0 +1,8 @@
+Erp\Bundle\DocumentBundle\Entity\DeliveryNoteDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\DeliveryNoteDetailRepository
+  table: document_deliverynotedetail
+  inheritanceType: JOINED
+  # associationOverride:
+  #   income:
+  #     targetEntity: Erp\Bundle\DocumentBundle\Entity\DeliveryNote

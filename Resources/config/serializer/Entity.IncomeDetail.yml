@@ -1,0 +1,6 @@
+Erp\Bundle\DocumentBundle\Entity\IncomeDetail:
+  access_type: property
+  properties:
+    purchase:
+      type: Erp\Bundle\DocumentBundle\Entity\Income
+      max_depth: 1

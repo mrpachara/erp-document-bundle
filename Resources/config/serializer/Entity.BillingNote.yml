@@ -1,0 +1,13 @@
+Erp\Bundle\DocumentBundle\Entity\BillingNote:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\BillingNote
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\BillingNote
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail>
+    paymentDate:
+      type: DateTimeImmutable
+    transferMoney:
+      type: array<string>

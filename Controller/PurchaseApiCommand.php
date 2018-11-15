@@ -2,8 +2,6 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-
 /**
  * Purchase Api Command
  */

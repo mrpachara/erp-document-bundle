@@ -1,0 +1,18 @@
+Erp\Bundle\DocumentBundle\Entity\Income:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\Income
+    updatedBys:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Income>
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\IncomeDetail>
+    project:
+      type: Erp\Bundle\MasterBundle\Entity\Project
+    requester:
+      type: Erp\Bundle\MasterBundle\Entity\Employee
+    boq:
+      type: Erp\Bundle\MasterBundle\Entity\ProjectBoq
+      max_depth: 1
+    deliveryDate:
+      type: DateTimeImmutable

@@ -2,9 +2,7 @@
 
 namespace Erp\Bundle\DocumentBundle\Controller;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Erp\Bundle\DocumentBundle\Collection\DocumentRestResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

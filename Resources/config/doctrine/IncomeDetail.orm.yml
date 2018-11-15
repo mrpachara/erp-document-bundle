@@ -1,0 +1,46 @@
+Erp\Bundle\DocumentBundle\Entity\IncomeDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\IncomeDetailRepository
+  table: document_incomedetail
+  inheritanceType: JOINED
+  id:
+    id:
+      type: bigint
+      generator:
+        strategy: IDENTITY
+  manyToOne:
+    income:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Income
+      inversedBy: details
+      joinColumn:
+        name: id_document_income
+        nullable: false
+        onDelete: CASCADE
+      fetch: EAGER
+  fields:
+    name:
+      type: string
+      length: 256
+      nullable: false
+    unit:
+      type: string
+      length: 128
+      nullable: false
+    price:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    quantity:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    total:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    remark:
+      type: text
+      nullable: true

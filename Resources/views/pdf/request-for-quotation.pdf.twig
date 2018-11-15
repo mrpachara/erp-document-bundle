@@ -199,18 +199,18 @@ table.cl-layout-cell {
       <table class="data-list">
         <thead>
           <tr>
-            <th style="width: 2em;">#No</th>
-            <th>Cost Item</th>
-            <th style="width: 4em;">Unit</th>
-            <th style="width: 6em;">Quantity</th>
+            <th style="width: 2em;">ลำดับ</th>
+            <th>รายการ</th>
+            <th style="width: 4em;">หน่วย</th>
+            <th style="width: 6em;">ปริมาณ</th>
           </tr>
         </thead>
         <tbody>
-{% for detail in model.details %}
+{% for detail in model.details if (detail.statusChanged|default is null) or (not detail.statusChanged.removed) %}
           <tr>
-            <td>{{ loop.index }}</td>
+            <td style="text-align: center;">{{ loop.index }}</td>
             <td>{{ detail.costItem.name }}</td>
-            <td>{{ detail.costItem.unit }}</td>
+            <td style="text-align: center;">{{ detail.costItem.unit }}</td>
             <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
           </tr>
 {% endfor %}

@@ -26,7 +26,7 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
 
         $options['term']['fields'][] = 'project.code';
         $options['term']['fields'][] = 'project.thing.name';
-
+        $options['term']['fields'][] = 'approved';
         return $options;
     }
 }

@@ -24,9 +24,13 @@ services:
   # BUG: https://github.com/symfony/symfony/issues/23200
   Erp\Bundle\DocumentBundle\Controller\:
     resource: '../../Controller'
+    exclude: '../../Controller/PurchaseOrderQuantitySummaryApiQueyController.php'
     tags: ['controller.service_arguments']
     calls:
       - [setContainer, ["@service_container"]]
+
+  Erp\Bundle\DocumentBundle\Controller\PurchaseOrderQuantitySummaryApiQueyController:
+    tags: ['controller.service_arguments']
 
   #Service
   Erp\Bundle\DocumentBundle\Service\PDFService:
@@ -52,7 +56,12 @@ services:
   Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\ProjectBoqSummaryQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\QuotationQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\QuotationQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\GoodsReceiptQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\GoodsReceiptQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuantitySummaryQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\PurchaseOrderQuantitySummaryQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\IncomeQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\IncomeQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\DeliveryNoteQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\DeliveryNoteQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\BillingNoteQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\BillingNoteQueryService'
   
+
   #Entity Listerner
   Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener:
     #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener
@@ -83,3 +92,14 @@ services:
     #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\GoodsReceiptListener
     tags:
       - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt, event: preFlush }
+
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\DeliveryNoteListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\DeliveryNoteListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\DeliveryNote, event: preFlush }
+      
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\BillingNoteListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\BillingNoteListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\BillingNote, event: preFlush }
+

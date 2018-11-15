@@ -47,7 +47,7 @@ class GoodsReceiptApiCommandController extends PurchaseApiCommand {
     if(!empty($data['budgetType'])) $data['budgetType'] = array_intersect_key($data['budgetType'], array_flip(['id', 'dtype']));
     $data['approved'] = !empty($data['approved']);
 
-    $docTotal = $data['docTotal'];
+    //$docTotal = $data['docTotal'];
     $total = $data['total'];
 
     if(empty($total)) throw new \Exception("Invalid data format!!!");
@@ -65,7 +65,7 @@ class GoodsReceiptApiCommandController extends PurchaseApiCommand {
 
       if(empty($detail['_total'])) throw new \Exception("Invalid data format!!!");
 
-      $detail['total'] = ($detail['_total'] / $total) * $docTotal;
+      //$detail['total'] = ($detail['_total'] / $total) * $docTotal;
 
       $data['details'][$index] = $detail;
     }

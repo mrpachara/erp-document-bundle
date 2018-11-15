@@ -1,0 +1,57 @@
+Erp\Bundle\DocumentBundle\Entity\Income:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\IncomeRepository
+  table: document_income
+  inheritanceType: JOINED
+  associationOverride:
+    updateOf:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Income
+    updatedBys:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Income
+  manyToOne:
+    project:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Project
+      joinColumn:
+        name: id_master_project
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+    requester:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Employee
+      joinColumn:
+        name: id_master_employee
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+    boq:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
+      joinColumn:
+        name: id_master_projectboqdata
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER
+  oneToMany:
+    details:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\IncomeDetail
+      cascade: ["persist", "refresh"]
+      mappedBy: income
+  fields:
+    ownerContactInformation:
+      type: string
+      length: 255
+      nullable: true
+    contactOwnerAddress:
+      type: text
+      nullable: true
+    contactInformation:
+      type: string
+      length: 255
+      nullable: false
+    deliveryDate:
+      type: date_immutable
+      nullable: true
+    total:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true

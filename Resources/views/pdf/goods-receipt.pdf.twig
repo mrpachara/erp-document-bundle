@@ -137,8 +137,8 @@ table.cl-layout-cell {
                 <td class="cl-code">{{ model.tstmp|date('d/m/Y') }}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong">อ้างอิงใบสั่งซื้อเลขที่:</td>
-                <td class="cl-code">{{ model.transferOf.code ?? '' }}</td>
+                <td class="cl-labeled-cell cl-strong">กำหนดส่งสินค้า:</td>
+                <td class="cl-code">{{ model.deliveryDate|date('d/m/Y') }}</td>
               </tr>
             </table>
           </td>
@@ -148,6 +148,10 @@ table.cl-layout-cell {
         <tr>
           <td style="width: 50%; vertical-align: top;">
             <table style="width: 100%;">
+              <tr>
+                <td style="font-weight: bold; text-align: right;">อ้างอิง :</td>
+                <td>{{ model.transferOf.code ?? '' }}</td>
+              </tr>
               <tr>
                 <td style="font-weight: bold; text-align: right;">โครงการ :</td>
                 <td>{{ [model.project.code ?? false, model.project.name ?? false]|vfilter(false, true)|join(' ') }}</td>
@@ -165,11 +169,15 @@ table.cl-layout-cell {
           <td style="width: 50%; vertical-align: top;">
             <table style="width: 100%;">
               <tr>
-                <td style="font-weight: bold; text-align: right;">เจ้าหนี้ :</td>
+                <td style="font-weight: bold; text-align: right;">อ้างอิง :</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ผู้ขาย :</td>
                 <td>{{ [ model.vendor.code ?? false, model.vendor.name ?? false ]|vfilter(false, true)|join(' ') }}</td>
               </tr>
               <tr>
-                <td style="font-weight: bold; text-align: right;">ที่อยู่เจ้าหนี้ :</td>
+                <td style="font-weight: bold; text-align: right;">ที่อยู่ผู้ขาย :</td>
                 <td>{{
                   [
                     model.vendor.owner.address.address ?? false,
@@ -204,7 +212,7 @@ table.cl-layout-cell {
           </tr>
         </thead>
         <tbody>
-{% for detail in model.details %}
+{% for detail in model.details if (detail.statusChanged|default is null) or (not detail.statusChanged.removed) %}
           <tr>
             <td style="text-align: center;">{{ loop.index }}</td>
             <td>{{ detail.costItem.name ?? '' }}</td>
@@ -216,76 +224,14 @@ table.cl-layout-cell {
 {% endfor %}
         </tbody>
       </table>
-      <table class="cl-layout-cell" style="width: 100%; page-break-inside: avoid;" nobr="true">
-        <tr>
-          <td colspan="2"></td>
-        </tr>
-        <tr>
-          <td class="cl-layout-cell" style="vertical-align: top;">
-            <table class="cl-layout-cell" style="width: 100%; border: 1px solid black;">
-              <caption class="cl-strong">หมายเหตุ</caption>
-              <tr>
-                
-              <tr>
-                <td colspan="5">{{ model.remarkFinance ?? '-'}}</td>
-              </tr>
-            </table>
-          </td>
-          <td class="cl-layout-cell" style="width: 16em;">
-            <table class="cl-layout-cell" style="width: 100%;">
-              <tr>
-                <td class="cl-labeled-cell cl-strong" style="width: 10em;">รวมราคาก่อนลด :</td>
-                <td class="cl-number cl-bordered-cell">{{ model.total|number_format(2) }}</td>
-              </tr>
-              <tr>
-                <td class="cl-labeled-cell">ส่วนลด :</td>
-                <td class="cl-number cl-bordered-cell">{{ model.discount|number_format(2) }}</td>
-              </tr>
-              <tr>
-                <td class="cl-labeled-cell cl-strong">รวมราคาทั้งหมด :</td>
-                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.costItemTotal|number_format(2) }}</td>
-              </tr>
-              <tr>
-                <td style="height: 0.5em;"></td>
-              </tr>
-{% if model.vatFactor %}
-              <tr>
-                <td class="cl-labeled-cell">{% autoescape false %}{{ (model.vatFactor)? ('ภาษีมูลค่าเพิ่ม ' ~ model.vat ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
-                <td class="cl-number cl-bordered-cell">{{ ((model.vatFactor)? model.vatCost|number_format(2) : '') }}</td>
-              </tr>
-{% endif %}
-              <tr>
-                <td class="cl-labeled-cell">{{ ((model.vatFactor)? 'มูลค่าสินค้าไม่รวม Vat' : 'มูลค่าสินค้าไม่มี Vat') }} :</td>
-                <td class="cl-number cl-bordered-cell">{{ model.excludeVat|number_format(2) }}</td>
-              </tr>
-              <tr>
-                <td class="cl-labeled-cell cl-strong">มูลค่าสินค้ารวม :</td>
-                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.docTotal|number_format(2) }}</td>
-              </tr>
-{% if model.taxFactor %}
-              <tr>
-                <td style="height: 0.5em;"></td>
-              </tr>
-              <tr>
-                <td class="cl-labeled-cell">{% autoescape false %}{{ (model.taxFactor)? ('ภาษีหัก ณ ที่จ่าย ' ~ model.tax ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
-                <td class="cl-number cl-bordered-cell">{{ (model.taxFactor)? model.taxCost|number_format(2) : '' }}</td>
-              </tr>
-              <tr>
-                <td class="cl-labeled-cell cl-strong">{% autoescape false %}{{ (model.taxFactor)? ('มูลค่าสินค้ารวมชำระ :')|e : '&nbsp;' }}{% endautoescape %}</td>
-                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ (model.taxFactor)? model.payTotal|number_format(2) : '' }}</td>
-              </tr>
-{% endif %}
-            </table>
-          </td>
-        </tr>
-      </table>
+      
       <div style="position: fixed; bottom: 0px;">
         <table class="cl-layout-cell" style="width: 100%;">
           <tr>
             <td class="cl-layout-cell" style="width: 50%; text-align: center">
               <table class="cl-layout-cell">
                 <tr>
-                  <td>ผู้จัดทำ</td>
+                  <td>ผู้รับของ</td>
                 </tr>
                 <tr>
                   <td>_________________________</td>
@@ -302,7 +248,7 @@ table.cl-layout-cell {
 {% if model.approved %}
               <table class="cl-layout-cell">
                 <tr>
-                  <td>ผู้อนุมัติ</td>
+                  <td>ผู้ตรวจสอบ</td>
                 </tr>
                 <tr>
                   <td>_________________________</td>
