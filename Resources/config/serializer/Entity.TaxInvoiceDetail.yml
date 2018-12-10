@@ -1,0 +1,8 @@
+Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail:
+  access_type: property
+  properties:
+    income:
+      type: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
+    statusChanged:
+      type: Erp\Bundle\DocumentBundle\Entity\BillingNoteDetailStatusChanged
+      

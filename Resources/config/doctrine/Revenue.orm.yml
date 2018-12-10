@@ -1,0 +1,104 @@
+Erp\Bundle\DocumentBundle\Entity\Revenue:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RevenueRepository
+  table: document_revenue
+  inheritanceType: JOINED
+  associationOverride:
+    updateOf:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Revenue
+    updatedBys:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\Revenue
+    details:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\RevenueDetail
+  fields:
+    discount:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: false
+    costItemTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: false
+    vatFactor:
+      type: boolean
+      nullable: false
+    vatIncluded:
+      type: boolean
+      nullable: true
+    vat:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    vatCost:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    excludeVat:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    docTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    tax:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    taxFactor:
+      type: boolean
+      nullable: false
+    taxCost:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    payTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    remarkFinance:
+      type: text
+      nullable: true
+    retention:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    retentionFactor:
+      type: boolean
+      nullable: false
+    retentionCost:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    retentionPayTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    netTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: false
+    paymentDate: 
+      type: datetime_immutable
+      nullable: true
+    paymentChannel:
+      type: string
+      length: 255
+      nullable: true
+    remarkOther:
+      type: text
+      nullable: true
+      

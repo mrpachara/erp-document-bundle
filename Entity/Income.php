@@ -77,7 +77,7 @@ abstract class Income extends Document
      * @var ArrayCollection
      */
     protected $details;
-
+    
     /**
      * constructor
      *

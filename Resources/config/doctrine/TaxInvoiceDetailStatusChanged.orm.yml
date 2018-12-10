@@ -1,0 +1,17 @@
+Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetailStatusChanged:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\TaxInvoiceDetailRepository
+  table: document_taxinvoicedetailstatuschanged
+  inheritanceType: JOINED
+  manyToOne:
+    taxInvoiceDetail:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail
+      joinColumn:
+        name: id_document_incomedetail
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    removed:
+      type: boolean
+      nullable: false

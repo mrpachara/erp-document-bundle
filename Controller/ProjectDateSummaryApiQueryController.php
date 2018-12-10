@@ -53,9 +53,7 @@ class ProjectDateSummaryApiQueryController extends FOSRestController
      */
     public function getAction($id, ServerRequestInterface $request)
     {
-        $query = $request->getQueryParams();
-        $excepts = (empty($query['excepts']))? null : $query['excepts'];
-        $item = $this->domainQuery->getProjectDateSummary($id, $excepts);
+        $item = $this->domainQuery->getProjectDateSummary($id);
 
         return $this->view(['data' => $item], 200);
     }

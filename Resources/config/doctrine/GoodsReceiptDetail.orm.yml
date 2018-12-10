@@ -1,7 +1,7 @@
 Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail:
   type: entity
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\GoodsReceiptDetailRepository
-  table: document_goodsReceiptdetail
+  table: document_goodsreceiptdetail
   inheritanceType: JOINED
   oneToOne:
     statusChanged:

@@ -11,6 +11,18 @@ use Doctrine\ORM\QueryBuilder;
 
 abstract class DocumentQuery extends ParentQuery implements QueryInterface
 {
+    public function searchOptions() {
+        $result = parent::searchOptions();
+        
+        if(!isset($result['where'])) $result['where'] = [
+            'fields' => [],
+        ];
+        
+        $result['where']['fields'][] = 'approved';
+        
+        return $result;
+    }
+    
     public function origin(Document $doc)
     {
         /** @var QueryBuilder */

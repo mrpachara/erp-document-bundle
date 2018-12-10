@@ -1,0 +1,11 @@
+Erp\Bundle\DocumentBundle\Entity\TaxInvoice:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail>
+    paymentDate:
+      type: DateTimeImmutable

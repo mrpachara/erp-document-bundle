@@ -13,7 +13,7 @@ class BillingNoteQueryService extends BillingNoteQuery
     }
 
     /** @required */
-    public function setDeliveryNoteQueryService(PurchaseRequestQueryService $deliveryNoteQueryService)
+    public function setDeliveryNoteQueryService(DeliveryNoteQueryService $deliveryNoteQueryService)
     {
         $this->deliveryNoteQueryService = $deliveryNoteQueryService;
     }

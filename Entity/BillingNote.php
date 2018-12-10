@@ -123,6 +123,10 @@ class BillingNote extends Income
      */
     protected $other;
     
+    /**
+     * @var string
+     */
+    protected $remarkOther;
     
     /**
      * constructor
@@ -425,6 +429,16 @@ class BillingNote extends Income
         
         return $this;
     }
+
+    public function getRemarkOther()
+    {
+        return $this->remarkOther;
+    }
     
-    
+    public function setRemarkOther($remarkOther)
+    {
+        $this->remarkOther = $remarkOther;
+        
+        return $this;
+    }
 }

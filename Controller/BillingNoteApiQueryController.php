@@ -125,6 +125,8 @@ class BillingNoteApiQueryController extends IncomeApiQuery
 
         $profile = $this->settingQuery->findOneByCode('profile')->getValue();
         
+        $bankAccounts = $this->settingQuery->findOneByCode('bankaccount')->getValue()['bankAccounts'];
+        
         $logo = null;
         if(!empty($profile['logo'])) {
             $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
@@ -134,6 +136,7 @@ class BillingNoteApiQueryController extends IncomeApiQuery
             'profile' => $profile,
             'origin' => $origin,
             'model' => $income,
+            'bankAccounts' => $bankAccounts,
         ]);
 
         $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($income, $logo) {

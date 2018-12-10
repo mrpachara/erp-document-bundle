@@ -2,7 +2,7 @@
 
 namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service;
 
-use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\ProjectQueryService;
+use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\ProjectBoqQueryService;
 
 class ProjectDateSummaryQueryService extends ProjectDateSummaryQuery
 {
@@ -19,8 +19,8 @@ class ProjectDateSummaryQueryService extends ProjectDateSummaryQuery
     }
 
     /** @required */
-    public function setProjectQueryService(ProjectQueryService $projectQueryService)
+    public function setProjectBoqQueryService(ProjectBoqQueryService $projectBoqQueryService)
     {
-        $this->projectQuery = $projectQueryService;
+        $this->projectBoqQuery = $projectBoqQueryService;
     }
 }

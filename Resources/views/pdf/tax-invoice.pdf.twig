@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+@page {
+  size: auto;
+  header: html_DefaultHeader;
+  footer: html_DefaultFooter;
+}
+
+body {
+  font-family: thsarabun;
+}
+
+.cl-title {
+  text-align: center;
+}
+
+.cl-header {
+  text-align: right;
+  border-bottom: 1px solid #000000;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.cl-logo {
+  width: 120px;
+}
+
+table.data-list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.data-list th,
+table.data-list td {
+  border: 1px solid black;
+}
+
+.cl-code,
+.cl-number {
+  font-family: monospace;
+  font-size: 0.60em;
+}
+
+.cl-number {
+  text-align: right;
+}
+
+.cl-layout-cell {
+  margin: 0;
+  padding: 0;
+}
+
+table.cl-collapse,
+table.cl-layout-cell {
+  border-collapse: collapse;
+}
+
+.cl-labeled-cell {
+  text-align: right;
+  font-weight: normal;
+}
+
+.cl-bordered-cell {
+  border: 1px solid black;
+}
+
+.cl-strong {
+  font-weight: bold;
+}
+    </style>
+  </head>
+  <body>
+      <htmlpageheader name="DefaultHeader">
+          <div class="cl-header cl-code">
+          <table width="100%" style="vertical-align: bottom; color: #000000; font-weight: bold;">
+            <tr>
+              <td style="width: 33%; text-align: left;"><span style="font-weight: bold;">created by CONSOL</span></td>
+              <td style="text-align: center; font-weight: bold;">{{ model.status }}</td>
+              <td style="width: 33%; text-align: right;"><span class="cl-code">{{ model.code }}</span></td>
+            </tr>
+          </table>
+        </div>
+      </htmlpageheader>
+
+      <htmlpagefooter name="DefaultFooter" class="cl-footer">
+          <table width="100%" style="vertical-align: bottom; color: #000000; font-weight: bold;">
+              <tr>
+                  <td style="width: 33%; text-align: left;"><span style="font-weight: bold;">{{ "now"|date('d/m/Y H:i:s') }}</span></td>
+                  <td style="text-align: center; font-weight: bold;">{PAGENO}/{nbpg}</td>
+                  <td style="width: 33%; text-align: right;">FM-PO-rev1.0</td>
+              </tr>
+          </table>
+      </htmlpagefooter>
+      
+      <h1 class="cl-title">ใบเสร็จรับเงิน/ใบกำกับภาษี (TAX INVOICE)</h1>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 100px;">
+{% if profile.logo %}
+            <img class="cl-logo" src="var:logo" />
+{% endif %}
+          </td>
+          <td>
+            <table>
+              <tr>
+                <td style="font-weight: bold;">{{ profile.profileData.name }} {% if profile.profileData.dtype == 'corporate' %}({{ (profile.profileData.main)? 'สำนักงานใหญ่': 'สาขา'~profile.profileData.branch }}){% endif %}</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
+                  [
+                    profile.profileData.address.address ?? false,
+                    (profile.profileData.address.subdistrict ?? false)|sformat('ต.%s'),
+                    (profile.profileData.address.district ?? false)|sformat('อ.%s'),
+                    (profile.profileData.address.province ?? false)|sformat('จ.%s'),
+                    profile.profileData.address.postalcode ?? false,
+                  ]|vfilter(false, true)|join(' ')
+                }}</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight: bold;">โทรศัพท์ :</span> {{ profile.phone }} <span style="font-weight: bold;">โทรสาร :</span> {{ profile.fax }}</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span> {{ profile.profileData.code }}</td>
+              </tr>
+            </table>
+          </td>
+          <td style="width: 180px;">
+            <table style="width: 100%;">
+              <tr>
+                <td class="cl-labeled-cell cl-strong">เลขที่เอกสาร :</td>
+                <td class="cl-code">{{ model.code }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">อ้างอิงภายใน :</td>
+                <td class="cl-code">{{ model.transferOf.code ?? '-' }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">วันที่ออกเอกสาร :</td>
+                <td class="cl-code">{{ model.tstmp|date('d/m/Y') }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">วันครบกำหนด :</td>
+                <td class="cl-code">{{ model.paymentDate|date('d/m/Y') }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 50%; vertical-align: top;">
+            <table style="width: 100%;">
+              <tr>
+                <td style="font-weight: bold; text-align: right;">โครงการ :</td>
+                <td>{{ [model.project.code ?? false, model.project.name ?? false]|vfilter(false, true)|join(' ') }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">งบประมาณ :</td>
+                <td>{{ model.boq.name ?? '-' }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
+                <td>{{ model.contactInformation }}</td>
+              </tr>
+            </table>
+          </td>
+          <td style="width: 50%; vertical-align: top;">
+            <table style="width: 100%;">
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ชื่อลูกค้า :</td>
+                <td>{{  model.project.owner.name ?? '-' }} 
+                {% if model.project.owner.personData.corporateName != '' or model.project.owner.personData.firstname == '' %}({{  (model.project.owner.personData.main) ? 'สำนักงานใหญ่' :'สาขา'~model.project.owner.personData.branch }})
+                {% elseif model.project.owner.personData.corporateName == '' or model.project.owner.personData.firstname != '' %} {% endif %}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ที่อยู่ลูกค้า :</td>
+                <td>{{
+                  [
+                    model.project.owner.personData.address.address ?? false,
+                    (model.project.owner.personData.address.subdistrict ?? false)|sformat('ต.%s'),
+                    (model.project.owner.personData.address.district ?? false)|sformat('อ.%s'),
+                    (model.project.owner.personData.address.province ?? false)|sformat('จ.%s'),
+                    model.project.owner.personData.address.postalcode ?? false,
+                  ]|vfilter(false, true)|join(' ')
+                }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
+                <td>{{ (model.ownerContactInformation)? model.ownerContactInformation:'-' }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; text-align: right;">ที่อยู่ติดต่อ :</td>
+                <td>{{ model.contactOwnerAddress ?? '-' }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <table class="data-list">
+        <thead>
+          <tr>
+            <th style="width: 2em;">ลำดับ</th>
+            <th>รายการ</th>
+            <th style="width: 5em;">ปริมาณ</th>
+            <th style="width: 4em;">หน่วย</th>
+            <th style="width: 6em;">ราคารวม</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for detail in model.details if (detail.statusChanged|default is null) or (not detail.statusChanged.removed) %}
+          <tr>
+            <td style="text-align: center;">{{ loop.index }}</td>
+            <td>{{ (detail.costItem.name) ?? detail.name }}</td>
+            <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
+            <td style="text-align: center;">{{ detail.costItem.unit ?? detail.unit }}</td>
+            <td class="cl-number">{{ (detail.price * detail.quantity)|number_format(2) }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+      <table class="cl-layout-cell" style="width: 100%; page-break-inside: avoid;" nobr="true">
+        <tr>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="cl-layout-cell" style="vertical-align: top;">
+            <table class="cl-layout-cell" style="width: 100%; border: 1px solid black;">
+              <caption class="cl-strong">การชำระเงิน</caption>
+              <tr>
+                <td class="cl-labeled-cell cl-strong" style="width: 25%;">{% autoescape false %}ประกันผลงาน {{(model.retentionFactor)? (  model.retention ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
+                <td style="width: 17%;">{{ (model.retentionFactor)? ('<span class="cl-number">' ~ model.retentionCost|number_format(2) ~ '</span>')|raw : 'ไม่มี' }}</td>
+              </tr>
+              <tr>
+                <th class="cl-labeled-cell cl-strong">หมายเหตุ :</th>
+                <td colspan="5">{{ model.remarkFinance }}</td>
+              </tr>
+            </table>
+            <table class="cl-layout-cell" style="width: 100%; border: 0px;">
+              <tr>
+                <td style="height: 1em;"></td>
+              </tr>
+ {% for bankAccount in bankAccounts %}
+ 	 {% if model.paymentChannel == bankAccount.code%}
+              <tr>
+                <td colspan="5" class="cl-strong">ชำระโดย</td>
+              </tr>
+              <tr>
+                <td colspan="5"><strong>โอนผ่านบัญชีธนาคาร </strong>{{ bankAccount.code }} {{ bankAccount.name }} {{ bankAccount.category }} {{ bankAccount.bank }} {{ bankAccount.branch }}</td>
+              </tr>
+     {% endif %}
+ {% endfor %}
+     {% if model.paymentChannel == 'bankChack'%}
+              <tr>
+                <td colspan="5" class="cl-strong">ชำระโดย</td>
+              </tr>
+              <tr>
+                <td colspan="5" class="cl-strong">เช็คในนามบริษัท</td>
+              </tr>
+     {% endif %}
+     {% if model.paymentChannel == 'etc'%}
+              <tr>
+                <td colspan="5" class="cl-strong">ชำระโดย</td>
+              </tr>
+              <tr>
+                <td colspan="5" class="cl-strong">อื่นๆ : {{ model.remarkOther }}</td>
+              </tr>
+     {% endif %}
+            </table>
+          </td>
+          <td class="cl-layout-cell" style="width: 16em;">
+            <table class="cl-layout-cell" style="width: 100%;">
+              <tr>
+                <td class="cl-labeled-cell cl-strong" style="width: 10em;">รวมราคาก่อนลด :</td>
+                <td class="cl-number cl-bordered-cell">{{ model.total|number_format(2) }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell">ส่วนลด :</td>
+                <td class="cl-number cl-bordered-cell">{{ model.discount|number_format(2) }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">รวมราคาทั้งหมด :</td>
+                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.costItemTotal|number_format(2) }}</td>
+              </tr>
+              <tr>
+                <td style="height: 0.5em;"></td>
+              </tr>
+{% if model.vatFactor %}
+              <tr>
+                <td class="cl-labeled-cell">{% autoescape false %}{{ (model.vatFactor)? ('ภาษีมูลค่าเพิ่ม ' ~ model.vat ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
+                <td class="cl-number cl-bordered-cell">{{ ((model.vatFactor)? model.vatCost|number_format(2) : '') }}</td>
+              </tr>
+{% endif %}
+              <tr>
+                <td class="cl-labeled-cell">{{ ((model.vatFactor)? 'มูลค่าสินค้าไม่รวม Vat' : 'มูลค่าสินค้าไม่มี Vat') }} :</td>
+                <td class="cl-number cl-bordered-cell">{{ model.excludeVat|number_format(2) }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">มูลค่าสินค้ารวม :</td>
+                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.docTotal|number_format(2) }}</td>
+              </tr>
+{% if model.taxFactor %}
+              <tr>
+                <td style="height: 0.5em;"></td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell">{% autoescape false %}{{ (model.taxFactor)? ('ภาษีหัก ณ ที่จ่าย ' ~ model.tax ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
+                <td class="cl-number cl-bordered-cell">{{ (model.taxFactor)? model.taxCost|number_format(2) : '' }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">{% autoescape false %}{{ (model.taxFactor)? ('มูลค่าสินค้ารวมชำระ :')|e : '&nbsp;' }}{% endautoescape %}</td>
+                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ (model.taxFactor)? model.payTotal|number_format(2) : '' }}</td>
+              </tr>
+{% endif %}
+			  <tr>
+                <td style="height: 0.5em;"></td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">มูลค่ารวมชำระสุทธิ :</td>
+                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.retentionPayTotal|number_format(2) }}</td>
+              </tr>
+              <tr>
+                <td style="height: 0.5em;"></td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">ยอดชำระสุทธิ :</td>
+                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ model.netTotal|number_format(2) }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table class="cl-layout-cell" style="width: 100%; page-break-inside: avoid;" nobr="true">
+        <tr>
+          <td colspan="2"></td>
+        </tr>
+        
+      </table>
+      <div style="position: fixed; bottom: 0px;">
+        <table class="cl-layout-cell" style="width: 100%;">
+          <tr>
+            <td class="cl-layout-cell" style="width: 50%; text-align: center">
+              <table class="cl-layout-cell">
+                <tr>
+                  <td><br>ผู้รับเงิน</td>
+                </tr>
+                <tr>
+                  <td>_________________________</td>
+                </tr>
+                <tr>
+                  <td>({{ '_________________________' }})</td>
+                </tr>
+                <tr>
+                  <td>{{ '____/____/____' }}</td>
+                </tr>
+              </table>
+            </td>
+            <td class="cl-layout-cell" style="width: 50%; text-align: center">
+{% if model.approved %}
+              <table class="cl-layout-cell">
+                <tr>
+                  <td>ในนาม {{ profile.profileData.name }}<br>ผู้รับมอบอำนาจ</td>
+                </tr>
+                <tr>
+                  <td>_________________________</td>
+                </tr>
+                <tr>
+                  <td>({{ '_________________________' }})</td>
+                </tr>
+                <tr>
+                  <td>{{ '____/____/____' }}</td>
+                </tr>
+              </table>
+{% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
+  </body>
+</html>

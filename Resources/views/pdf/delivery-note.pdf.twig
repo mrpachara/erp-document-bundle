@@ -133,8 +133,12 @@ table.cl-layout-cell {
                 <td class="cl-code">{{ model.code }}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong">อ้างอิง :</td>
+                <td class="cl-labeled-cell cl-strong">อ้างอิงภายใน :</td>
                 <td class="cl-code">{{ model.updateOf.code ?? '-' }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">อ้างอิงภายนอก :</td>
+                <td class="cl-code"> - </td>
               </tr>
               <tr>
                 <td class="cl-labeled-cell cl-strong">วันที่ออกเอกสาร :</td>

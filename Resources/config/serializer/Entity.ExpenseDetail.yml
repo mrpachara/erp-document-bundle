@@ -1,0 +1,7 @@
+Erp\Bundle\DocumentBundle\Entity\ExpenseDetail:
+  access_type: property
+  properties:
+    purchase:
+      type: Erp\Bundle\DocumentBundle\Entity\Expense
+    statusChanged:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrderExpenseDetailStatusChanged

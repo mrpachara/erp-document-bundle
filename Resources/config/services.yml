@@ -60,7 +60,10 @@ services:
   Erp\Bundle\DocumentBundle\Domain\CQRS\IncomeQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\IncomeQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\DeliveryNoteQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\DeliveryNoteQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\BillingNoteQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\BillingNoteQueryService'
-  
+  Erp\Bundle\DocumentBundle\Domain\CQRS\ExpenseQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\ExpenseQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\TaxInvoiceQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\TaxInvoiceQueryService'
+  Erp\Bundle\DocumentBundle\Domain\CQRS\RevenueQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\RevenueQueryService'
+
 
   #Entity Listerner
   Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener:
@@ -103,3 +106,17 @@ services:
     tags:
       - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\BillingNote, event: preFlush }
 
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\ExpenseListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\ExpenseListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\Expense, event: preFlush }
+      
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TaxInvoiceListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TaxInvoiceListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\TaxInvoice, event: preFlush }
+
+  Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\RevenueListener:
+    #class: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\RevenueListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\DocumentBundle\Entity\Revenue, event: preFlush }

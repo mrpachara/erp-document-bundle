@@ -54,7 +54,8 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
         foreach ($boqData->getBudgets() as $budget) {
             $budget->cost = [
                 'request' => 0,
-                'order' => 0
+                'order' => 0,
+                'expense' => 0
             ];
         }
 
@@ -67,7 +68,11 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
                     $budgets[$purchase->getBudgetType()->getId()]->cost['request'] += $purchaseDetail->getTotal();
                 }
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail) {
+                if ($purchase->updatable()) {
                 $budgets[$purchase->getBudgetType()->getId()]->cost['order'] += $purchaseDetail->getTotal();
+                }
+            } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\ExpenseDetail) {
+                    $budgets[$purchase->getBudgetType()->getId()]->cost['expense'] += $purchaseDetail->getTotal();
             }
         }
 

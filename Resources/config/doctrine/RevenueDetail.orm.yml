@@ -1,0 +1,14 @@
+Erp\Bundle\DocumentBundle\Entity\RevenueDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\TaxInvoiceDetailRepository
+  table: document_revenuedetail
+  inheritanceType: JOINED
+  oneToOne:
+    statusChanged:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetailStatusChanged
+      cascade: ["persist", "refresh"]
+      joinColumn:
+        name: id_document_taxInvoicedetailstatuschanged
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER

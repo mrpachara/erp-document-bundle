@@ -6,6 +6,8 @@ Erp\Bundle\DocumentBundle\Entity\Document:
   indexes:
     document_document_tstmp_inx:
       columns: tstmp
+    document_document_approved_inx:
+      columns: approved
   manyToOne:
     creator:
       targetEntity: Erp\Bundle\SystemBundle\Entity\SystemUser

@@ -103,4 +103,6 @@ Erp\Bundle\DocumentBundle\Entity\BillingNote:
     other:
       type: boolean
       nullable: false
-      
+    remarkOther:
+      type: text
+      nullable: true

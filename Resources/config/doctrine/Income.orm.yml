@@ -24,7 +24,7 @@ Erp\Bundle\DocumentBundle\Entity\Income:
         onDelete: RESTRICT
       fetch: EAGER
     boq:
-      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
+      targetEntity: Erp\Bundle\MasterBundle\Entity\ProjectBoq
       joinColumn:
         name: id_master_projectboqdata
         nullable: false

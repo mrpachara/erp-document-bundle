@@ -25,7 +25,7 @@ class PurchaseOrderDetailStatusChanged extends DocumentObjectValue {
   public function __construct() { }
 
   public function getPurchaseOrderDetail() {
-      return $this->PurchaseOrderDetail;
+      return $this->purchaseOrderDetail;
   }
 
   public function setPurchaseOrderDetail(?PurchaseOrderDetail $purchaseOrderDetail) {

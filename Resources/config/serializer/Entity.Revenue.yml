@@ -1,0 +1,11 @@
+Erp\Bundle\DocumentBundle\Entity\Revenue:
+  access_type: property
+  properties:
+    updateOf:
+      type: Erp\Bundle\DocumentBundle\Entity\Revenue
+    updatedBy:
+      type: Erp\Bundle\DocumentBundle\Entity\Revenue
+    details:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\RevenueDetail>
+    paymentDate:
+      type: DateTimeImmutable

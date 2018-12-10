@@ -133,11 +133,19 @@ table.cl-layout-cell {
                 <td class="cl-code">{{ model.code }}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong">วัน/เดือน/ปี :</td>
+                <td class="cl-labeled-cell cl-strong">อ้างอิงภายใน :</td>
+                <td class="cl-code">{{ model.transferOf.code ?? '' }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">อ้างอิงภายนอก :</td>
+                <td class="cl-code"> - </td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">วันที่ออกเอกสาร :</td>
                 <td class="cl-code">{{ model.tstmp|date('d/m/Y') }}</td>
               </tr>
               <tr>
-                <td class="cl-labeled-cell cl-strong">กำหนดส่งสินค้า :</td>
+                <td class="cl-labeled-cell cl-strong">วันที่ส่งสินค้า :</td>
                 <td class="cl-code">{{ model.deliveryDate|date('d/m/Y') }}</td>
               </tr>
             </table>
@@ -148,10 +156,6 @@ table.cl-layout-cell {
         <tr>
           <td style="width: 50%; vertical-align: top;">
             <table style="width: 100%;">
-              <tr>
-                <td style="font-weight: bold; text-align: right;">อ้างอิง :</td>
-                <td>{{ model.transferOf.code ?? '' }}</td>
-              </tr>
               <tr>
                 <td style="font-weight: bold; text-align: right;">โครงการ :</td>
                 <td>{{ [model.project.code ?? false, model.project.name ?? false]|vfilter(false, true)|join(' ') }}</td>
@@ -168,10 +172,6 @@ table.cl-layout-cell {
           </td>
           <td style="width: 50%; vertical-align: top;">
             <table style="width: 100%;">
-              <tr>
-                <td style="font-weight: bold; text-align: right;">อ้างอิง :</td>
-                <td></td>
-              </tr>
               <tr>
                 <td style="font-weight: bold; text-align: right;">ผู้ขาย :</td>
                 <td>{{ [ model.vendor.code ?? false, model.vendor.name ?? false ]|vfilter(false, true)|join(' ') }}</td>

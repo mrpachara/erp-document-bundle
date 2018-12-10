@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\BillingNoteDetailStatusChanged:
+  access_type: property
+  properties:
+    billingNoteDetail:
+      type: Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail
