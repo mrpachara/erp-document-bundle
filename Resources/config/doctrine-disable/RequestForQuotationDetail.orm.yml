@@ -1,0 +1,19 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RequestForQuotationDetailRepository
+  table: document_requestforquotationdetail
+  inheritanceType: JOINED
+  manyToOne:
+    purchaseRequstDetail:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail
+      joinColumn:
+        name: id_document_purchaserequestdetail
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    stockQuantity:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true

@@ -1,0 +1,13 @@
+Erp\Bundle\DocumentBundle\Entity\QuotationDetail:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\QuotationDetailRepository
+  table: document_quotationdetail
+  inheritanceType: JOINED
+  manyToOne:
+    requestForQuotationDetail:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\RequestForQuotationDetail
+      joinColumn:
+        name: id_document_requestforquotationdetail
+        nullable: false
+        onDelete: RESTRICT
+      fetch: EAGER

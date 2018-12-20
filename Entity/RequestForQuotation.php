@@ -433,7 +433,7 @@ class RequestForQuotation extends Document
     /**
      * Add requestForQuotationVendors
      *
-     * @param Vendor $vendor
+     * @param RequestForQuotationVendor $rqvendor
      *
      * @return static
      */
@@ -449,7 +449,7 @@ class RequestForQuotation extends Document
     /**
      * Remove requestForQuotationVendors
      *
-     * @param Vendor $vendor
+     * @param RequestForQuotationVendor $rqvendor
      */
     public function removeRequestForQuotationVendor(RequestForQuotationVendor $rqvendor)
     {
