@@ -170,9 +170,7 @@ table.cl-layout-cell {
             <table style="width: 100%;">
               <tr>
                 <td style="font-weight: bold; text-align: right;">ชื่อลูกค้า :</td>
-                <td>{{  model.project.owner.name ?? '-' }} 
-                {% if model.project.owner.personData.corporateName != '' or model.project.owner.personData.firstname == '' %}({{  (model.project.owner.personData.main) ? 'สำนักงานใหญ่' :'สาขา'~model.project.owner.personData.branch }})
-                {% elseif model.project.owner.personData.corporateName == '' or model.project.owner.personData.firstname != '' %} {% endif %}</td>
+                <td>{{  model.project.owner.name ?? '-' }} </td>
               </tr>
               <tr>
                 <td style="font-weight: bold; text-align: right;">ที่อยู่ลูกค้า :</td>

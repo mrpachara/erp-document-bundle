@@ -6,21 +6,21 @@ class DeliveryNoteAuthorization extends AbstractIncomeAuthorization
 {
     public function replace(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_EDIT_INCOME_DN');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_INCOME_DN_EDIT');
     }
 
     public function approve(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_APPROVE_INCOME_DN');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_INCOME_DN_APPROVE');
     }
 
     public function cancel(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_CANCEL_INCOME_DN');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_INCOME_DN_CANCEL');
     }
 
     public function reject(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_REJECT_INCOME_DN');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_INCOME_DN_REJECT');
     }
 }

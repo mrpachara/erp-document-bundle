@@ -20,39 +20,36 @@ abstract class IncomeApiQuery extends DocumentApiQuery {
      */
     protected $domainQuery;
 
-    /** @var \Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery-*/
-    protected $projectBoqSummaryQuery;
+    /** @var \Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqContractSummaryQuery-*/
+    protected $projectBoqContractSummaryQuery;
 
-    //    /** @required */
-    //    public function setProjectBoqSummaryQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery $projectBoqSummaryQuery)
-    //    {
-    //        $this->projectBoqSummaryQuery = $projectBoqSummaryQuery;
-    //    }
+        /** @required */
+        public function setProjectBoqContractSummaryQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqContractSummaryQuery $projectBoqContractSummaryQuery)
+        {
+            $this->projectBoqContractSummaryQuery = $projectBoqContractSummaryQuery;
+        }
 
-//    /**
-//     * get action
-//     *
-//     * @Rest\Get("/{id}")
-//     *
-//     * @param string $id
-//     * @param ServerRequestInterface $request
-//     */
-//    public function getAction($id, ServerRequestInterface $request)
-//    {
-//        $response = parent::getAction($id, $request);
+    /**
+     * get action
+     *
+     * @Rest\Get("/{id}")
+     *
+     * @param string $id
+     * @param ServerRequestInterface $request
+     */
+    public function getAction($id, ServerRequestInterface $request)
+    {
+        $response = parent::getAction($id, $request);
 
-//        $responseData = $response->getData();
-//        /** @var Erp\Bundle\DocumentBundle\Entity\Income */
-//        $income = $responseData['data'];
+        $responseData = $response->getData();
+        /** @var Erp\Bundle\DocumentBundle\Entity\Income */
+        $income = $responseData['data'];
 
-//        if (!empty($income)) {
-//            // TODO: check authentication
-//            foreach ($income->getDetails() as $detail) {
-//                // TODO: check if needed set back to $detail
-//                $this->projectBoqSummaryQuery->getProjectBoqDataSummary($detail->getBoqData()->getId());
-//            }
-//        }
+        if (!empty($income)) {
+            // TODO: check authentication
+            $this->projectBoqContractSummaryQuery->getProjectBoqDataSummary($income->getBoq()->getId());
+        }
 
-//        return $response;
-//    }
+        return $response;
+    }
 }

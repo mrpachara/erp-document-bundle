@@ -6,21 +6,21 @@ class PurchaseRequestAuthorization extends AbstractPurchaseAuthorization
 {
     public function replace(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_EDIT_PURCHASE_PR');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_EDIT');
     }
 
     public function approve(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_APPROVE_PURCHASE_PR');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_APPROVE');
     }
 
     public function cancel(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_CANCEL_PURCHASE_PR');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_CANCEL');
     }
 
     public function reject(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_REJECT_PURCHASE_PR');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_REJECT');
     }
 }

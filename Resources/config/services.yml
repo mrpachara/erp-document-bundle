@@ -26,8 +26,8 @@ services:
     resource: '../../Controller'
     exclude: '../../Controller/PurchaseOrderQuantitySummaryApiQueyController.php'
     tags: ['controller.service_arguments']
-    calls:
-      - [setContainer, ["@service_container"]]
+#    calls:
+#      - [setContainer, ["@service_container"]]
 
   Erp\Bundle\DocumentBundle\Controller\PurchaseOrderQuantitySummaryApiQueyController:
     tags: ['controller.service_arguments']

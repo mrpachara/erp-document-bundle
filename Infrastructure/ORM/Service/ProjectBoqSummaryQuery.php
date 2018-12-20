@@ -53,9 +53,18 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
 
         foreach ($boqData->getBudgets() as $budget) {
             $budget->cost = [
-                'request' => 0,
-                'order' => 0,
-                'expense' => 0
+                'request' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
+                'order' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
+                'expense' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
             ];
         }
 
@@ -65,14 +74,14 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
 
             if ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail) {
                 if ($purchase->updatable()) {
-                    $budgets[$purchase->getBudgetType()->getId()]->cost['request'] += $purchaseDetail->getTotal();
+                    $budgets[$purchase->getBudgetType()->getId()]->cost['request'][$purchase->getApproved()? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
                 }
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail) {
                 if ($purchase->updatable()) {
-                $budgets[$purchase->getBudgetType()->getId()]->cost['order'] += $purchaseDetail->getTotal();
+                    $budgets[$purchase->getBudgetType()->getId()]->cost['order'][$purchase->getApproved()? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
                 }
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\ExpenseDetail) {
-                    $budgets[$purchase->getBudgetType()->getId()]->cost['expense'] += $purchaseDetail->getTotal();
+                $budgets[$purchase->getBudgetType()->getId()]->cost['expense'][$purchase->getApproved()? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
             }
         }
 

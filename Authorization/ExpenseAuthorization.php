@@ -6,21 +6,21 @@ class ExpenseAuthorization extends AbstractPurchaseAuthorization
 {
     public function replace(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_EDIT_PURCHASE_EP');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_EDIT');
     }
 
     public function approve(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_APPROVE_PURCHASE_EP');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_APPROVE');
     }
 
     public function cancel(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_CANCEL_PURCHASE_EP');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_CANCEL');
     }
 
     public function reject(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_REJECT_PURCHASE_EP');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_REJECT');
     }
 }

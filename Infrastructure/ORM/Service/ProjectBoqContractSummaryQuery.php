@@ -55,9 +55,22 @@ abstract class ProjectBoqContractSummaryQuery implements QueryInterface
             $incomeDetails = $incomeDetailQb->getQuery()->getResult();
 
             $projectBoq->value = [
-                'delivery' => 0,
-                'billing' => 0,
-                'taxinvoice' => 0
+                'delivery' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
+                'billing' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
+                'taxinvoice' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
+                'revenue' => [
+                    'approved' => 0,
+                    'nonapproved' => 0,
+                ],
             ];
 
             foreach ($incomeDetails as $incomeDetail) {
@@ -65,14 +78,18 @@ abstract class ProjectBoqContractSummaryQuery implements QueryInterface
                 
                 if ($incomeDetail instanceof \Erp\Bundle\DocumentBundle\Entity\DeliveryNoteDetail) {
                     if ($income->updatable()) {
-                        $projectBoq->value['delivery'] += $incomeDetail->getTotal();
+                        $projectBoq->value['delivery'][$income->getApproved()? 'approved' : 'nonapproved'] += $incomeDetail->getTotal();
                     }
                 } elseif ($incomeDetail instanceof \Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail) {
                     if ($income->updatable()) {
-                        $projectBoq->value['billing'] += $incomeDetail->getTotal();
+                        $projectBoq->value['billing'][$income->getApproved()? 'approved' : 'nonapproved'] += $incomeDetail->getTotal();
                     }
                 } elseif ($incomeDetail instanceof \Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail) {
-                        $projectBoq->value['taxinvoice'] += $incomeDetail->getTotal();
+                    if ($income->updatable()) {
+                        $projectBoq->value['taxinvoice'][$income->getApproved()? 'approved' : 'nonapproved'] += $incomeDetail->getTotal();
+                    }
+                } elseif ($incomeDetail instanceof \Erp\Bundle\DocumentBundle\Entity\RevenueDetail) {
+                    $projectBoq->value['revenue'][$income->getApproved()? 'approved' : 'nonapproved'] += $incomeDetail->getTotal();
                 }
             }
             

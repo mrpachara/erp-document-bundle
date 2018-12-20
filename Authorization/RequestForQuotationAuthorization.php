@@ -6,21 +6,21 @@ class RequestForQuotationAuthorization extends AbstractPurchaseAuthorization
 {
     public function replace(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_EDIT_PURCHASE_RQ');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_RQ_EDIT');
     }
     
     public function approve(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_APPROVE_PURCHASE_RQ');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_RQ_APPROVE');
     }
     
     public function cancel(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_CANCEL_PURCHASE_RQ');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_RQ_CANCEL');
     }
     
     public function reject(...$args)
     {
-        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_REJECT_PURCHASE_RQ');
+        return parent::cancel(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_RQ_REJECT');
     }
 }
