@@ -8,8 +8,7 @@ use Erp\Bundle\CoreBundle\Entity\StatusPresentable;
 
 abstract class AbstractDocumentAuthorization extends Authorization
 {
-    use \Erp\Bundle\CoreBundle\Authorization\ErpUnupdatableAuthorizationTrait;
-    use \Erp\Bundle\CoreBundle\Authorization\ErpUndeletableAuthorizationTrait;
+    use \Erp\Bundle\CoreBundle\Authorization\ErpUnchangableAuthorizationTrait;
 
     public function replace(...$args)
     {
