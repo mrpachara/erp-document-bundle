@@ -122,6 +122,7 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
             /** @var TerminatedDocument */
             $termDoc = new TerminatedDocument();
             $termDoc = $this->patchTerminatedDocumentItem($termDoc, $data);
+            $this->initialItem($termDoc);
             $em->persist($termDoc);
 
             $item->setTerminated($termDoc);

@@ -64,6 +64,7 @@ services:
   Erp\Bundle\DocumentBundle\Domain\CQRS\TaxInvoiceQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\TaxInvoiceQueryService'
   Erp\Bundle\DocumentBundle\Domain\CQRS\RevenueQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service\RevenueQueryService'
 
+  Erp\Bundle\DocumentBundle\Domain\CQRS\Query\DocumentQuery: '@Erp\Bundle\DocumentBundle\Infrastructure\ORM\Query\DocumentQuery'
 
   #Entity Listerner
   Erp\Bundle\DocumentBundle\Infrastructure\ORM\Listener\TerminatedDocumentListener:
