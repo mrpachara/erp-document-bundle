@@ -1,0 +1,109 @@
+Erp\Bundle\DocumentBundle\Entity\RequestForQuotation:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RequestForQuotationRepository
+  table: document_requestforquotation
+  inheritanceType: JOINED
+  manyToMany:
+    requestedVendors:
+      targetEntity: Erp\Bundle\MasterBundle\Entity\Vendor
+      joinTable:
+        name: document_requestforquotation_vendor
+        joinColumns:
+          joinColumn:
+            name: id_document_requestforquotation
+            nullable: false
+            onDelete: CASCADE
+        inverseJoinColumns:
+          joinColumn:
+            name: id_master_vendor
+            nullable: false
+            onDelete: RESTRICT
+  fields:
+    discount:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: false
+    costItemTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: false
+    vatFactor:
+      type: boolean
+      nullable: false
+    vatIncluded:
+      type: boolean
+      nullable: true
+    vat:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    vatCost:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    excludeVat:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    docTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    tax:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    taxFactor:
+      type: boolean
+      nullable: false
+    taxCost:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    payTotal:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    productWarranty:
+      type: boolean
+      nullable: true
+    productWarrantyCost:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    payMethod:
+      type: boolean
+      nullable: true
+    creditDay:
+      type: integer
+      nullable: true
+    dueDate:
+      type: datetime_immutable
+      nullable: true
+    payTerm:
+      type: boolean
+      nullable: true
+    payDeposit:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
+    remarkFinance:
+      type: text
+      nullable: true
+    conditionsOfRequestPrice:
+      type: text
+      nullable: true
+    conditions:
+      type: text
+      nullable: true

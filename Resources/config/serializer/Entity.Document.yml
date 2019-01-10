@@ -4,6 +4,9 @@ Erp\Bundle\DocumentBundle\Entity\Document:
     getStatus:
       serialized_name: status
       type: string
+    getStatusType:
+      serialized_name: statusType
+      type: array
   properties:
     tstmp:
       type: DateTimeImmutable

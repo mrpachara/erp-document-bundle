@@ -250,6 +250,17 @@ abstract class Document extends CoreAccount implements DocumentStatus
         $this->transferedBys->removeElement($transferedBy);
     }
 
+    public function getTransferedBy()
+    {
+        foreach($this->getTransferedBys() as $doc) {
+            if ($doc->getTerminated() === null) {
+                return $doc;
+            }
+        }
+        
+        return null;
+    }
+    
     /**
      * get terminated
      *
@@ -323,6 +334,35 @@ abstract class Document extends CoreAccount implements DocumentStatus
             $status = 'DRAFT';
         }
 
+        return $status;
+    }
+    
+    public function getStatusType()
+    {
+        $status = [
+            'type' => null,
+            'message' => null,
+        ];
+        
+        if($this->getTerminated() !== null) {
+            $user = $this->getTerminated()->getCreator();
+            $status['type'] = $this->getTerminated()->getType();
+            $status['message'] = sprintf("%s by %s", ucfirst(strtolower($status['type'])), ($user)? $user->getName() : 'unknown');
+        } else if(($doc = $this->getUpdateBy()) !== null) {
+            $status['type'] = 'REPLACED';
+            $status['message'] = sprintf("%s by %s", ucfirst(strtolower($status['type'])), $doc->getCode());
+        } else if(($doc = $this->getTransferedBy()) !== null) {
+            $status['type'] = 'TRANSFERED';
+            $status['message'] = sprintf("%s by %s", ucfirst(strtolower($status['type'])), $doc->getCode());
+        } else if(!$this->getApproved()) {
+            $status['type'] = 'DRAFT';
+            $status['message'] = 'Draft';
+        } else {
+            $user = $this->getCreator();
+            $status['type'] = 'APPROVED';
+            $status['message'] = sprintf("%s by %s", ucfirst(strtolower($status['type'])), ($user)? $user->getName() : 'unknown');
+        }
+        
         return $status;
     }
 }
