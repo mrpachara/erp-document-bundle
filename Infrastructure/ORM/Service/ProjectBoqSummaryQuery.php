@@ -89,8 +89,9 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
             $childResult = $this->getProjectBoqDataSummary($child->getId());
 
             foreach ($childResult->getBudgets() as $childBudget) {
-                foreach ($childBudget->cost as $costKey => $costValue) {
-                    $boqData->getBudgets()[$childBudget->getBoqBudgetType()->getId()]->cost[$costKey] += $costValue;
+                foreach ($childBudget->cost as $costKey => $costWithTypes) {
+                    foreach($costWithTypes as $costType => $costValue)
+                        $boqData->getBudgets()[$childBudget->getBoqBudgetType()->getId()]->cost[$costKey][$costType] += $costValue;
                 }
             }
         }
