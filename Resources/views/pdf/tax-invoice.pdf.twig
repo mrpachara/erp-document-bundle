@@ -227,45 +227,30 @@ table.cl-layout-cell {
           <td class="cl-layout-cell" style="vertical-align: top;">
             <table class="cl-layout-cell" style="width: 100%; border: 1px solid black;">
               <caption class="cl-strong">การชำระเงิน</caption>
-              <tr>
-                <td class="cl-labeled-cell cl-strong" style="width: 25%;">{% autoescape false %}ประกันผลงาน {{(model.retentionFactor)? (  model.retention ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
-                <td style="width: 17%;">{{ (model.retentionFactor)? ('<span class="cl-number">' ~ model.retentionCost|number_format(2) ~ '</span>')|raw : 'ไม่มี' }}</td>
-              </tr>
-              <tr>
-                <th class="cl-labeled-cell cl-strong">หมายเหตุ :</th>
-                <td colspan="5">{{ model.remarkFinance }}</td>
-              </tr>
-            </table>
-            <table class="cl-layout-cell" style="width: 100%; border: 0px;">
-              <tr>
-                <td style="height: 1em;"></td>
-              </tr>
  {% for bankAccount in bankAccounts %}
  	 {% if model.paymentChannel == bankAccount.code%}
               <tr>
-                <td colspan="5" class="cl-strong">ชำระโดย</td>
-              </tr>
-              <tr>
-                <td colspan="5"><strong>โอนผ่านบัญชีธนาคาร </strong>{{ bankAccount.code }} {{ bankAccount.name }} {{ bankAccount.category }} {{ bankAccount.bank }} {{ bankAccount.branch }}</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 25%;"><strong>ชำระโดย :</strong></td>
+                <td style="width: 100%;">โอนผ่านบัญชีธนาคาร {{ bankAccount.code }} {{ bankAccount.name }} {{ bankAccount.category }} {{ bankAccount.bank }} {{ bankAccount.branch }}</td>
               </tr>
      {% endif %}
  {% endfor %}
-     {% if model.paymentChannel == 'bankChack'%}
+     {% if model.paymentChannel == 'bankCheck'%}
               <tr>
-                <td colspan="5" class="cl-strong">ชำระโดย</td>
-              </tr>
-              <tr>
-                <td colspan="5" class="cl-strong">เช็คในนามบริษัท</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 25%;"><strong>ชำระโดย :</strong></td>
+                <td style="width: 17%;">เช็คในนามบริษัท</td>
               </tr>
      {% endif %}
      {% if model.paymentChannel == 'etc'%}
               <tr>
-                <td colspan="5" class="cl-strong">ชำระโดย</td>
-              </tr>
-              <tr>
-                <td colspan="5" class="cl-strong">อื่นๆ : {{ model.remarkOther }}</td>
+                <td class="cl-labeled-cell cl-strong" style="width: 25%;"><strong>ชำระโดย :</strong>  </td>
+                <td style="width: 50%;">{{ model.remarkOther }}</td>
               </tr>
      {% endif %}
+              <tr>
+                <th class="cl-labeled-cell cl-strong">หมายเหตุ :</th>
+                <td colspan="5">{{ model.remarkFinance }}</td>
+              </tr>
             </table>
           </td>
           <td class="cl-layout-cell" style="width: 16em;">
@@ -310,6 +295,19 @@ table.cl-layout-cell {
               <tr>
                 <td class="cl-labeled-cell cl-strong">{% autoescape false %}{{ (model.taxFactor)? ('มูลค่าสินค้ารวมชำระ :')|e : '&nbsp;' }}{% endautoescape %}</td>
                 <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ (model.taxFactor)? model.payTotal|number_format(2) : '' }}</td>
+              </tr>
+{% endif %}
+{% if model.retentionFactor %}
+              <tr>
+                <td style="height: 0.5em;"></td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell">{% autoescape false %}{{ (model.retentionFactor)? ('ประกันผลงาน ' ~ model.retention ~ '% :')|e : '&nbsp;' }}{% endautoescape %}</td>
+                <td class="cl-number cl-bordered-cell">{{ (model.retentionFactor)? model.retentionCost|number_format(2) : '' }}</td>
+              </tr>
+              <tr>
+                <td class="cl-labeled-cell cl-strong">{% autoescape false %}{{ (model.retentionFactor)? ('มูลค่าสินค้ารวมชำระ :')|e : '&nbsp;' }}{% endautoescape %}</td>
+                <td class="cl-number cl-bordered-cell" style="border-bottom: 3px double black;">{{ (model.retentionFactor)? model.retentionPayTotal|number_format(2) : '' }}</td>
               </tr>
 {% endif %}
 			  <tr>
