@@ -39,6 +39,7 @@ class ProjectBoqWithSummaryQueryService implements QueryInterface
 
         return $boqs;
     }
+    
     public function getProjectBoq($idProject, $id, $excepts = null)
     {
         /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoq */
@@ -52,4 +53,15 @@ class ProjectBoqWithSummaryQueryService implements QueryInterface
         return $boq;
     }
 
+    public function getAllProjectContractByBoq($idProject, $id, $excepts = null)
+    {
+        /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoq */
+        $boq = $this->projectBoqRepository->findOneBy(['id' => $id, 'project' => $idProject]);
+        
+        if(!empty($boq)) {
+            return $this->valueService->getIncomeDetailActive($boq->getId(), $excepts);
+        }
+        
+        return [];
+    }
 }

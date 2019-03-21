@@ -7,5 +7,6 @@ namespace Erp\Bundle\DocumentBundle\Domain\CQRS;
  */
 interface ProjectBoqWithSummaryQuery {
     public function getProjectBoq($idProject, $id, $excepts = null);
+    public function getAllProjectContractByBoq($idProject, $id, $excepts = null);
     public function getAllProjectBoq($id, $excepts = null);
 }
