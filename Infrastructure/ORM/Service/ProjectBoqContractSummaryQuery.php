@@ -18,43 +18,15 @@ abstract class ProjectBoqContractSummaryQuery implements QueryInterface
     /** @var IncomeQuery */
     protected $incomeQuery;
 
+    
     public function getProjectBoqDataSummary($id, $excepts = null)
     {
-        $excepts = (array)$excepts;
+        $incomeDetails = $this->getIncomeDetailActive($id, $excepts);
+
         /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoq */
         $projectBoq = $this->projectBoqRepository->find($id);
         
-        $activeIncomeQb = $this->incomeQuery->getActiveDocumentQueryBuilder();
-        $incomeDetailQb = $this->incomeQuery->createDetailQueryBuilder('_incomeDetail');
-        $excepts = array_map(function($value) use ($incomeDetailQb) {
-            return $incomeDetailQb->expr()->literal($value);
-        }, $excepts);
-            $incomeDetailQb
-            ->select('')
-            ->innerJoin(
-            '_incomeDetail.income',
-            '_income',
-                'WITH',
-                $incomeDetailQb->expr()->andX(
-                    $incomeDetailQb->expr()->in(
-                        '_income.id',
-                        $activeIncomeQb->select('_activeDocument.id')->getDQL()
-                        ),
-                    (empty($excepts))? '1 = 1' :
-                    $incomeDetailQb->expr()->notIn(
-                        '_income.id',
-                        $excepts
-                        )
-                    )
-                )
-            ->innerJoin('_income.boq','_boq')
-            ->andWhere('_boq = :boqId')
-            ->setParameter('boqId', $projectBoq->getId())
-        ;
-
-            $incomeDetails = $incomeDetailQb->getQuery()->getResult();
-
-            $projectBoq->value = [
+        $projectBoq->value = [
                 'delivery' => [
                     'approved' => 0,
                     'nonapproved' => 0,
@@ -106,5 +78,44 @@ abstract class ProjectBoqContractSummaryQuery implements QueryInterface
         }
 
         return $projectBoqs;
+    }
+    
+    public function getIncomeDetailActive($id, $excepts = null)
+    {
+        $excepts = (array)$excepts;
+        /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoq */
+        $projectBoq = $this->projectBoqRepository->find($id);
+        
+        $activeIncomeQb = $this->incomeQuery->getActiveDocumentQueryBuilder();
+        $incomeDetailQb = $this->incomeQuery->createDetailQueryBuilder('_incomeDetail');
+        $excepts = array_map(function($value) use ($incomeDetailQb) {
+            return $incomeDetailQb->expr()->literal($value);
+        }, $excepts);
+            $incomeDetailQb
+            ->select('')
+            ->innerJoin(
+                '_incomeDetail.income',
+                '_income',
+                'WITH',
+                $incomeDetailQb->expr()->andX(
+                    $incomeDetailQb->expr()->in(
+                        '_income.id',
+                        $activeIncomeQb->select('_activeDocument.id')->getDQL()
+                        ),
+                    (empty($excepts))? '1 = 1' :
+                    $incomeDetailQb->expr()->notIn(
+                        '_income.id',
+                        $excepts
+                        )
+                    )
+                )
+                ->innerJoin('_income.boq','_boq')
+                ->andWhere('_boq = :boqId')
+                ->setParameter('boqId', $projectBoq->getId())
+                ;
+                
+                $incomeDetails = $incomeDetailQb->getQuery()->getResult();
+                
+                return $incomeDetails;
     }
 }
