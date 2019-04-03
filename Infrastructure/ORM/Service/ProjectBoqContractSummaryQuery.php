@@ -118,4 +118,31 @@ abstract class ProjectBoqContractSummaryQuery implements QueryInterface
                 
                 return $incomeDetails;
     }
+    
+    public function getIncomeActiveByBoq($id, $excepts = null)
+    {
+        $excepts = (array)$excepts;
+        /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoq */
+        $projectBoq = $this->projectBoqRepository->find($id);
+        
+        $activeIncomeQb = $this->incomeQuery->getActiveDocumentQueryBuilder('_income');
+        $excepts = array_map(function($value) use ($activeIncomeQb) {
+            return $activeIncomeQb->expr()->literal($value);
+        }, $excepts);
+        $activeIncomeQb
+            ->innerJoin('_income.boq','_boq')
+            ->andWhere('_boq = :boqId')
+            ->andWhere((empty($excepts))? '1 = 1' :
+                $activeIncomeQb->expr()->notIn(
+                    '_income.id',
+                    $excepts
+                )
+            )
+            ->setParameter('boqId', $projectBoq->getId())
+        ;
+        
+        $incomes = $activeIncomeQb->getQuery()->getResult();
+        
+        return $incomes;
+    }
 }

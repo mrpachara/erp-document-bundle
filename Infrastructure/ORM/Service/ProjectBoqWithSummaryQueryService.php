@@ -59,7 +59,7 @@ class ProjectBoqWithSummaryQueryService implements QueryInterface
         $boq = $this->projectBoqRepository->findOneBy(['id' => $id, 'project' => $idProject]);
         
         if(!empty($boq)) {
-            return $this->valueService->getIncomeDetailActive($boq->getId(), $excepts);
+            return $this->valueService->getIncomeActiveByBoq($boq->getId(), $excepts);
         }
         
         return [];
