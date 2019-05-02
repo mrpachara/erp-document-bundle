@@ -245,6 +245,19 @@ table.cl-layout-cell {
                 <td colspan="5">{{ model.remarkFinance }}</td>
               </tr>
             </table>
+
+<table>
+<tr>
+<td class="cl-strong">หมายเหตุ : </td>
+<td>{{ model.remark }}</td>
+</tr>
+{% if model.terminated != null  %}
+<tr>
+<td class="cl-strong">{{ (model.terminated.type == 'REJECT')? 'ปฏิเสธ' : 'ยกเลิก' }} : </td>
+<td>{{ model.terminated.description }}</td>
+</tr>
+{% endif %}
+</table>
           </td>
           <td class="cl-layout-cell" style="width: 16em;">
             <table class="cl-layout-cell" style="width: 100%;">

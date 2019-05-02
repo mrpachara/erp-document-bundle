@@ -213,7 +213,20 @@ table.cl-layout-cell {
 {% endfor %}
         </tbody>
       </table>
-      
+
+<table>
+<tr>
+<td class="cl-strong">หมายเหตุ : </td>
+<td>{{ model.remark }}</td>
+</tr>
+{% if model.terminated != null  %}
+<tr>
+<td class="cl-strong">{{ (model.terminated.type == 'REJECT')? 'ปฏิเสธ' : 'ยกเลิก' }} : </td>
+<td>{{ model.terminated.description }}</td>
+</tr>
+{% endif %}
+</table>
+
       <table class="cl-layout-cell" style="width: 100%; page-break-inside: avoid;" nobr="true">
         <tr>
           <td colspan="2"></td>
