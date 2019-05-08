@@ -1,18 +1,17 @@
 Erp\Bundle\DocumentBundle\Entity\Purchase:
   access_type: property
   properties:
-    updateOf:
-      type: Erp\Bundle\DocumentBundle\Entity\Purchase
-    updatedBys:
-      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Purchase>
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseDetail>
     project:
       type: Erp\Bundle\MasterBundle\Entity\Project
+      groups: [short]
     vendor:
       type: Erp\Bundle\MasterBundle\Entity\Vendor
+      groups: [short]
     requester:
       type: Erp\Bundle\MasterBundle\Entity\Employee
+      groups: [short]
     boq:
       type: Erp\Bundle\MasterBundle\Entity\ProjectBoq
       max_depth: 1
@@ -20,9 +19,13 @@ Erp\Bundle\DocumentBundle\Entity\Purchase:
       type: Erp\Bundle\MasterBundle\Entity\ProjectBoqBudgetType
     wantedDate:
       type: DateTimeImmutable
+      groups: [short]
     startDate:
       type: DateTimeImmutable
+      groups: [short]
     finishDate:
       type: DateTimeImmutable
+      groups: [short]
     deliveryDate:
       type: DateTimeImmutable
+      groups: [short]

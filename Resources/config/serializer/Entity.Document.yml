@@ -4,23 +4,31 @@ Erp\Bundle\DocumentBundle\Entity\Document:
     getStatus:
       serialized_name: status
       type: string
+      groups: [short]
     getStatusType:
       serialized_name: statusType
       type: array
+      groups: [short]
   properties:
     tstmp:
       type: DateTimeImmutable
+      groups: [short]
     creator:
       type: Erp\Bundle\SystemBundle\Entity\SystemUser
+      groups: [short]
     updateOf:
       type: Erp\Bundle\DocumentBundle\Entity\Document
       max_depth: 1
+      groups: [short]
     updatedBys:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Document>
       max_depth: 1
+      groups: [short]
     transferOf:
       type: Erp\Bundle\DocumentBundle\Entity\Document
       max_depth: 1
+      groups: [short]
     transferedBys:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\Document>
       max_depth: 1
+      groups: [short]
