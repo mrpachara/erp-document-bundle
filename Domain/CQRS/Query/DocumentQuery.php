@@ -11,11 +11,19 @@ use Erp\Bundle\SystemBundle\Entity\SystemUser;
 interface DocumentQuery
 {
     /**
-     * Get related documents depend on SystemUser.
+     * Get tracking related documents depend on SystemUser.
      * 
      * @param SystemUser $user
      * @return array
      */
-    function getRelatedDocument(SystemUser $user): array;
+    function getRelatedDocumentTracking(SystemUser $user): array;
+    
+    /**
+     * Get next related documents depend on SystemUser.
+     * 
+     * @param SystemUser $user
+     * @return array
+     */
+    function getRelatedDocumentNext(SystemUser $user): array;
 }
 
