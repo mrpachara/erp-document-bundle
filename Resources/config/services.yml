@@ -45,6 +45,7 @@ services:
             B: 'THSarabun Bold.ttf'
             I: 'THSarabun Italic.ttf'
             BI: 'THSarabun Bold Italic.ttf'
+        useDictionaryLBR: true
     public: true
 
   # --------------- domain service

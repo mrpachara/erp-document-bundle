@@ -3,10 +3,10 @@ Erp\Bundle\DocumentBundle\Entity\GoodsReceipt:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\GoodsReceiptRepository
   table: document_goodsreceipt
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail
+#  associationOverride:
+#    updateOf:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
+#    updatedBys:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\GoodsReceipt
+#    details:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail

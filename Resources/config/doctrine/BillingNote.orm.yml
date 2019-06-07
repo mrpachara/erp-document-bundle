@@ -3,13 +3,13 @@ Erp\Bundle\DocumentBundle\Entity\BillingNote:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\BillingNoteRepository
   table: document_billingnote
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNote
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNote
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail
+#  associationOverride:
+#    updateOf:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNote
+#    updatedBys:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNote
+#    details:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail
   fields:
     discount:
       type: decimal

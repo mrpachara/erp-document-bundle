@@ -3,13 +3,13 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrder:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseOrderRepository
   table: document_purchaseorder
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail
+#  associationOverride:
+#    updateOf:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
+#    updatedBys:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
+#    details:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail
   fields:
     discount:
       type: decimal

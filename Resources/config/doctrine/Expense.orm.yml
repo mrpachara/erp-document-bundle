@@ -3,13 +3,13 @@ Erp\Bundle\DocumentBundle\Entity\Expense:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\ExpenseRepository
   table: document_expense
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\Expense
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\Expense
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\ExpenseDetail
+#  associationOverride:
+#    updateOf:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\Expense
+#    updatedBys:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\Expense
+#    details:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\ExpenseDetail
   fields:
     discount:
       type: decimal

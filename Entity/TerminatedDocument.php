@@ -100,7 +100,7 @@ class TerminatedDocument extends DocumentObjectValue {
   public function setType(string $type) {
     $this->type = $type;
 
-    return this;
+    return $this;
   }
 
   /**
@@ -122,7 +122,7 @@ class TerminatedDocument extends DocumentObjectValue {
   public function setCreator(SystemUser $creator) {
     $this->creator = $creator;
 
-    return this;
+    return $this;
   }
 
   /**
@@ -144,6 +144,6 @@ class TerminatedDocument extends DocumentObjectValue {
   public function setDescription(string $description) {
     $this->description = $description;
 
-    return this;
+    return $this;
   }
 }

@@ -3,6 +3,7 @@ namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Query;
 
 use Erp\Bundle\DocumentBundle\Domain\CQRS\Query\DocumentQuery as QueryInterface;
 use Erp\Bundle\DocumentBundle\Infrastructure\ORM\Helper\DocumentQueryHelper;
+use Erp\Bundle\DocumentBundle\Infrastructure\ORM\Helper\PurchaseQueryHelper;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Erp\Bundle\DocumentBundle\Entity\Document;
@@ -23,6 +24,8 @@ use Erp\Bundle\DocumentBundle\Entity\DeliveryNote;
 use Erp\Bundle\DocumentBundle\Entity\BillingNote;
 use Erp\Bundle\DocumentBundle\Entity\TaxInvoice;
 use Erp\Bundle\DocumentBundle\Entity\Revenue;
+use Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetailStatusChanged;
+use Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetailStatusChanged;
 
 /**
  *
@@ -81,6 +84,8 @@ class DocumentQuery implements QueryInterface
      */
     private $reposRevenue;
     
+    private $prHq;
+    
     private $docHq;
     
     private $accHq;
@@ -96,6 +101,7 @@ class DocumentQuery implements QueryInterface
      */
     public function __construct(
         RegistryInterface $doctrine,
+        PurchaseQueryHelper $prHq,
         DocumentQueryHelper $docHq,
         CoreAccountQueryHelper $accHq,
         ErpQueryHelper $erpHq,
@@ -118,6 +124,7 @@ class DocumentQuery implements QueryInterface
         $this->reposTaxInvoice = $doctrine->getRepository(TaxInvoice::class);
         $this->reposRevenue = $doctrine->getRepository(Revenue::class);
         
+        $this->prHq = $prHq;
         $this->docHq = $docHq;
         $this->accHq = $accHq;
         $this->erpHq = $erpHq;
@@ -222,7 +229,8 @@ class DocumentQuery implements QueryInterface
         if($this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE')) {
             $alias = '_doc_pr_next';
             $subQb = $this->reposPruchaseRequest->createQueryBuilder($alias);
-            $this->docHq->applyActiveFilter($subQb, 'and');
+            //$this->docHq->applyActiveFilter($subQb, 'and');
+            $this->prHq->applyRemainFilter($subQb, PurchaseOrder::class, PurchaseRequestDetailStatusChanged::class, 'purchaseRequestDetail', 'and');
             $this->docHq->applyApproveFilter($subQb, true, 'and');
             
             $qb->orWhere($qb->expr()->in("_doc", $subQb->getDQL()));
@@ -242,7 +250,8 @@ class DocumentQuery implements QueryInterface
         if($this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_CREATE')) {
             $alias = '_doc_po_next';
             $subQb = $this->reposPruchaseOrder->createQueryBuilder($alias);
-            $this->docHq->applyActiveFilter($subQb, 'and');
+            //$this->docHq->applyActiveFilter($subQb, 'and');
+            $this->prHq->applyRemainFilter($subQb, Expense::class, PurchaseOrderDetailStatusChanged::class, 'purchaseOrderDetail', 'and');
             $this->docHq->applyApproveFilter($subQb, true, 'and');
             
             $qb->orWhere($qb->expr()->in("_doc", $subQb->getDQL()));

@@ -111,9 +111,9 @@ table.cl-layout-cell {
                 <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
                   [
                     profile.profileData.address.address ?? false,
-                    (profile.profileData.address.subdistrict ?? false)|sformat('ต.%s'),
-                    (profile.profileData.address.district ?? false)|sformat('อ.%s'),
-                    (profile.profileData.address.province ?? false)|sformat('จ.%s'),
+                    (profile.profileData.address.subdistrict ?? false)|sformat('%s'),
+                    (profile.profileData.address.district ?? false)|sformat('%s'),
+                    (profile.profileData.address.province ?? false)|sformat('%s'),
                     profile.profileData.address.postalcode ?? false,
                   ]|vfilter(false, true)|join(' ')
                 }}</td>

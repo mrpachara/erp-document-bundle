@@ -3,13 +3,13 @@ Erp\Bundle\DocumentBundle\Entity\Revenue:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\RevenueRepository
   table: document_revenue
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\Revenue
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\Revenue
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\RevenueDetail
+#  associationOverride:
+#    updateOf:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\Revenue
+#    updatedBys:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\Revenue
+#    details:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\RevenueDetail
   fields:
     discount:
       type: decimal

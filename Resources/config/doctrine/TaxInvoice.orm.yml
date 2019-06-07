@@ -3,13 +3,13 @@ Erp\Bundle\DocumentBundle\Entity\TaxInvoice:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\TaxInvoiceRepository
   table: document_taxinvoice
   inheritanceType: JOINED
-  associationOverride:
-    updateOf:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
-    updatedBys:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
-    details:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail
+#  associationOverride:
+#    updateOf:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
+#    updatedBys:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
+#    details:
+#      targetEntity: Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail
   fields:
     discount:
       type: decimal
