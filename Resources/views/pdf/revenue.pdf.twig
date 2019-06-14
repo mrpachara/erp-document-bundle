@@ -138,7 +138,7 @@ table.cl-layout-cell {
               </tr>
               <tr>
                 <td class="cl-labeled-cell cl-strong">วันที่ออกเอกสาร :</td>
-                <td class="cl-code">{{ model.tstmp|date('d/m/Y') }}</td>
+                <td class="cl-code">{{ model.deliveryDate|date('d/m/Y') }}</td>
               </tr>
               <tr>
                 <td class="cl-labeled-cell cl-strong">วันครบกำหนด :</td>
@@ -392,7 +392,7 @@ table.cl-layout-cell {
                   <td>({{ origin.creator.name ?? '_________________________' }})</td>
                 </tr>
                 <tr>
-                  <td>{{ (origin.tstmp ?? false)? origin.tstmp|date('d/m/Y') : '____/____/____' }}</td>
+                  <td>___/___/______</td>
                 </tr>
               </table>
             </td>
@@ -409,7 +409,7 @@ table.cl-layout-cell {
                   <td>({{ model.creator.name ?? '_________________________' }})</td>
                 </tr>
                 <tr>
-                  <td>{{ (model.tstmp ?? false)? origin.tstmp|date('d/m/Y') : '____/____/____' }}</td>
+                  <td>___/___/______</td>
                 </tr>
               </table>
 {% endif %}
