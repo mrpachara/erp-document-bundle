@@ -103,28 +103,7 @@ table.cl-layout-cell {
 {% endif %}
           </td>
           <td>
-            <table>
-              <tr>
-                <td style="font-weight: bold;">{{ profile.profileData.name }} {% if profile.profileData.dtype == 'corporate' %}({{ (profile.profileData.main)? 'สำนักงานใหญ่': 'สาขา'~profile.profileData.branch }}){% endif %}</td>
-              </tr>
-              <tr>
-                <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
-                  [
-                    profile.profileData.address.address ?? false,
-                    (profile.profileData.address.subdistrict ?? false)|sformat('%s'),
-                    (profile.profileData.address.district ?? false)|sformat('%s'),
-                    (profile.profileData.address.province ?? false)|sformat('%s'),
-                    profile.profileData.address.postalcode ?? false,
-                  ]|vfilter(false, true)|join(' ')
-                }}</td>
-              </tr>
-              <tr>
-                <td><span style="font-weight: bold;">โทรศัพท์ :</span> {{ profile.phone }} <span style="font-weight: bold;">โทรสาร :</span> {{ profile.fax }}</td>
-              </tr>
-              <tr>
-                <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span> {{ profile.profileData.code }}</td>
-              </tr>
-            </table>
+{% include '@ErpDocument/template/company-profile.twig' with profile only %}
           </td>
           <td style="width: 180px;">
             <table style="width: 100%;">
