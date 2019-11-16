@@ -5,6 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use FOS\RestBundle\View\View;
 
 /**
  * TaxInvoice Api Controller
@@ -70,9 +71,9 @@ class TaxInvoiceApiQueryController extends IncomeApiQuery
     {
         $context = $this->prepareContext($context);
 
-        // if (!isset($context['searchable'])) {
-        //     $context['searchable'] = true;
-        // }
+        if (!isset($context['searchable'])) {
+            $context['searchable'] = true;
+        }
 
         foreach (['add'] as $action) {
             if (!in_array($action, $context['actions'])) {
@@ -101,7 +102,14 @@ class TaxInvoiceApiQueryController extends IncomeApiQuery
 
         $items = $this->domainQuery->searchBillingNoteRemain($queryParams, $context);
 
-        return $this->view($this->listBillingNoteRemainResponse($items, $context), 200);
+        $view = new View($this->listBillingNoteRemainResponse($items, $context));
+        
+        $context = $view->getContext();
+        $context
+            ->addGroup('short')
+        ;
+        
+        return $view;
     }
 
     /**

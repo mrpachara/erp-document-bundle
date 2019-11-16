@@ -49,6 +49,15 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
         $item->setCreator($this->tokenStorage->getToken()->getUser());
     }
 
+    protected function prepareItemAfterPatch($item)
+    {
+        $item = parent::prepareItemAfterPatch($item);
+        
+        if(!$this->grant('approve', [$item])) $item->setApproved(false);
+        
+        return $item;
+    }
+
     /**
      * replace action
      *
