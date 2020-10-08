@@ -49,7 +49,6 @@ abstract class IncomeDetail {
    */
   protected $total;
 
-
   /**
    * remark
    *

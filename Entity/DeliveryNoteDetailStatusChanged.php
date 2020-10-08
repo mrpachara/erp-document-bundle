@@ -19,7 +19,7 @@ class DeliveryNoteDetailStatusChanged extends DocumentObjectValue {
   public function __construct() { }
 
   public function getDeliveryNoteDetail() {
-    return $this->DeliveryNoteDetail;
+    return $this->deliveryNoteDetail;
   }
 
   public function setDeliveryNoteDetail(?DeliveryNoteDetail $deliveryNoteDetail) {

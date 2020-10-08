@@ -87,7 +87,7 @@ abstract class Purchase extends Document
     protected $finishDate;
 
     /**
-     * wantedDate
+     * deliveryDate
      *
      * @var \DateTimeImmutable
      */

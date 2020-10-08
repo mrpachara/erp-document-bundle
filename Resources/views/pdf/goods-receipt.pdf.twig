@@ -125,7 +125,7 @@ table.cl-layout-cell {
               </tr>
               <tr>
                 <td class="cl-labeled-cell cl-strong">วันที่ส่งสินค้า:</td>
-                <td class="cl-code">{{ model.deliveryDate|date('d/m/Y') }}</td>
+                <td class="cl-code">{{ (model.deliveryDate is empty)? '-' : model.deliveryDate|date('d/m/Y') }}</td>
               </tr>
             </table>
           </td>

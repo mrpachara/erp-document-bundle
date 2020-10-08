@@ -3,11 +3,14 @@
 namespace Erp\Bundle\DocumentBundle\Entity;
 
 use Erp\Bundle\CoreBundle\Entity\Thing;
+use Erp\Bundle\DocumentBundle\Model\PaymentProperties;
+use Erp\Bundle\DocumentBundle\Model\RetentionProperties;
+use Erp\Bundle\DocumentBundle\Model\PaymentMethodChannelProperties;
 
 /**
  * TaxInvoice Entity
  */
-class TaxInvoice extends Income
+class TaxInvoice extends Income implements PaymentProperties, RetentionProperties, PaymentMethodChannelProperties
 {
     /**
      * @var string

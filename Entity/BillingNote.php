@@ -3,11 +3,14 @@
 namespace Erp\Bundle\DocumentBundle\Entity;
 
 use Erp\Bundle\CoreBundle\Entity\Thing;
+use Erp\Bundle\DocumentBundle\Model\PaymentProperties;
+use Erp\Bundle\DocumentBundle\Model\RetentionProperties;
+use Erp\Bundle\DocumentBundle\Model\PaymentMethodSelectableProperties;
 
 /**
  * BillingNote Entity
  */
-class BillingNote extends Income
+class BillingNote extends Income implements PaymentProperties, RetentionProperties, PaymentMethodSelectableProperties
 {
     /**
      * @var string

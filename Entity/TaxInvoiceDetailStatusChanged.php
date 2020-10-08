@@ -19,7 +19,7 @@ class TaxInvoiceDetailStatusChanged extends DocumentObjectValue {
   public function __construct() { }
 
   public function getTaxInvoiceDetail() {
-    return $this->TaxInvoiceDetail;
+    return $this->taxInvoiceDetail;
   }
 
   public function setTaxInvoiceDetail(?TaxInvoiceDetail $taxInvoiceDetail) {

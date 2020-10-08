@@ -5,6 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Erp\Bundle\DocumentBundle\Entity\Income;
 
 /**
  * Income Api Query
@@ -42,7 +43,7 @@ abstract class IncomeApiQuery extends DocumentApiQuery {
         $response = parent::getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Income */
+        /** @var Income */
         $income = $responseData['data'];
 
         if (!empty($income)) {

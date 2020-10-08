@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use FOS\RestBundle\View\View;
+use Erp\Bundle\DocumentBundle\Entity\Income;
 
 /**
  * Revenue Api Controller
@@ -126,7 +127,7 @@ class RevenueApiQueryController extends IncomeApiQuery
         $response = $this->getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Income */
+        /** @var Income */
         $income = $responseData['data'];
 
         $origin = $this->domainQuery->origin($income);
