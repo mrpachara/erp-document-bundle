@@ -6,6 +6,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Erp\Bundle\DocumentBundle\Entity\Purchase;
 
 /**
  * Quotation Api Controller
@@ -119,7 +120,7 @@ class QuotationApiQueryController extends PurchaseApiQuery
         $response = $this->getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Purchase */
+        /** @var Purchase */
         $purchase = $responseData['data'];
 
         $origin = $this->domainQuery->origin($purchase);

@@ -103,28 +103,7 @@ table.cl-layout-cell {
 {% endif %}
           </td>
           <td>
-            <table>
-              <tr>
-                <td style="font-weight: bold;">{{ profile.profileData.name }}</td>
-              </tr>
-              <tr>
-                <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
-                  [
-                    profile.profileData.address.address ?? false,
-                    (profile.profileData.address.subdistrict ?? false)|sformat('%s'),
-                    (profile.profileData.address.district ?? false)|sformat('%s'),
-                    (profile.profileData.address.province ?? false)|sformat('%s'),
-                    profile.profileData.address.postalcode ?? false,
-                  ]|vfilter(false, true)|join(' ')
-                }}</td>
-              </tr>
-              <tr>
-                <td><span style="font-weight: bold;">โทรศัพท์ :</span> {{ profile.phone }} <span style="font-weight: bold;">โทรสาร :</span> {{ profile.fax }}</td>
-              </tr>
-              <tr>
-                <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span> {{ profile.profileData.code }}</td>
-              </tr>
-            </table>
+{% include '@ErpDocument/template/company-profile.twig' with profile only %}
           </td>
           <td style="width: 180px;">
             <table style="width: 100%;">
@@ -142,7 +121,7 @@ table.cl-layout-cell {
               </tr>
               <tr>
                 <td class="cl-labeled-cell cl-strong">วันครบกำหนด :</td>
-                <td class="cl-code">{{ model.paymentDate|date('d/m/Y') }}</td>
+                <td class="cl-code">{{ (model.paymentDate is empty)? '-' : model.paymentDate|date('d/m/Y') }}</td>
               </tr>
             </table>
           </td>
@@ -167,36 +146,11 @@ table.cl-layout-cell {
             </table>
           </td>
           <td style="width: 50%; vertical-align: top;">
-            <table style="width: 100%;">
-              <tr>
-                <td style="font-weight: bold; text-align: right;">ชื่อลูกค้า :</td>
-                <td>{{  model.project.owner.name ?? '-' }}</td>
-              </tr>
-              <tr>
-                <td style="font-weight: bold; text-align: right;">ที่อยู่ลูกค้า :</td>
-                <td>{{
-                  [
-                    model.project.owner.personData.address.address ?? false,
-                    (model.project.owner.personData.address.subdistrict ?? false)|sformat('%s'),
-                    (model.project.owner.personData.address.district ?? false)|sformat('%s'),
-                    (model.project.owner.personData.address.province ?? false)|sformat('%s'),
-                    model.project.owner.personData.address.postalcode ?? false,
-                  ]|vfilter(false, true)|join(' ')
-                }}</td>
-              </tr>
-              <tr>
-                <td style="font-weight: bold; text-align: right;">เลยประจำตัวผู้เสียภาษี :</td>
-                <td>{{ (model.project.owner.personData.code)? model.project.owner.personData.code : '-' }}</td>
-              </tr>
-              <tr>
-                <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
-                <td>{{ (model.ownerContactInformation)? model.ownerContactInformation:'-' }}</td>
-              </tr>
-              <tr>
-                <td style="font-weight: bold; text-align: right;">ที่อยู่ติดต่อ :</td>
-                <td>{{ model.contactOwnerAddress ?? '-' }}</td>
-              </tr>
-            </table>
+{% include '@ErpDocument/template/customer-profile.twig' with {
+  'owner' : model.project.owner,
+  'ownerContactInformation' : model.ownerContactInformation,
+  'contactOwnerAddress' : model.contactOwnerAddress,
+} only %}
           </td>
         </tr>
       </table>

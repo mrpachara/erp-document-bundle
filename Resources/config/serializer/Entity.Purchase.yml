@@ -3,6 +3,7 @@ Erp\Bundle\DocumentBundle\Entity\Purchase:
   properties:
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseDetail>
+      #max_depth: 4
     project:
       type: Erp\Bundle\MasterBundle\Entity\Project
       groups: [short]

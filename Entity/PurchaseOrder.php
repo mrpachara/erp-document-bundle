@@ -3,11 +3,12 @@
 namespace Erp\Bundle\DocumentBundle\Entity;
 
 use Erp\Bundle\CoreBundle\Entity\Thing;
+use Erp\Bundle\DocumentBundle\Model\PaymentProperties;
 
 /**
  * PurchaseOrder Entity
  */
-class PurchaseOrder extends Purchase
+class PurchaseOrder extends Purchase implements PaymentProperties
 {
     /**
      * @var string

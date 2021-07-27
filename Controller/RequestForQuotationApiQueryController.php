@@ -5,6 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Erp\Bundle\DocumentBundle\Entity\RequestForQuotation;
 
 /**
  * RequestForQuotation Api Controller
@@ -118,7 +119,7 @@ class RequestForQuotationApiQueryController extends DocumentApiQuery
         $response = $this->getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\RequestForQuotation */
+        /** @var RequestForQuotation */
         $requestForQuotation = $responseData['data'];
 
         $origin = $this->domainQuery->origin($requestForQuotation);

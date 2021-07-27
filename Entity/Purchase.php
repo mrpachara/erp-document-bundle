@@ -87,7 +87,7 @@ abstract class Purchase extends Document
     protected $finishDate;
 
     /**
-     * wantedDate
+     * deliveryDate
      *
      * @var \DateTimeImmutable
      */
@@ -471,7 +471,7 @@ abstract class Purchase extends Document
             $this->details[] = $detail;
         }
 
-        return this;
+        return $this;
     }
 
     /**
@@ -483,10 +483,10 @@ abstract class Purchase extends Document
     {
         $this->details->removeElement($detail);
     }
-    
+
     public function setDetails(ArrayCollection $details) {
         $this->details = $details;
-        
+
         return $this;
     }
 }

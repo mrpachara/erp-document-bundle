@@ -19,7 +19,7 @@ class BillingNoteDetailStatusChanged extends DocumentObjectValue {
   public function __construct() { }
 
   public function getBillingNoteDetail() {
-      return $this->BillingNoteDetail;
+      return $this->billingNoteDetail;
   }
 
   public function setBillingNoteDetail(?BillingNoteDetail $billingNoteDetail) {

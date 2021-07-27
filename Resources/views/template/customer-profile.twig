@@ -1,0 +1,36 @@
+<table style="width: 100%;">
+  <tr>
+    <td style="font-weight: bold; text-align: right;">ชื่อลูกค้า :</td>
+    <td>
+      {{-  owner.name ?? '-' -}}
+      {% if owner.personData is corporate %}
+        ({{ (owner.personData.main)? 'สำนักงานใหญ่': 'สาขา'~owner.personData.branch -}})
+      {% endif %}
+      
+    </td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; text-align: right;">ที่อยู่ลูกค้า :</td>
+    <td>{{
+      [
+        owner.personData.address.address ?? false,
+        (owner.personData.address.subdistrict ?? false)|sformat('%s'),
+        (owner.personData.address.district ?? false)|sformat('%s'),
+        (owner.personData.address.province ?? false)|sformat('%s'),
+        owner.personData.address.postalcode ?? false,
+      ]|vfilter(false, true)|join(' ')
+    }}</td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; text-align: right;">เลขประจำตัวผู้เสียภาษี :</td>
+    <td>{{ (owner.personData.code)?? '-' }}</td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; text-align: right;">ผู้ติดต่อ :</td>
+    <td>{{ (ownerContactInformation)?? '-' }}</td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; text-align: right;">ที่อยู่ติดต่อ :</td>
+    <td>{{ contactOwnerAddress ?? '-' }}</td>
+  </tr>
+</table>

@@ -5,6 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Erp\Bundle\DocumentBundle\Entity\Purchase;
 
 /**
  * Purchase Api Query
@@ -42,7 +43,7 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         $response = parent::getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Purchase */
+        /** @var Purchase */
         $purchase = $responseData['data'];
 
         if (!empty($purchase)) {

@@ -1,0 +1,22 @@
+<table>
+  <tr>
+    <td style="font-weight: bold;">{{ profileData.name }}{% if profileData.dtype == 'corporate' %}({{ (profileData.main)? ' สำนักงานใหญ่': ' สาขา'~profileData.branch }}){% endif %}</td>
+  </tr>
+  <tr>
+    <td><span style="font-weight: bold;">ที่อยู่ :</span> {{
+      [
+        profileData.address.address ?? false,
+        (profileData.address.subdistrict ?? false)|sformat('%s'),
+        (profileData.address.district ?? false)|sformat('%s'),
+        (profileData.address.province ?? false)|sformat('%s'),
+        profileData.address.postalcode ?? false,
+      ]|vfilter(false, true)|join(' ')
+    }}</td>
+  </tr>
+  <tr>
+    <td><span style="font-weight: bold;">โทรศัพท์ :</span> {{ phone }} <span style="font-weight: bold;">โทรสาร :</span> {{ fax }}</td>
+  </tr>
+  <tr>
+    <td><span style="font-weight: bold;">เลขประจำตัวผู้เสียภาษีอากร :</span> {{ profileData.code }}</td>
+  </tr>
+</table>

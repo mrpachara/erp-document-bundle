@@ -5,6 +5,8 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use FOS\RestBundle\View\View;
+use Erp\Bundle\DocumentBundle\Entity\Purchase;
 
 /**
  * Expense Api Controller
@@ -70,9 +72,9 @@ class ExpenseApiQueryController extends PurchaseApiQuery
     {
         $context = $this->prepareContext($context);
 
-        // if (!isset($context['searchable'])) {
-        //     $context['searchable'] = true;
-        // }
+        if (!isset($context['searchable'])) {
+            $context['searchable'] = true;
+        }
 
         foreach (['add'] as $action) {
             if (!in_array($action, $context['actions'])) {
@@ -100,8 +102,15 @@ class ExpenseApiQueryController extends PurchaseApiQuery
         $context = [];
 
         $items = $this->domainQuery->searchPurchaseOrderExpenseRemain($queryParams, $context);
-
-        return $this->view($this->listPurchaseOrderExpenseRemainResponse($items, $context), 200);
+        
+        $view = new View($this->listPurchaseOrderExpenseRemainResponse($items, $context));
+        
+        $context = $view->getContext();
+        $context
+            ->addGroup('short')
+        ;
+        
+        return $view;
     }
 
     /**
@@ -118,7 +127,7 @@ class ExpenseApiQueryController extends PurchaseApiQuery
         $response = $this->getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Purchase */
+        /** @var Purchase */
         $purchase = $responseData['data'];
 
         $origin = $this->domainQuery->origin($purchase);

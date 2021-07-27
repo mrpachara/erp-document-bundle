@@ -5,6 +5,8 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use FOS\RestBundle\View\View;
+use Erp\Bundle\DocumentBundle\Entity\Income;
 
 /**
  * Revenue Api Controller
@@ -70,9 +72,9 @@ class RevenueApiQueryController extends IncomeApiQuery
     {
         $context = $this->prepareContext($context);
 
-        // if (!isset($context['searchable'])) {
-        //     $context['searchable'] = true;
-        // }
+        if (!isset($context['searchable'])) {
+            $context['searchable'] = true;
+        }
 
         foreach (['add'] as $action) {
             if (!in_array($action, $context['actions'])) {
@@ -101,7 +103,14 @@ class RevenueApiQueryController extends IncomeApiQuery
 
         $items = $this->domainQuery->searchTaxInvoiceRemain($queryParams, $context);
 
-        return $this->view($this->listTaxInvoiceRemainResponse($items, $context), 200);
+        $view = new View($this->listTaxInvoiceRemainResponse($items, $context));
+        
+        $context = $view->getContext();
+        $context
+            ->addGroup('short')
+        ;
+        
+        return $view;
     }
 
     /**
@@ -118,7 +127,7 @@ class RevenueApiQueryController extends IncomeApiQuery
         $response = $this->getAction($id, $request);
 
         $responseData = $response->getData();
-        /** @var Erp\Bundle\DocumentBundle\Entity\Income */
+        /** @var Income */
         $income = $responseData['data'];
 
         $origin = $this->domainQuery->origin($income);
