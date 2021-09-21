@@ -6,6 +6,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Erp\Bundle\DocumentBundle\Entity\Purchase;
+use Erp\Bundle\SystemBundle\Entity\SystemUser;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Purchase Api Query
@@ -28,6 +30,29 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
     public function setProjectBoqSummaryQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery $projectBoqSummaryQuery)
     {
         $this->projectBoqSummaryQuery = $projectBoqSummaryQuery;
+    }
+
+    /**
+     * list action
+     *
+     * @Rest\Get("")
+     *
+     * @param ServerRequestInterface $request
+     */
+    public function listAction(ServerRequestInterface $request)
+    {
+        try {
+            return parent::listAction($request);
+        } catch (UnprocessableEntityHttpException $excp) {
+            // dummay
+        }
+
+        return $this->listQuery('list-individual', $request, function($queryParams, &$context) {
+            /** @var SystemUser */
+            $user = $this->getUser();
+
+            return $this->domainQuery->searchWithUser($queryParams, $user, $context);
+        });
     }
 
     /**

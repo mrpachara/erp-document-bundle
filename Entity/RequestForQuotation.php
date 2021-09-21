@@ -20,92 +20,92 @@ class RequestForQuotation extends Document
      * @var ArrayCollection
      */
     protected $requestedVendors;
-    
+
     /**
      *
      * @var ArrayCollection
      */
     protected $requestForQuotationVendors;
-    
+
     /**
      * vendorContactInformation
      *
      * @var string
      */
     protected $vendorContactInformation;
-    
+
     /**
      * vendorAddress
      *
      * @var string
      */
     protected $vendorAddress;
-    
+
     /**
      * project
      *
      * @var Project
      */
     protected $project;
-    
-    
+
+
     /**
      * requester
      *
      * @var Employee
      */
     protected $requester;
-    
+
     /**
      * contactInformation
      *
      * @var string
      */
     protected $contactInformation;
-    
+
     /**
      * shippingAddress
-     * 
+     *
      * @var string
      */
     protected $shippingAddress;
-    
+
     /**
      * wantedDate
      *
      * @var \DateTimeImmutable
      */
     protected $wantedDate;
-    
+
     /**
      * wantedDate
      *
      * @var \DateTimeImmutable
      */
     protected $deliveryDate;
-    
+
     /**
      * boq
      *
      * @var ProjectBoq
      */
     protected $boq;
-    
+
     /**
      * budgetType
      *
      * @var ProjectBoqBudgetType
      */
     protected $budgetType;
-  
+
     /**
      * details
      *
      * @var ArrayCollection
      */
     protected $details;
-    
-    
+
+
     /**
      * get vendorContactInformation
      *
@@ -115,7 +115,7 @@ class RequestForQuotation extends Document
     {
         return $this->vendorContactInformation;
     }
-    
+
     /**
      * set vendorContactInformation
      *
@@ -126,10 +126,10 @@ class RequestForQuotation extends Document
     public function setVendorContactInformation(string $vendorContactInformation)
     {
         $this->vendorContactInformation = $vendorContactInformation;
-        
+
         return $this;
     }
-    
+
     /**
      * get vendorAddress
      *
@@ -139,7 +139,7 @@ class RequestForQuotation extends Document
     {
         return $this->vendorAddress;
     }
-    
+
     /**
      * set vendorAddress
      *
@@ -150,10 +150,10 @@ class RequestForQuotation extends Document
     public function setVendorAddress(string $vendorAddress)
     {
         $this->vendorAddress = $vendorAddress;
-        
+
         return $this;
     }
-    
+
     /**
      * get shippingAddress
      *
@@ -163,7 +163,7 @@ class RequestForQuotation extends Document
     {
         return $this->shippingAddress;
     }
-    
+
     /**
      * set shippingAddress
      *
@@ -174,11 +174,11 @@ class RequestForQuotation extends Document
     public function setShippingAddress(string $shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * get project
      *
@@ -188,7 +188,7 @@ class RequestForQuotation extends Document
     {
         return $this->project;
     }
-    
+
     /**
      * set project
      *
@@ -199,10 +199,10 @@ class RequestForQuotation extends Document
     public function setProject(Project $project)
     {
         $this->project = $project;
-        
+
         return $this;
     }
-    
+
     /**
      * get requester
      *
@@ -212,7 +212,7 @@ class RequestForQuotation extends Document
     {
         return $this->requester;
     }
-    
+
     /**
      * set requester
      *
@@ -223,11 +223,11 @@ class RequestForQuotation extends Document
     public function setRequester(Employee $requester)
     {
         $this->requester = $requester;
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * get contactInformation
      *
@@ -237,7 +237,7 @@ class RequestForQuotation extends Document
     {
         return $this->contactInformation;
     }
-    
+
     /**
      * set contactInformation
      *
@@ -248,10 +248,10 @@ class RequestForQuotation extends Document
     public function setContactInformation(string $contactInformation)
     {
         $this->contactInformation = $contactInformation;
-        
+
         return $this;
     }
-    
+
     /**
      * get wantedDate
      *
@@ -261,7 +261,7 @@ class RequestForQuotation extends Document
     {
         return $this->wantedDate;
     }
-    
+
     /**
      * set wantedDate
      *
@@ -272,22 +272,22 @@ class RequestForQuotation extends Document
     public function setWantedDate(\DateTimeImmutable $wantedDate)
     {
         $this->wantedDate = $wantedDate;
-        
+
         return $this;
     }
-    
+
     public function getDeliveryDate()
     {
         return $this->deliveryDate;
     }
-    
+
     public function setDeliveryDate($deliveryDate)
     {
         $this->deliveryDate = $deliveryDate;
-        
+
         return $this;
     }
-    
+
     /**
      * get boq
      *
@@ -297,7 +297,7 @@ class RequestForQuotation extends Document
     {
         return $this->boq;
     }
-    
+
     /**
      * set boq
      *
@@ -308,10 +308,10 @@ class RequestForQuotation extends Document
     public function setBoq(ProjectBoq $boq)
     {
         $this->boq = $boq;
-        
+
         return $this;
     }
-    
+
     /**
      * get budgetType
      *
@@ -321,7 +321,7 @@ class RequestForQuotation extends Document
     {
         return $this->budgetType;
     }
-    
+
     /**
      * set budgetType
      *
@@ -332,10 +332,10 @@ class RequestForQuotation extends Document
     public function setBudgetType(ProjectBoqBudgetType $budgetType)
     {
         $this->budgetType = $budgetType;
-        
+
         return $this;
     }
-    
+
     /**
      * get details
      *
@@ -345,7 +345,7 @@ class RequestForQuotation extends Document
     {
         return $this->details->toArray();
     }
-    
+
     /**
      * add detail
      *
@@ -358,10 +358,10 @@ class RequestForQuotation extends Document
         if (!$this->details->contains($detail)) {
             $this->details[] = $detail;
         }
-        
-        return this;
+
+        return $this;
     }
-    
+
     /**
      * remove detail
      *
@@ -394,10 +394,10 @@ class RequestForQuotation extends Document
         if (!$this->requestedVendors->contains($vendor)) {
             $this->requestedVendors[] = $vendor;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Remove requestedVendor
      *
@@ -407,8 +407,8 @@ class RequestForQuotation extends Document
     {
         $this->requestedVendors->removeElement($vendor);
     }
-    
-    
+
+
     /**
      * constructor
      *
@@ -420,7 +420,7 @@ class RequestForQuotation extends Document
         $this->requestedVendors = new ArrayCollection();
         $this->requestForQuotationVendors = new ArrayCollection();
     }
-    
+
     /**
      *
      * @return Vendor[]
@@ -429,7 +429,7 @@ class RequestForQuotation extends Document
     {
         return $this->requestForQuotationVendors->toArray();
     }
-    
+
     /**
      * Add requestForQuotationVendors
      *
@@ -442,10 +442,10 @@ class RequestForQuotation extends Document
         if (!$this->requestForQuotationVendors->contains($rqvendor)) {
             $this->requestForQuotationVendors[] = $rqvendor;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Remove requestForQuotationVendors
      *
@@ -455,6 +455,6 @@ class RequestForQuotation extends Document
     {
         $this->requestForQuotationVendors->removeElement($rqvendor);
     }
-  
+
 
 }

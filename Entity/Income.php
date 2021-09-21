@@ -63,7 +63,7 @@ abstract class Income extends Document
      * @var ProjectBoq
      */
     protected $boq;
-    
+
     /**
      * total
      *
@@ -77,7 +77,7 @@ abstract class Income extends Document
      * @var ArrayCollection
      */
     protected $details;
-    
+
     /**
      * constructor
      *
@@ -300,7 +300,7 @@ abstract class Income extends Document
             $this->details[] = $detail;
         }
 
-        return this;
+        return $this;
     }
 
     /**
@@ -312,10 +312,10 @@ abstract class Income extends Document
     {
         $this->details->removeElement($detail);
     }
-    
+
     public function setDetails(ArrayCollection $details) {
         $this->details = $details;
-        
+
         return $this;
     }
 }

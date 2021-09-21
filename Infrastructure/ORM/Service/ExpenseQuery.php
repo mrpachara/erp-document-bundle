@@ -42,7 +42,6 @@ abstract class ExpenseQuery extends PurchaseQuery implements QueryInterface
         $context = (array)$context;
         $statusChangedQb = $this->getPurchaseOrderExpenseDetailStatusChangedQueryBuilder('_detail');
 
-        /** @var \Doctrine\ORM\QueryBuilder */
         $qb = $this->purchaseOrderQueryService->searchQueryBuilder($params, '_entity', $context);
         $qb
             ->leftJoin('_entity.updatedBys', '_updatedBy', 'WITH', '_updatedBy.terminated IS NULL')

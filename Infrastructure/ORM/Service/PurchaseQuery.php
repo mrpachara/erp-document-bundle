@@ -6,9 +6,12 @@ use Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseQuery as QueryInterface;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\ProjectQuery;
 
 abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
 {
+    use DocumentWithProjectTrail;
+
     /** @var EntityRepository */
     protected $detailRepository;
 
