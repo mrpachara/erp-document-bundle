@@ -51,6 +51,7 @@ class DocumentQueryHelper
     private function addWhereClause(QueryBuilder $qb, string $method, $whereClause): QueryBuilder
     {
         return $qb->{$method}($whereClause->expression)
+            // NOTE: setParameters() always removes all of old parameters.
             ->setParameters($whereClause->parameters)
         ;
     }

@@ -7,23 +7,23 @@ use Erp\Bundle\CoreBundle\Infrastructure\ORM\Helper\AliasUniqueGenerator;
 /**
  *
  * @author pachara
- *        
+ *
  */
 class PurchaseQueryHelper
 {
     private $gen;
-    
+
     private $docHq;
-    
+
     /**
      */
     public function __construct(AliasUniqueGenerator $gen, DocumentQueryHelper $docHq)
     {
         $this->gen = $gen;
-        
+
         $this->docHq = $docHq;
     }
-    
+
     /**
      * Validating operator must be and/or.
      *
@@ -39,34 +39,35 @@ class PurchaseQueryHelper
         } else if(!($operator instanceof \stdClass)) {
             throw new \InvalidArgumentException("Operator must be string or stdClass.");
         }
-        
+
         return false;
     }
-    
+
     /**
      * Add where-clause to querybuilder.
      *
      * @param QueryBuilder $qb
      * @param string $method
-     * @param array $whereClause
+     * @param mixed $whereClause
      * @return QueryBuilder
      */
     private function addWhereClause(QueryBuilder $qb, string $method, $whereClause): QueryBuilder
     {
         return $qb->{$method}($whereClause->expression)
-        ->setParameters($whereClause->parameters)
+            // NOTE: setParameters() always removes all of old parameters.
+            ->setParameters($whereClause->parameters)
         ;
     }
-    
+
     private function copyWhereClause($target, $source)
     {
         $target->expression = $source->expression;
         $target->parameters = $source->parameters;
     }
-    
+
     /**
      * Apply remains filter of details from the next specific $statusChangedRepos.
-     * 
+     *
      * @param QueryBuilder $qb
      * @param string $refDocClass Purchase class that change the previous detail, e.g. DocumentBundle:PurchaseOrder
      * @param string $statusChangedClass The class of statusChanged that associates with changed detail (previous detail), e.g. DocumentBundle:PurchaseDetailStatusChanged
@@ -80,7 +81,7 @@ class PurchaseQueryHelper
     public function applyRemainFilter(QueryBuilder $qb, string $refDocClass, string $statusChangedClass, string $refBackName, string $operator, string $alias = null, string $entityClass = null): QueryBuilder
     {
         $isOperator = $this->operatorValidator($operator);
-        
+
         if($alias === null) $alias = $qb->getAllAliases()[0];
         if($entityClass === null) $entityClass = $qb->getRootEntities()[array_search($alias, $qb->getRootAliases())];
         $entityDetailClass = $entityClass.'Detail';
@@ -91,12 +92,12 @@ class PurchaseQueryHelper
         $subStatusChangedAlias = $this->gen->unique('_sub_status_changed_');
         $existDetailAlias = $this->gen->unique('_sub_doc_detail_');
         $existJoinAlias = $this->gen->unique('_sub_join_');
-        
+
         $qbExpr = $qb->expr();
         $subRefDocQb = $qb->getEntityManager()->getRepository($refDocClass)->createQueryBuilder($subRefDocAlias);
         $subRefDocExpr = $subRefDocQb->expr();
         $classMetadataStatusChanged = $subRefDocQb->getEntityManager()->getClassMetadata($statusChangedClass);
-        
+
         $subRefDocQb
             ->innerJoin($refDocDetailClass, $subRefDocDetailAlias, 'WITH', $subRefDocExpr->eq("{$subRefDocAlias}.id", "{$subRefDocDetailAlias}.purchase"))
             ->innerJoin("{$subRefDocDetailAlias}.statusChanged", $subStatusChangedAlias)
@@ -105,7 +106,7 @@ class PurchaseQueryHelper
 //             )
         ;
         $this->docHq->applyAliveFilter($subRefDocQb, 'and');
-        
+
         $existQb = $qb->getEntityManager()->getRepository($entityClass)->createQueryBuilder($existAlias);
         $existExpr = $existQb->expr();
         $existQb
@@ -120,12 +121,13 @@ class PurchaseQueryHelper
                 )
             ))
             ->andWhere($existExpr->isNull($existJoinAlias))
+            // NOTE: setParameters() always removes all of old parameters.
             ->setParameters($subRefDocQb->getParameters())
         ;
-        
+
         $whereClauseAlive = (object)[];
         $this->docHq->applyAliveFilter($qb, $whereClauseAlive);
-        
+
         $whereClause = (object)[
             'expression' => $qb->expr()->andX(
                 $whereClauseAlive->expression,
@@ -135,7 +137,7 @@ class PurchaseQueryHelper
             ),
             'parameters' => array_merge($whereClauseAlive->parameters, $existQb->getParameters()->toArray()),
         ];
-        
+
         if($isOperator) {
             $method = $operator.'Where';
             $this->addWhereClause($qb, $method, $whereClause);

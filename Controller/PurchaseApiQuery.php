@@ -65,7 +65,21 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
      */
     public function getAction($id, ServerRequestInterface $request)
     {
-        $response = parent::getAction($id, $request);
+        $response = null;
+        try {
+            $response = parent::getAction($id, $request);
+        } catch (UnprocessableEntityHttpException $excp) {
+            // dummay
+        }
+
+        if($response === null) {
+            $response = $this->getQuery('get-individual', $id, $request, function($id, $queryParams, &$context) {
+                /** @var SystemUser */
+                $user = $this->getUser();
+
+                return $this->domainQuery->findWithUser($id, $user);
+            });
+        }
 
         $responseData = $response->getData();
         /** @var Purchase */

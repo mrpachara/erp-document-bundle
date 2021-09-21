@@ -3,7 +3,7 @@
 namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Erp\Bundle\CoreBundle\Infrastructure\ORM\Service\QueryHelperService;
+use Erp\Bundle\CoreBundle\Infrastructure\ORM\Service\QueryHelper;
 use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\EmployeeQuery;
 use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\EmployeeQueryService;
 use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\ProjectQuery;
@@ -11,7 +11,7 @@ use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\ProjectQueryService;
 use Erp\Bundle\SystemBundle\Entity\SystemUser;
 
 trait DocumentWithProjectTrail {
-    /** @var QueryHelperService */
+    /** @var QueryHelper */
     protected $qh;
 
     /** @var ProjectQuery */
@@ -35,37 +35,49 @@ trait DocumentWithProjectTrail {
     abstract public function createQueryBuilder(string $alias) : QueryBuilder;
     abstract public function applySearchFilter(QueryBuilder $qb, array $params, string $alias, &$context = null) : QueryBuilder;
 
-    public function projectWithSomeWorkersQueryBuilder(
+    public function withEmployeesQueryBuilder(
         string $alias,
-        $workers
+        $employees
     ) : QueryBuilder
     {
-        $projectAlias = "{$alias}_project_for_workers";
-        $projectWorkerQb = $this->projectQuery->someWorkersQueryBuilder($projectAlias, $workers);
+        $projectAlias = "{$alias}_project_for_employees";
+        $projectOfWorkersQb = $this->projectQuery->memberOfWorkersQueryBuilder($projectAlias, $employees);
 
         $qb = $this->createQueryBuilder($alias);
-        $projectWorkerQb->andWhere(
-            $qb->expr()->eq("{$alias}.project", $projectAlias)
+        $expr = $qb->expr();
+
+        $projectOfWorkersQb->andWhere(
+            $expr->eq("{$alias}.project", $projectAlias)
+        );
+
+        $requestersVar = "{$alias}_requesters";
+
+        $orX = $expr->orX();
+        $orX->add(
+            $expr->in("{$alias}.requester", ":{$requestersVar}")
+        );
+        $orX->add(
+            $expr->exists(
+                $projectOfWorkersQb->getDql()
+            )
         );
 
         $qb
-            ->andWhere(
-                $qb->expr()->exists(
-                    $projectWorkerQb->getDql()
-                )
-            )
-            ->setParameters($projectWorkerQb->getParameters())
+            ->andWhere($orX)
+            ->setParameter($requestersVar, $employees)
         ;
+
+        $this->qh->appendParameters($qb, $projectOfWorkersQb->getParameters());
 
         return $qb;
     }
 
-    public function searchWithSomeWorkers($params, $workers, ?array &$context = null)
+    public function searchWithEmployees($params, $employees, ?array &$context = null)
     {
-        if(empty($workers)) return [];
+        if(empty($employees)) return [];
 
         $alias = 'doc';
-        $qb = $this->projectWithSomeWorkersQueryBuilder($alias, $workers);
+        $qb = $this->withEmployeesQueryBuilder($alias, $employees);
         $qb = $this->applySearchFilter($qb, $params, $alias, $context);
 
         return $this->qh->execute($qb->getQuery(), $params, $context);
@@ -73,7 +85,26 @@ trait DocumentWithProjectTrail {
 
     public function searchWithUser($params, SystemUser $user, ?array &$context = null)
     {
-        $workers = $this->employeeQuery->findByThing($user->getThing());
-        return $this->searchWithSomeWorkers($params, $workers, $context);
+        $employees = $this->employeeQuery->findByThing($user->getThing());
+        return $this->searchWithEmployees($params, $employees, $context);
+    }
+
+    function findWithUser($id, SystemUser $user)
+    {
+        $employees = $this->employeeQuery->findByThing($user->getThing());
+
+        if(empty($employees)) return null;
+
+        $alias = 'doc';
+        $qb = $this->withEmployeesQueryBuilder($alias, $employees);
+        $idVar = "{$alias}_id";
+
+        $expr = $qb->expr();
+        $qb
+            ->andWhere($expr->eq("{$alias}.id", ":{$idVar}"))
+            ->setParameter($idVar, $id)
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

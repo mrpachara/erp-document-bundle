@@ -10,7 +10,7 @@ abstract class PurchaseOrderQuantitySummaryQuery implements QueryInterface
 {
     /** @var EntityRepository */
     protected $purchaseOrderRepository;
-    
+
     /** @var GoodsReceiptQuery */
     protected $goodsReceiptQuery;
 
@@ -22,13 +22,12 @@ abstract class PurchaseOrderQuantitySummaryQuery implements QueryInterface
         $excepts = (array)$excepts;
         /** @var \Erp\Bundle\DocumentBundle\Entity\PurchaseOrder */
         $purchaseOrder = $this->purchaseOrderRepository->find($id);
-        
+
         $activeGoodsReceiptQb = $this->goodsReceiptQuery->getActiveDocumentQueryBuilder()
             ->andWhere('_activeDocument.transferOf = :transferOf')
-            
             ->setParameter('transferOf', $purchaseOrder->getId())
         ;
- 
+
         $goodsReceiptDetailQb = $this->goodsReceiptQuery->createDetailQueryBuilder('_goodsReceiptDetail');
         $excepts = array_map(function($value) use ($goodsReceiptDetailQb) {
             return $goodsReceiptDetailQb->expr()->literal($value);
@@ -53,15 +52,16 @@ abstract class PurchaseOrderQuantitySummaryQuery implements QueryInterface
         ;
 
         $goodsReceiptDetailQb
-        ->select('_purchaseOrderDetail.id AS id', 'SUM(_goodsReceiptDetail.quantity) AS quantity')
-        ->innerJoin('_goodsReceiptDetail.statusChanged', '_statusChanged')
-        ->innerJoin('_statusChanged.purchaseOrderDetail', '_purchaseOrderDetail')
-        ->groupBy('_purchaseOrderDetail.id')
+            ->select('_purchaseOrderDetail.id AS id', 'SUM(_goodsReceiptDetail.quantity) AS quantity')
+            ->innerJoin('_goodsReceiptDetail.statusChanged', '_statusChanged')
+            ->innerJoin('_statusChanged.purchaseOrderDetail', '_purchaseOrderDetail')
+            ->groupBy('_purchaseOrderDetail.id')
         ;
-            
+
+        // NOTE: setParameters() always removes all of old parameters.
         $goodsReceiptDetailQb->setParameters($activeGoodsReceiptQb->getParameters());
         $goodsReceiptDetails = $goodsReceiptDetailQb->getQuery()->getResult();
-            
+
         return $goodsReceiptDetails;
         }
 }
