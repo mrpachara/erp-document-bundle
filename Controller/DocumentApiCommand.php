@@ -69,17 +69,19 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
     public function replaceAction($id, Request $request)
     {
         $grant = 'replace';
-        return $this->createCommand($grant, $request, function($class, &$data) use ($id, $grant) {
-            if(!($doc = $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE)) || !$this->grant($grant, [$doc]))
-                return null;
+        return $this->createCommand($request, [
+            $grant => function($class, &$data) use ($id, $grant) {
+                if(!($doc = $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE)) || !$this->grant($grant, [$doc]))
+                    return null;
 
-            $item = new $class();
+                $item = new $class();
 
-            $item->setUpdateOf($doc);
-            $doc->addUpdatedBy($item);
+                $item->setUpdateOf($doc);
+                $doc->addUpdatedBy($item);
 
-            return $item;
-        });
+                return $item;
+            },
+        ]);
     }
 
     protected function prepareTerminatedDocumentData($data)
@@ -113,39 +115,42 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
         ));
     }
 
-    protected function terminateCommand($grant, $id, Request $request, $callback)
+    protected function terminateCommand($id, Request $request, $callbacks)
     {
-        if (!$this->grant($grant, [])) {
-            throw new AccessDeniedException("Terminate is not allowed.");
+        foreach($callbacks as $grantText => $callback) {
+            $grants = preg_split('/\s+/', $grantText);
+            if (!$this->grant($grants, [])) continue;
+
+            $data = $this->extractTerminatedDocumentData($request);
+
+            $item = $this->commandHandler->execute(function ($em) use ($callback, $id, $data, $grants) {
+                if(!($item = $callback($id, $data)))
+                    throw new NotFoundHttpException("Entity not found.");
+                if (!$this->grant($grants, [$item])) {
+                    throw new AccessDeniedException("Terminate is not allowed.");
+                }
+
+                /** @var TerminatedDocument */
+                $termDoc = new TerminatedDocument();
+                $termDoc = $this->patchTerminatedDocumentItem($termDoc, $data);
+                $this->initialItem($termDoc);
+                $em->persist($termDoc);
+
+                $item->setTerminated($termDoc);
+
+                if ($termDoc->getType() === 'REJECT') {
+                    for ($affDoc = $item->getUpdateOf(); $affDoc !== null; $affDoc = $affDoc->getUpdateOf()) {
+                        $affDoc->setTerminated($termDoc);
+                    }
+                }
+
+                return $item;
+            });
+
+            return $this->view(['data' => $this->domainQuery->find($item->getId())], 200);
         }
 
-        $data = $this->extractTerminatedDocumentData($request);
-
-        $item = $this->commandHandler->execute(function ($em) use ($callback, $id, $data, $grant) {
-            if(!($item = $callback($id, $data)))
-                throw new NotFoundHttpException("Entity not found.");
-            if (!$this->grant($grant, [$item])) {
-                throw new AccessDeniedException("Terminate is not allowed.");
-            }
-
-            /** @var TerminatedDocument */
-            $termDoc = new TerminatedDocument();
-            $termDoc = $this->patchTerminatedDocumentItem($termDoc, $data);
-            $this->initialItem($termDoc);
-            $em->persist($termDoc);
-
-            $item->setTerminated($termDoc);
-
-            if ($termDoc->getType() === 'REJECT') {
-                for ($affDoc = $item->getUpdateOf(); $affDoc !== null; $affDoc = $affDoc->getUpdateOf()) {
-                    $affDoc->setTerminated($termDoc);
-                }
-            }
-
-            return $item;
-        });
-
-        return $this->view(['data' => $this->domainQuery->find($item->getId())], 200);
+        throw new AccessDeniedException("Terminate is not allowed.");
     }
 
     /**
@@ -159,8 +164,10 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
     public function terminateAction($id, Request $request)
     {
         // return document
-        return $this->terminateCommand('terminate', $id, $request, function($id, &$data) {
-            return $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE);
-        });
+        return $this->terminateCommand($id, $request, [
+            'terminate' => function($id, &$data) {
+                return $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE);
+            },
+        ]);
     }
 }
