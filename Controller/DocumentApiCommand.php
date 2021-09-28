@@ -6,7 +6,7 @@ use Erp\Bundle\CoreBundle\Controller\CoreAccountApiCommand;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Erp\Bundle\CoreBundle\Domain\Adapter\LockMode;
@@ -52,9 +52,9 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
     protected function prepareItemAfterPatch($item)
     {
         $item = parent::prepareItemAfterPatch($item);
-        
+
         if(!$this->grant('approve', [$item])) $item->setApproved(false);
-        
+
         return $item;
     }
 
@@ -116,7 +116,7 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
     protected function terminateCommand($grant, $id, Request $request, $callback)
     {
         if (!$this->grant($grant, [])) {
-            throw new UnprocessableEntityHttpException("Terminate is not allowed.");
+            throw new AccessDeniedException("Terminate is not allowed.");
         }
 
         $data = $this->extractTerminatedDocumentData($request);
@@ -125,7 +125,7 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
             if(!($item = $callback($id, $data)))
                 throw new NotFoundHttpException("Entity not found.");
             if (!$this->grant($grant, [$item])) {
-                throw new UnprocessableEntityHttpException("Terminate is not allowed.");
+                throw new AccessDeniedException("Terminate is not allowed.");
             }
 
             /** @var TerminatedDocument */

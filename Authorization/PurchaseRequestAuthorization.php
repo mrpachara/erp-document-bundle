@@ -9,6 +9,11 @@ class PurchaseRequestAuthorization extends AbstractPurchaseAuthorization
         return parent::list(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_LIST');
     }
 
+    public function listWorker(...$args)
+    {
+        return parent::list(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_LIST_WORKER');
+    }
+
     public function listIndividual(...$args)
     {
         return parent::list(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_LIST_INDIVIDUAL');
@@ -17,6 +22,11 @@ class PurchaseRequestAuthorization extends AbstractPurchaseAuthorization
     public function get(...$args)
     {
         return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_VIEW');
+    }
+
+    public function getWorker(...$args)
+    {
+        return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_VIEW_WORKER');
     }
 
     public function getIndividual(...$args)

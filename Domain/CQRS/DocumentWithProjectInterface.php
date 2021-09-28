@@ -11,16 +11,20 @@ use Erp\Bundle\SystemBundle\Entity\SystemUser;
  */
 interface DocumentWithProjectInterface
 {
+    const OWNER = 1;
+    const WORKER = 2;
+
     /**
      * Search by related given employees.
      *
      * @param array $params
      * @param Employee[] $employees
+     * @param int[] $types
      * @param ?array &$context
      *
      * @return Document[]
      */
-    function searchWithEmployees($params, $employees, ?array &$context = null);
+    function searchWithEmployees($params, $employees, array $types, ?array &$context = null);
 
     /**
      * Search by projects has the given user.
@@ -29,18 +33,20 @@ interface DocumentWithProjectInterface
      *
      * @param array $params
      * @param SystemUser $user
+     * @param int[] $types
      * @param ?array &$context
      *
      * @return Document[]
      */
-    function searchWithUser($params, SystemUser $user, ?array &$context = null);
+    function searchWithUser($params, SystemUser $user, array $types, ?array &$context = null);
 
     /**
      * Find from identifier for the given use.
      *
      * @param mixed $id Identifier.
+     * @param int[] $types
      *
      * @return Document
      */
-    function findWithUser($id, SystemUser $user);
+    function findWithUser($id, SystemUser $user, array $types);
 }

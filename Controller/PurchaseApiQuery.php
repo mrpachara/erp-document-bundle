@@ -5,9 +5,10 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Erp\Bundle\DocumentBundle\Entity\Purchase;
 use Erp\Bundle\SystemBundle\Entity\SystemUser;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
 
 /**
  * Purchase Api Query
@@ -43,16 +44,36 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
     {
         try {
             return parent::listAction($request);
-        } catch (UnprocessableEntityHttpException $excp) {
+        } catch (AccessDeniedException $excp) {
             // dummay
         }
 
-        return $this->listQuery('list-individual', $request, function($queryParams, &$context) {
-            /** @var SystemUser */
-            $user = $this->getUser();
+        return $this->listQuery($request, [
+            'list-worker list-individual' => function($queryParams, &$context) {
+                /** @var SystemUser */
+                $user = $this->getUser();
 
-            return $this->domainQuery->searchWithUser($queryParams, $user, $context);
-        });
+                return $this->domainQuery->searchWithUser($queryParams, $user,
+                    [ServiceInterface::WORKER, ServiceInterface::OWNER]
+                , $context);
+            },
+            'list-worker' => function($queryParams, &$context) {
+                /** @var SystemUser */
+                $user = $this->getUser();
+
+                return $this->domainQuery->searchWithUser($queryParams, $user,
+                    [ServiceInterface::WORKER]
+                , $context);
+            },
+            'list-individual' => function($queryParams, &$context) {
+                /** @var SystemUser */
+                $user = $this->getUser();
+
+                return $this->domainQuery->searchWithUser($queryParams, $user,
+                    [ServiceInterface::OWNER]
+                , $context);
+            },
+        ]);
     }
 
     /**
@@ -68,17 +89,37 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         $response = null;
         try {
             $response = parent::getAction($id, $request);
-        } catch (UnprocessableEntityHttpException $excp) {
+        } catch (AccessDeniedException $excp) {
             // dummay
         }
 
         if($response === null) {
-            $response = $this->getQuery('get-individual', $id, $request, function($id, $queryParams, &$context) {
-                /** @var SystemUser */
-                $user = $this->getUser();
+            $response = $this->getQuery($id, $request, [
+                'get-worker get-individual' => function($id, $queryParams, &$context) {
+                    /** @var SystemUser */
+                    $user = $this->getUser();
 
-                return $this->domainQuery->findWithUser($id, $user);
-            });
+                    return $this->domainQuery->findWithUser($id, $user,
+                        [ServiceInterface::WORKER, ServiceInterface::OWNER]
+                    );
+                },
+                'get-worker' => function($id, $queryParams, &$context) {
+                    /** @var SystemUser */
+                    $user = $this->getUser();
+
+                    return $this->domainQuery->findWithUser($id, $user,
+                        [ServiceInterface::WORKER]
+                    );
+                },
+                'get-indidual' => function($id, $queryParams, &$context) {
+                    /** @var SystemUser */
+                    $user = $this->getUser();
+
+                    return $this->domainQuery->findWithUser($id, $user,
+                        [ServiceInterface::OWNER]
+                    );
+                },
+            ]);
         }
 
         $responseData = $response->getData();
