@@ -39,35 +39,35 @@ abstract class PurchaseOrderQuery extends PurchaseQuery implements QueryInterfac
 
     public function searchPurchaseRequestRemain(array $params, array &$context = null)
     {
-        $context = (array)$context;
-        $statusChangedQb = $this->getPurchaseRequestDetailStatusChangedQueryBuilder('_detail');
+        // $context = (array)$context;
+        // $statusChangedQb = $this->getPurchaseRequestDetailStatusChangedQueryBuilder('_detail');
 
-        /** @var \Doctrine\ORM\QueryBuilder */
-        $qb = $this->purchaseRequestQueryService->searchQueryBuilder($params, '_entity', $context);
-        $qb
-            ->leftJoin('_entity.updatedBys', '_updatedBy', 'WITH', '_updatedBy.terminated IS NULL')
-            ->innerJoin('_entity.details', '_detail')
-            ->leftJoin(
-                'ErpDocumentBundle:PurchaseRequestDetailStatusChanged',
-                '_activeStatusChanged',
-                'WITH',
-                $qb->expr()->andX(
-                    $qb->expr()->eq('_detail', '_activeStatusChanged.purchaseRequestDetail'),
-                    $qb->expr()->in(
-                        '_activeStatusChanged.id',
-                        $statusChangedQb->select('_statusChanged.id')->getDQL()
-                    )
-                )
-            )
+        // $qb = $this->purchaseRequestQueryService->searchQueryBuilder($params, '_entity', $context);
+        // $qb
+        //     ->leftJoin('_entity.updatedBys', '_updatedBy', 'WITH', '_updatedBy.terminated IS NULL')
+        //     ->innerJoin('_entity.details', '_detail')
+        //     ->leftJoin(
+        //         'ErpDocumentBundle:PurchaseRequestDetailStatusChanged',
+        //         '_activeStatusChanged',
+        //         'WITH',
+        //         $qb->expr()->andX(
+        //             $qb->expr()->eq('_detail', '_activeStatusChanged.purchaseRequestDetail'),
+        //             $qb->expr()->in(
+        //                 '_activeStatusChanged.id',
+        //                 $statusChangedQb->select('_statusChanged.id')->getDQL()
+        //             )
+        //         )
+        //     )
 
-            ->andWhere('_activeStatusChanged IS NULL')
+        //     ->andWhere('_activeStatusChanged IS NULL')
 
-            ->andWhere('_entity.terminated IS NULL')
-            ->andWhere('_updatedBy IS NULL')
-            ->andWhere('_entity.approved = TRUE')
-        ;
+        //     ->andWhere('_entity.terminated IS NULL')
+        //     ->andWhere('_updatedBy IS NULL')
+        //     ->andWhere('_entity.approved = TRUE')
+        // ;
 
-        return $this->qh->execute($qb->distinct()->getQuery(), $params, $context);
+        // return $this->qh->execute($qb->distinct()->getQuery(), $params, $context);
+        return $this->purchaseRequestQueryService->searchRemain($params, $context);
     }
 
     public function getPurchaseRequestRemain($id)
@@ -77,32 +77,44 @@ abstract class PurchaseOrderQuery extends PurchaseQuery implements QueryInterfac
             return $purchaseRequest;
         }
 
-        $statusChangedQb = $this->getPurchaseRequestDetailStatusChangedQueryBuilder('_purchaseRequestDetail');
+        // $statusChangedQb = $this->getPurchaseRequestDetailStatusChangedQueryBuilder('_purchaseRequestDetail');
 
-        $qb = $this->purchaseRequestQueryService->createDetailQueryBuilder('_purchaseRequestDetail');
-        $qb
-            ->innerJoin(
-                'ErpDocumentBundle:PurchaseRequest', '_purchaseRequest',
-                'WITH', '_purchaseRequestDetail.purchase = _purchaseRequest'
-            )
-            ->leftJoin(
-                'ErpDocumentBundle:PurchaseRequestDetailStatusChanged', '_activeStatusChanged',
-                'WITH',
-                $qb->expr()->andX(
-                    $qb->expr()->eq('_purchaseRequestDetail', '_activeStatusChanged.purchaseRequestDetail'),
-                    $qb->expr()->in(
-                        '_activeStatusChanged.id',
-                        $statusChangedQb->select('_statusChanged.id')->getDQL()
-                    )
-                )
-            )
-            ->andWhere('_activeStatusChanged IS NULL')
+        // $qb = $this->purchaseRequestQueryService->createDetailQueryBuilder('_purchaseRequestDetail');
+        // $qb
+        //     ->innerJoin(
+        //         'ErpDocumentBundle:PurchaseRequest', '_purchaseRequest',
+        //         'WITH', '_purchaseRequestDetail.purchase = _purchaseRequest'
+        //     )
+        //     ->leftJoin(
+        //         'ErpDocumentBundle:PurchaseRequestDetailStatusChanged', '_activeStatusChanged',
+        //         'WITH',
+        //         $qb->expr()->andX(
+        //             $qb->expr()->eq('_purchaseRequestDetail', '_activeStatusChanged.purchaseRequestDetail'),
+        //             $qb->expr()->in(
+        //                 '_activeStatusChanged.id',
+        //                 $statusChangedQb->select('_statusChanged.id')->getDQL()
+        //             )
+        //         )
+        //     )
+        //     ->andWhere('_activeStatusChanged IS NULL')
 
-            ->andWhere('_purchaseRequest = :purchaseRequestId')
-            ->setParameter('purchaseRequestId', $purchaseRequest->getId())
-        ;
+        //     ->andWhere('_purchaseRequest = :purchaseRequestId')
+        //     ->setParameter('purchaseRequestId', $purchaseRequest->getId())
+        // ;
 
-        $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($qb->distinct()->getQuery()->getResult());
+        // $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($qb->distinct()->getQuery()->getResult());
+        // if(count($details) == 0) return null;
+        // $purchaseRequest->setDetails($details);
+
+        $detailAlias = '_purchase_detail';
+        $detailRemainQb = $this->purchaseRequestQueryService->createDetailQueryBuilder($detailAlias);
+        $detailRemainQb = $this->purchaseRequestQueryService->assignDetailRemainQuery($detailRemainQb, $detailAlias);
+
+        $expr = $detailRemainQb->expr();
+        $detailRemainQb->andWhere($expr->eq("{$detailAlias}.purchase", ':purchaseRequest'));
+        $detailRemainQb->setParameter('purchaseRequest', $purchaseRequest);
+
+        $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($detailRemainQb->getQuery()->getResult());
         if(count($details) == 0) return null;
         $purchaseRequest->setDetails($details);
 

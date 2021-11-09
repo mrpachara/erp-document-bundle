@@ -11,4 +11,8 @@ use Erp\Bundle\SystemBundle\Entity\SystemUser;
  */
 interface PurchaseQuery extends DocumentQuery, DocumentWithProjectInterface
 {
+    /**
+     * Search for Remain Purchase.
+     */
+    public function searchRemain(array $params, array &$context = null);
 }

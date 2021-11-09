@@ -4,11 +4,6 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 
 class ExpenseDetail extends PurchaseDetail {
   /**
-   * @var PurchaseOrderDetailStatusChanged
-   */
-  protected $statusChanged;
-
-  /**
    * constructor
    *
    * @param Expense|null $purchase
@@ -19,11 +14,5 @@ class ExpenseDetail extends PurchaseDetail {
 
   public function getStatusChanged() {
     return $this->statusChanged;
-  }
-
-  public function setStatusChanged(PurchaseOrderDetailStatusChanged $statusChanged) {
-    $this->statusChanged = $statusChanged;
-
-    return $this;
   }
 }

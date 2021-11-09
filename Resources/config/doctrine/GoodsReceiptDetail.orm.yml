@@ -3,12 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\GoodsReceiptDetail:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\GoodsReceiptDetailRepository
   table: document_goodsreceiptdetail
   inheritanceType: JOINED
-  oneToOne:
-    statusChanged:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetailStatusChanged
-      cascade: ["persist", "refresh"]
-      joinColumn:
-        name: id_document_purchaseOrderdetailstatuschanged
-        nullable: true
-        onDelete: RESTRICT
-      fetch: EAGER

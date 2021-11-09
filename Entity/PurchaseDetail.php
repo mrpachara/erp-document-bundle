@@ -5,7 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 use Erp\Bundle\MasterBundle\Entity\CostItem;
 use Erp\Bundle\MasterBundle\Entity\ProjectBoqData;
 
-abstract class PurchaseDetail {
+abstract class PurchaseDetail implements DetailStatusChanged {
   /**
   * @var string
   */
@@ -58,6 +58,13 @@ abstract class PurchaseDetail {
    * @var string
    */
   protected $remark;
+
+  /**
+   * status changed
+   *
+   * @var PurchaseDetailStatusChanged
+   */
+  protected $statusChanged;
 
   /**
    * constructor
@@ -227,6 +234,16 @@ abstract class PurchaseDetail {
    */
   public function setRemark(string $remark) {
     $this->remark = $remark;
+
+    return $this;
+  }
+
+  public function getStatusChanged() {
+    return $this->statusChanged;
+  }
+
+  public function setStatusChanged($statusChanged) {
+    $this->statusChanged = $statusChanged;
 
     return $this;
   }

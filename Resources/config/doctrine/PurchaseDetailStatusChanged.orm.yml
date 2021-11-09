@@ -1,0 +1,21 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseDetailStatusChanged:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseDetailRepository
+  table: document_purchasedetailstatuschanged
+  inheritanceType: JOINED
+  indexes:
+    document_purchasedetailstatuschanged_type_idx:
+      columns: [ type ]
+  manyToOne:
+    detail:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseDetail
+      joinColumn:
+        name: id_document_purchasedetail
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    type:
+      type: string
+      length: 64
+      nullable: false

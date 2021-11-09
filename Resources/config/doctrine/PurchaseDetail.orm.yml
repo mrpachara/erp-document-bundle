@@ -32,6 +32,15 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
         nullable: true
         onDelete: RESTRICT
       fetch: EAGER
+  oneToOne:
+    statusChanged:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseDetailStatusChanged
+      cascade: ["persist", "refresh"]
+      joinColumn:
+        name: id_document_purchasedetailstatuschanged
+        nullable: true
+        onDelete: RESTRICT
+      # fetch: EAGER
   fields:
     price:
       type: decimal

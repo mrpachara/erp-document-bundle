@@ -3,12 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\PurchaseRequestDetailRepository
   table: document_purchaseorderdetail
   inheritanceType: JOINED
-  oneToOne:
-    statusChanged:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetailStatusChanged
-      cascade: ["persist", "refresh"]
-      joinColumn:
-        name: id_document_purchaserequestdetailstatuschanged
-        nullable: true
-        onDelete: RESTRICT
-      fetch: EAGER
