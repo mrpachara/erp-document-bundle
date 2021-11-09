@@ -8,13 +8,13 @@ abstract class RevenueQuery extends IncomeQuery implements QueryInterface
 {
     /** @var \Doctrine\ORM\EntityRepository */
     protected $taxInvoiceDetailStatusChangedRepository;
-    
+
     /** @var TaxInvoiceQueryService */
     protected $taxInvoiceQueryService;
-    
+
     public function getTaxInvoiceDetailStatusChangedQueryBuilder($alias)
     {
-        $activeRevenueQb = $this->getActiveDocumentQueryBuilder();
+        $activeRevenueQb = $this->getAliveDocumentQueryBuilder('_activeDocument');
         $statusChangedQb = $this->taxInvoiceDetailStatusChangedRepository->createQueryBuilder('_statusChanged');
         return $statusChangedQb
         ->innerJoin(
@@ -36,12 +36,12 @@ abstract class RevenueQuery extends IncomeQuery implements QueryInterface
                 ->where($statusChangedQb->expr()->eq('_statusChanged.taxInvoiceDetail', $alias))
                 ;
     }
-    
+
     public function searchTaxInvoiceRemain(array $params, array &$context = null)
     {
         $context = (array)$context;
         $statusChangedQb = $this->getTaxInvoiceDetailStatusChangedQueryBuilder('_detail');
-        
+
         /** @var \Doctrine\ORM\QueryBuilder */
         $qb = $this->taxInvoiceQueryService->searchQueryBuilder($params, '_entity', $context);
         $qb
@@ -59,26 +59,26 @@ abstract class RevenueQuery extends IncomeQuery implements QueryInterface
                     )
                 )
             )
-            
+
             ->andWhere('_activeStatusChanged IS NULL')
-            
+
             ->andWhere('_entity.terminated IS NULL')
             ->andWhere('_updatedBy IS NULL')
             ->andWhere('_entity.approved = TRUE')
             ;
-            
+
             return $this->qh->execute($qb->distinct()->getQuery(), $params, $context);
     }
-    
+
     public function getTaxInvoiceRemain($id)
     {
         $taxInvoice = $this->taxInvoiceQueryService->find($id);
         if (empty($taxInvoice)) {
             return $taxInvoice;
         }
-        
+
         $statusChangedQb = $this->getTaxInvoiceDetailStatusChangedQueryBuilder('_taxInvoiceDetail');
-        
+
         $qb = $this->taxInvoiceQueryService->createDetailQueryBuilder('_taxInvoiceDetail');
         $qb
         ->innerJoin(
@@ -97,15 +97,15 @@ abstract class RevenueQuery extends IncomeQuery implements QueryInterface
                     )
                 )
                 ->andWhere('_activeStatusChanged IS NULL')
-                
+
                 ->andWhere('_taxInvoice = :taxInvoiceId')
                 ->setParameter('taxInvoiceId', $taxInvoice->getId())
                 ;
-                
+
                 $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($qb->distinct()->getQuery()->getResult());
                 if(count($details) == 0) return null;
                 $taxInvoice->setDetails($details);
-                
+
                 return $taxInvoice;
     }
 }

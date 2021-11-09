@@ -97,7 +97,7 @@ trait DocumentWithProjectTrail {
         return $this->searchWithEmployees($params, $employees, $types, $context);
     }
 
-    function findWithUser($id, SystemUser $user, array $types)
+    function findWithUser($id, SystemUser $user, array $types, ?int $lockMode = null)
     {
         $employees = $this->employeeQuery->findByThing($user->getThing());
 
@@ -113,6 +113,11 @@ trait DocumentWithProjectTrail {
             ->setParameter($idVar, $id)
         ;
 
-        return $qb->getQuery()->getOneOrNullResult();
+        $query = $qb->getQuery();
+        if($lockMode !== null) {
+            $query->setLockMode($lockMode);
+        }
+
+        return $query->getOneOrNullResult();
     }
 }

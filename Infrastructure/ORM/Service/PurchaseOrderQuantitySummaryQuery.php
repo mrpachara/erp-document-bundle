@@ -23,7 +23,7 @@ abstract class PurchaseOrderQuantitySummaryQuery implements QueryInterface
         /** @var \Erp\Bundle\DocumentBundle\Entity\PurchaseOrder */
         $purchaseOrder = $this->purchaseOrderRepository->find($id);
 
-        $activeGoodsReceiptQb = $this->goodsReceiptQuery->getActiveDocumentQueryBuilder()
+        $activeGoodsReceiptQb = $this->goodsReceiptQuery->getAliveDocumentQueryBuilder('_activeDocument')
             ->andWhere('_activeDocument.transferOf = :transferOf')
             ->setParameter('transferOf', $purchaseOrder->getId())
         ;

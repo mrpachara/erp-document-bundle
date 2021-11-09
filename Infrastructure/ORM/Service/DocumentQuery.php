@@ -8,21 +8,29 @@ use Erp\Bundle\CoreBundle\Infrastructure\ORM\Service\CoreAccountQuery as ParentQ
 use Erp\Bundle\DocumentBundle\Entity\Document;
 
 use Doctrine\ORM\QueryBuilder;
+use Erp\Bundle\CoreBundle\Domain\Adapter\Query;
 
 abstract class DocumentQuery extends ParentQuery implements QueryInterface
 {
+    /** @var \Doctrine\ORM\EntityRepository */
+    protected $docRepository = null;
+
+    public function setDocRepository(\Symfony\Bridge\Doctrine\RegistryInterface $doctrine){
+        $this->docRepository = $doctrine->getRepository(Document::class);
+    }
+
     public function searchOptions() {
         $result = parent::searchOptions();
-        
+
         if(!isset($result['where'])) $result['where'] = [
             'fields' => [],
         ];
-        
+
         $result['where']['fields'][] = 'approved';
-        
+
         return $result;
     }
-    
+
     public function origin(Document $doc)
     {
         /** @var QueryBuilder */
@@ -41,19 +49,19 @@ abstract class DocumentQuery extends ParentQuery implements QueryInterface
         ;
     }
 
-    public function getActiveDocumentQueryBuilder($alias = '_activeDocument')
+    public function getAliveDocumentQueryBuilder($alias) : QueryBuilder
     {
         /** @var QueryBuilder */
         $qb = $this->repository->createQueryBuilder($alias);
-        return $this->assignActiveDocumentQuery($qb, $alias);
+        return $this->assignAliveDocumentQuery($qb, $alias);
     }
 
-    public function assignActiveDocumentQuery(QueryBuilder $qb, $alias)
+    public function assignAliveDocumentQuery(QueryBuilder $qb, $alias) : QueryBuilder
     {
         return $qb
-            ->leftJoin("{$alias}.updatedBys", "{$alias}_activeDocumentUpdatedBy", 'WITH', "{$alias}_activeDocumentUpdatedBy.terminated IS NULL")
+            ->leftJoin("{$alias}.updatedBys", "{$alias}_aliveDocumentUpdatedBy", 'WITH', "{$alias}_aliveDocumentUpdatedBy.terminated IS NULL")
             ->andWhere("{$alias}.terminated IS NULL")
-            ->andWhere("{$alias}_activeDocumentUpdatedBy IS NULL")
+            ->andWhere("{$alias}_aliveDocumentUpdatedBy IS NULL")
         ;
     }
 }

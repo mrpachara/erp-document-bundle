@@ -68,10 +68,9 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
      */
     public function replaceAction($id, Request $request)
     {
-        $grant = 'replace';
         return $this->createCommand($request, [
-            $grant => function($class, &$data) use ($id, $grant) {
-                if(!($doc = $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE)) || !$this->grant($grant, [$doc]))
+            'replace' => function($class, &$data) use ($id) {
+                if(!($doc = $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE)) || !$this->grant('replace', [$doc]))
                     return null;
 
                 $item = new $class();

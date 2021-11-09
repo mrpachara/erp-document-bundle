@@ -8,13 +8,13 @@ abstract class BillingNoteQuery extends IncomeQuery implements QueryInterface
 {
     /** @var \Doctrine\ORM\EntityRepository */
     protected $deliveryNoteDetailStatusChangedRepository;
-    
+
     /** @var DeliveryNoteQueryService */
     protected $deliveryNoteQueryService;
-    
+
     public function getDeliveryNoteDetailStatusChangedQueryBuilder($alias)
     {
-        $activeBillingNoteQb = $this->getActiveDocumentQueryBuilder();
+        $activeBillingNoteQb = $this->getAliveDocumentQueryBuilder('_activeDocument');
         $statusChangedQb = $this->deliveryNoteDetailStatusChangedRepository->createQueryBuilder('_statusChanged');
         return $statusChangedQb
         ->innerJoin(
@@ -36,12 +36,12 @@ abstract class BillingNoteQuery extends IncomeQuery implements QueryInterface
                 ->where($statusChangedQb->expr()->eq('_statusChanged.deliveryNoteDetail', $alias))
                 ;
     }
-    
+
     public function searchDeliveryNoteRemain(array $params, array &$context = null)
     {
         $context = (array)$context;
         $statusChangedQb = $this->getDeliveryNoteDetailStatusChangedQueryBuilder('_detail');
-        
+
         /** @var \Doctrine\ORM\QueryBuilder */
         $qb = $this->deliveryNoteQueryService->searchQueryBuilder($params, '_entity', $context);
         $qb
@@ -59,26 +59,26 @@ abstract class BillingNoteQuery extends IncomeQuery implements QueryInterface
                     )
                 )
             )
-            
+
             ->andWhere('_activeStatusChanged IS NULL')
-            
+
             ->andWhere('_entity.terminated IS NULL')
             ->andWhere('_updatedBy IS NULL')
             ->andWhere('_entity.approved = TRUE')
             ;
-            
+
             return $this->qh->execute($qb->distinct()->getQuery(), $params, $context);
     }
-    
+
     public function getDeliveryNoteRemain($id)
     {
         $deliveryNote = $this->deliveryNoteQueryService->find($id);
         if (empty($deliveryNote)) {
             return $deliveryNote;
         }
-        
+
         $statusChangedQb = $this->getDeliveryNoteDetailStatusChangedQueryBuilder('_deliveryNoteDetail');
-        
+
         $qb = $this->deliveryNoteQueryService->createDetailQueryBuilder('_deliveryNoteDetail');
         $qb
         ->innerJoin(
@@ -97,15 +97,15 @@ abstract class BillingNoteQuery extends IncomeQuery implements QueryInterface
                     )
                 )
                 ->andWhere('_activeStatusChanged IS NULL')
-                
+
                 ->andWhere('_deliveryNote = :deliveryNoteId')
                 ->setParameter('deliveryNoteId', $deliveryNote->getId())
                 ;
-                
+
                 $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($qb->distinct()->getQuery()->getResult());
                 if(count($details) == 0) return null;
                 $deliveryNote->setDetails($details);
-                
+
                 return $deliveryNote;
     }
 }

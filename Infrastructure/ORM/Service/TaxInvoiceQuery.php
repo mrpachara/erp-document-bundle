@@ -8,13 +8,13 @@ abstract class TaxInvoiceQuery extends IncomeQuery implements QueryInterface
 {
     /** @var \Doctrine\ORM\EntityRepository */
     protected $billingNoteDetailStatusChangedRepository;
-    
+
     /** @var BillingNoteQueryService */
     protected $billingNoteQueryService;
-    
+
     public function getBillingNoteDetailStatusChangedQueryBuilder($alias)
     {
-        $activeTaxInvoiceQb = $this->getActiveDocumentQueryBuilder();
+        $activeTaxInvoiceQb = $this->getAliveDocumentQueryBuilder('_activeDocument');
         $statusChangedQb = $this->billingNoteDetailStatusChangedRepository->createQueryBuilder('_statusChanged');
         return $statusChangedQb
         ->innerJoin(
@@ -36,12 +36,12 @@ abstract class TaxInvoiceQuery extends IncomeQuery implements QueryInterface
                 ->where($statusChangedQb->expr()->eq('_statusChanged.billingNoteDetail', $alias))
                 ;
     }
-    
+
     public function searchBillingNoteRemain(array $params, array &$context = null)
     {
         $context = (array)$context;
         $statusChangedQb = $this->getBillingNoteDetailStatusChangedQueryBuilder('_detail');
-        
+
         /** @var \Doctrine\ORM\QueryBuilder */
         $qb = $this->billingNoteQueryService->searchQueryBuilder($params, '_entity', $context);
         $qb
@@ -59,26 +59,26 @@ abstract class TaxInvoiceQuery extends IncomeQuery implements QueryInterface
                     )
                 )
             )
-            
+
             ->andWhere('_activeStatusChanged IS NULL')
-            
+
             ->andWhere('_entity.terminated IS NULL')
             ->andWhere('_updatedBy IS NULL')
             ->andWhere('_entity.approved = TRUE')
             ;
-            
+
             return $this->qh->execute($qb->distinct()->getQuery(), $params, $context);
     }
-    
+
     public function getBillingNoteRemain($id)
     {
         $billingNote = $this->billingNoteQueryService->find($id);
         if (empty($billingNote)) {
             return $billingNote;
         }
-        
+
         $statusChangedQb = $this->getBillingNoteDetailStatusChangedQueryBuilder('_billingNoteDetail');
-        
+
         $qb = $this->billingNoteQueryService->createDetailQueryBuilder('_billingNoteDetail');
         $qb
         ->innerJoin(
@@ -97,15 +97,15 @@ abstract class TaxInvoiceQuery extends IncomeQuery implements QueryInterface
                     )
                 )
                 ->andWhere('_activeStatusChanged IS NULL')
-                
+
                 ->andWhere('_billingNote = :billingNoteId')
                 ->setParameter('billingNoteId', $billingNote->getId())
                 ;
-                
+
                 $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($qb->distinct()->getQuery()->getResult());
                 if(count($details) == 0) return null;
                 $billingNote->setDetails($details);
-                
+
                 return $billingNote;
     }
 }

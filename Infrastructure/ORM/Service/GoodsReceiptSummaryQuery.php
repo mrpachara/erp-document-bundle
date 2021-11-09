@@ -22,7 +22,7 @@ abstract class GoodsReceiptSummaryQuery implements QueryInterface
         /** @var \Erp\Bundle\DocumentBundle\Entity\PurchaseOrder */
         $purchaseOrder = $this->purchaseOrderRepository->find($id);
 
-        $activeGoodsReceiptQb = $this->goodsReceiptQuery->getActiveDocumentQueryBuilder();
+        $activeGoodsReceiptQb = $this->goodsReceiptQuery->getAliveDocumentQueryBuilder('_activeDocument');
         $activeGoodsReceiptQb
             ->andWhere('_activeDocument.transferOf = :purchaseOrderId')
             ->setParameter('purchaseOrderId', $purchaseOrder->getId())

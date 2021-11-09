@@ -48,5 +48,5 @@ interface DocumentWithProjectInterface
      *
      * @return Document
      */
-    function findWithUser($id, SystemUser $user, array $types);
+    function findWithUser($id, SystemUser $user, array $types, ?int $lockMode = null);
 }

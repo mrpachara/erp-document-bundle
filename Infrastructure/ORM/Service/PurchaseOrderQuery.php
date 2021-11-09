@@ -14,7 +14,7 @@ abstract class PurchaseOrderQuery extends PurchaseQuery implements QueryInterfac
 
     public function getPurchaseRequestDetailStatusChangedQueryBuilder($alias)
     {
-        $activePurchaseOrderQb = $this->getActiveDocumentQueryBuilder();
+        $activePurchaseOrderQb = $this->getAliveDocumentQueryBuilder('_activeDocument');
         $statusChangedQb = $this->purchaseRequestDetailStatusChangedRepository->createQueryBuilder('_statusChanged');
         return $statusChangedQb
             ->innerJoin(

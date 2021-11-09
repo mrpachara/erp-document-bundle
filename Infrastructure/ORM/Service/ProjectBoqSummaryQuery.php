@@ -23,7 +23,7 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
         /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoqData */
         $boqData = $this->projectBoqDataRepository->find($id);
 
-        $activePurchaseQb = $this->purchaseQuery->getActiveDocumentQueryBuilder();
+        $activePurchaseQb = $this->purchaseQuery->getAliveDocumentQueryBuilder('_activeDocument');
         $purchaseDetailQb = $this->purchaseQuery->createDetailQueryBuilder('_purchaseDetail');
         $excepts = array_map(function($value) use ($purchaseDetailQb) {
             return $purchaseDetailQb->expr()->literal($value);

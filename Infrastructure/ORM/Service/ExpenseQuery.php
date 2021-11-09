@@ -14,7 +14,7 @@ abstract class ExpenseQuery extends PurchaseQuery implements QueryInterface
 
     public function getPurchaseOrderExpenseDetailStatusChangedQueryBuilder($alias)
     {
-        $activeExpenseQb = $this->getActiveDocumentQueryBuilder();
+        $activeExpenseQb = $this->getAliveDocumentQueryBuilder('_activeDocument');
         $statusChangedQb = $this->purchaseOrderExpenseDetailStatusChangedRepository->createQueryBuilder('_statusChanged');
         return $statusChangedQb
             ->innerJoin(
