@@ -1,5 +1,0 @@
-Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetailStatusChanged:
-  access_type: property
-  properties:
-    purchaseRequestDetail:
-      type: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail

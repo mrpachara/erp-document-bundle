@@ -8,3 +8,5 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
       type: Erp\Bundle\MasterBundle\Entity\CostItem
     boqData:
       type: Erp\Bundle\MasterBundle\Entity\ProjectBoqData
+    statusChanged:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseDetailStatusChanged

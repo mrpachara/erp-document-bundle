@@ -9,7 +9,6 @@ class ExpenseQueryService extends ExpenseQuery
     {
         $this->repository = $doctrine->getRepository('ErpDocumentBundle:Expense');
         $this->detailRepository = $doctrine->getRepository('ErpDocumentBundle:ExpenseDetail');
-        $this->purchaseOrderExpenseDetailStatusChangedRepository = $doctrine->getRepository('ErpDocumentBundle:PurchaseOrderExpenseDetailStatusChanged');
     }
 
     /** @required */

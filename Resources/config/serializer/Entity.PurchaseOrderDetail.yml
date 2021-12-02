@@ -3,5 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail:
   properties:
     purchase:
       type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
-    statusChanged:
-      type: Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetailStatusChanged

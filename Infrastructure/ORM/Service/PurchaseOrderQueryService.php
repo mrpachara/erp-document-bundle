@@ -9,7 +9,6 @@ class PurchaseOrderQueryService extends PurchaseOrderQuery
     {
         $this->repository = $doctrine->getRepository('ErpDocumentBundle:PurchaseOrder');
         $this->detailRepository = $doctrine->getRepository('ErpDocumentBundle:PurchaseOrderDetail');
-        $this->purchaseRequestDetailStatusChangedRepository = $doctrine->getRepository('ErpDocumentBundle:PurchaseRequestDetailStatusChanged');
     }
 
     /** @required */

@@ -130,7 +130,9 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
             // TODO: check authentication
             foreach ($purchase->getDetails() as $detail) {
                 // TODO: check if needed set back to $detail
-                $this->projectBoqSummaryQuery->getProjectBoqDataSummary($detail->getBoqData()->getId());
+                if($detail->getBoqData()) {
+                    $this->projectBoqSummaryQuery->getProjectBoqDataSummary($detail->getBoqData()->getId());
+                }
             }
         }
 

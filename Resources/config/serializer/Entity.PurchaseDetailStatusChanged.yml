@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseDetailStatusChanged:
+  access_type: property
+  properties:
+    detail:
+      type: Erp\Bundle\DocumentBundle\Entity\PurchaseDetail

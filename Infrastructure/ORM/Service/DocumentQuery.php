@@ -59,9 +59,18 @@ abstract class DocumentQuery extends ParentQuery implements QueryInterface
     public function assignAliveDocumentQuery(QueryBuilder $qb, $alias) : QueryBuilder
     {
         return $qb
+            // TODO: The updated document should be dead forever, so don't check terminated IS NULL for updatedBy documents.
+            //   This will be the cause of creating multiple branches of document and breaking some constraints, e.g. PO document.
             ->leftJoin("{$alias}.updatedBys", "{$alias}_aliveDocumentUpdatedBy", 'WITH', "{$alias}_aliveDocumentUpdatedBy.terminated IS NULL")
             ->andWhere("{$alias}.terminated IS NULL")
             ->andWhere("{$alias}_aliveDocumentUpdatedBy IS NULL")
+        ;
+    }
+
+    public function assignApprovedDocumentQuery(QueryBuilder $qb, $alias) : QueryBuilder
+    {
+        return $qb
+            ->andWhere("{$alias}.approved = 1")
         ;
     }
 }

@@ -83,6 +83,8 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
         $detailQb = $this->assignDetailRemainQuery($detailQb, $detailAlias);
 
         $expr = $qb->expr();
+        $qb = $this->assignAliveDocumentQuery($qb, $alias);
+        $qb = $this->assignApprovedDocumentQuery($qb, $alias);
         return $qb
             ->andWhere(
                 $expr->exists(
@@ -102,5 +104,26 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
         $qb = $this->assignHeaderRemainQuery($qb, $alias);
 
         return $this->qh->execute($qb->getQuery(), $params, $context);
+    }
+
+    public function getRemain($id) {
+        $purchase = $this->find($id);
+        if (empty($purchase)) {
+            return $purchase;
+        }
+
+        $detailAlias = '_purchase_detail';
+        $detailRemainQb = $this->createDetailQueryBuilder($detailAlias);
+        $detailRemainQb = $this->assignDetailRemainQuery($detailRemainQb, $detailAlias);
+
+        $expr = $detailRemainQb->expr();
+        $detailRemainQb->andWhere($expr->eq("{$detailAlias}.purchase", ':purchaseRequest'));
+        $detailRemainQb->setParameter('purchaseRequest', $purchase);
+
+        $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($detailRemainQb->getQuery()->getResult());
+        if(count($details) == 0) return null;
+        $purchase->setDetails($details);
+
+        return $purchase;
     }
 }
