@@ -16,25 +16,6 @@ abstract class PurchaseOrderQuery extends PurchaseQuery implements QueryInterfac
 
     public function getPurchaseRequestRemain($id)
     {
-        // $purchaseRequest = $this->purchaseRequestQueryService->find($id);
-        // if (empty($purchaseRequest)) {
-        //     return $purchaseRequest;
-        // }
-
-        // $detailAlias = '_purchase_detail';
-        // $detailRemainQb = $this->purchaseRequestQueryService->createDetailQueryBuilder($detailAlias);
-        // $detailRemainQb = $this->purchaseRequestQueryService->assignDetailRemainQuery($detailRemainQb, $detailAlias);
-
-        // $expr = $detailRemainQb->expr();
-        // $detailRemainQb->andWhere($expr->eq("{$detailAlias}.purchase", ':purchaseRequest'));
-        // $detailRemainQb->setParameter('purchaseRequest', $purchaseRequest);
-
-        // $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($detailRemainQb->getQuery()->getResult());
-        // if(count($details) == 0) return null;
-        // $purchaseRequest->setDetails($details);
-
-        // return $purchaseRequest;
-
         return $this->purchaseRequestQueryService->getRemain($id);
     }
 }

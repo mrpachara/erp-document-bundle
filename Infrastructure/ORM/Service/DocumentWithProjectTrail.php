@@ -36,7 +36,8 @@ trait DocumentWithProjectTrail {
     abstract public function createQueryBuilder(string $alias) : QueryBuilder;
     abstract public function applySearchFilter(QueryBuilder $qb, array $params, string $alias, &$context = null) : QueryBuilder;
 
-    public function withEmployeesQueryBuilder(
+    public function assignWithEmployeesFilter(
+        QueryBuilder $qb,
         string $alias,
         $employees,
         array $types
@@ -44,7 +45,6 @@ trait DocumentWithProjectTrail {
     {
         if(empty($types)) throw new \InvalidArgumentException("\$types could not be empty.");
 
-        $qb = $this->createQueryBuilder($alias);
         $expr = $qb->expr();
         $orX = $expr->orX();
 
@@ -76,6 +76,29 @@ trait DocumentWithProjectTrail {
         }
 
         $qb->andWhere($orX);
+
+        return $qb;
+    }
+
+    public function assignWithUserFilter(
+        QueryBuilder $qb,
+        string $alias,
+        SystemUser $user,
+        array $types
+    ) : QueryBuilder
+    {
+        $employees = $this->employeeQuery->findByThing($user->getThing());
+        return $this->assignWithEmployeesFilter($qb, $alias, $employees, $types);
+    }
+
+    public function withEmployeesQueryBuilder(
+        string $alias,
+        $employees,
+        array $types
+    ) : QueryBuilder
+    {
+        $qb = $this->createQueryBuilder($alias);
+        $qb = $this->assignWithEmployeesFilter($qb, $alias, $employees, $types);
 
         return $qb;
     }

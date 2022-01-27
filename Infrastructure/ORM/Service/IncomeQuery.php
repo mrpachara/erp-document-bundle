@@ -9,6 +9,16 @@ use Doctrine\ORM\QueryBuilder;
 
 abstract class IncomeQuery extends DocumentQuery implements QueryInterface
 {
+    use DocumentWithProjectTrail;
+
+    /** @var IncomeQueryService */
+    protected $detailQueryService;
+
+    /** @required */
+    public function setDetailQueryService(IncomeQueryService $detailQueryService){
+        $this->detailQueryService = $detailQueryService;
+    }
+
     /** @var EntityRepository */
     protected $detailRepository;
 

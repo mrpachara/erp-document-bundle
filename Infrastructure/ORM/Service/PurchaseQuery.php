@@ -9,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use Erp\Bundle\DocumentBundle\Entity\DetailStatusChanged;
 use Erp\Bundle\MasterBundle\Infrastructure\ORM\Service\ProjectQuery;
 
-abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
+abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, DocumentWithProject
 {
     use DocumentWithProjectTrail;
 
@@ -39,10 +39,15 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
         $options['term']['fields'][] = 'project.code';
         $options['term']['fields'][] = 'project.thing.name';
         $options['term']['fields'][] = 'approved';
+
+        $options['documetnWithProject'] = [
+            'service' => $this,
+        ];
+
         return $options;
     }
 
-    public function assignDetailRemainQuery(QueryBuilder $qb, $alias) : QueryBuilder
+    public function assignDetailRemainFilter(QueryBuilder $qb, $alias) : QueryBuilder
     {
         $boundDetailAlias = "{$alias}_boundDetail";
         $boundHeaderAlias = "{$alias}_boundHeader";
@@ -76,11 +81,11 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
         ;
     }
 
-    public function assignHeaderRemainQuery(QueryBuilder $qb, $alias) : QueryBuilder
+    public function assignHeaderRemainFilter(QueryBuilder $qb, $alias) : QueryBuilder
     {
         $detailAlias = "{$alias}_detail";
         $detailQb = $this->createDetailQueryBuilder($detailAlias);
-        $detailQb = $this->assignDetailRemainQuery($detailQb, $detailAlias);
+        $detailQb = $this->assignDetailRemainFilter($detailQb, $detailAlias);
 
         $expr = $qb->expr();
         $qb = $this->assignAliveDocumentQuery($qb, $alias);
@@ -101,7 +106,7 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
 
         $alias = '_doc_remain';
         $qb = $this->searchQueryBuilder($params, $alias, $context);
-        $qb = $this->assignHeaderRemainQuery($qb, $alias);
+        $qb = $this->assignHeaderRemainFilter($qb, $alias);
 
         return $this->qh->execute($qb->getQuery(), $params, $context);
     }
@@ -114,7 +119,7 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface
 
         $detailAlias = '_purchase_detail';
         $detailRemainQb = $this->createDetailQueryBuilder($detailAlias);
-        $detailRemainQb = $this->assignDetailRemainQuery($detailRemainQb, $detailAlias);
+        $detailRemainQb = $this->assignDetailRemainFilter($detailRemainQb, $detailAlias);
 
         $expr = $detailRemainQb->expr();
         $detailRemainQb->andWhere($expr->eq("{$detailAlias}.purchase", ':purchaseRequest'));
