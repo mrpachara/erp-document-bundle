@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use FOS\RestBundle\View\View;
 use Erp\Bundle\DocumentBundle\Entity\Purchase;
 use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * PurchaseOrder Api Controller
@@ -102,11 +103,8 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
         $items = [];
         $context = [];
 
-        // TODO: use PO authorization to query remain PR.
-        // $queryParams['document-with-user'] = [
-        //     'user' => $this->getUser(),
-        //     'types' => [ServiceInterface::WORKER, ServiceInterface::OWNER],
-        // ];
+        $queryParams = $this->assignRemainSearchRule($queryParams);
+
         $items = $this->domainQuery->searchPurchaseRequestRemain($queryParams, $context);
 
         $view = new View($this->listPurchaseRequestRemainResponse($items, $context));

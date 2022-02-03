@@ -39,6 +39,16 @@ class PurchaseRequestAuthorization extends AbstractPurchaseAuthorization
         return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_CREATE');
     }
 
+    public function addWorker(...$args)
+    {
+        return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_CREATE_WORKER');
+    }
+
+    public function addIndividual(...$args)
+    {
+        return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_CREATE_INDIVIDUAL');
+    }
+
     public function replace(...$args)
     {
         return parent::replace(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PR_EDIT');

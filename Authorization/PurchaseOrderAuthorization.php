@@ -8,16 +8,17 @@ class PurchaseOrderAuthorization extends AbstractPurchaseAuthorization
     {
         return parent::list(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_LIST');
     }
-    
+
     public function get(...$args)
     {
         return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_VIEW');
     }
-    
+
     public function add(...$args)
     {
         return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE');
     }
+
     public function replace(...$args)
     {
         return parent::replace(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_EDIT');

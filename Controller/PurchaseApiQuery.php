@@ -48,6 +48,7 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
             // dummay
         }
 
+        // TODO: allow action 'add' for 'add-worker' and 'and-individual'.
         return $this->listQuery($request, [
             'list-worker list-individual' => function($queryParams, &$context) {
                 /** @var SystemUser */
@@ -137,5 +138,41 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         }
 
         return $response;
+    }
+
+    protected function getRemainRuleForFindFunction()
+    {
+        return [
+            'add' => function($grants) {
+                return [];
+            },
+            'add-worker add-individual' => function($grants) {
+                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
+            },
+            'add-worker' => function($grants) {
+                return [ServiceInterface::WORKER];
+            },
+            'add-individual' => function($grants) {
+                return [ServiceInterface::OWNER];
+            }
+        ];
+    }
+
+    protected function assignRemainSearchRule($queryParams)
+    {
+        $withUser = $this->tryGrant($this->getRemainRuleForFindFunction());
+
+        if($withUser instanceof AccessDeniedException) {
+            throw new AccessDeniedException("Create is not allowed!!!");
+        }
+
+        if(!empty($withUser)) {
+            $queryParams['document-with-user'] = [
+                'user' => $this->getUser(),
+                'types' => $withUser,
+            ];
+        }
+
+        return $queryParams;
     }
 }
