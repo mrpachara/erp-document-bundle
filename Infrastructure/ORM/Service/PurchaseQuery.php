@@ -111,8 +111,8 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
         return $this->qh->execute($qb->getQuery(), $params, $context);
     }
 
-    public function getRemain($id) {
-        $purchase = $this->find($id);
+    public function getRemain($id, ?array $params = null) {
+        $purchase = $this->findWith($id, $params);
         if (empty($purchase)) {
             return $purchase;
         }

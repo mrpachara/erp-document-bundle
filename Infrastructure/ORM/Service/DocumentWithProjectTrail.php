@@ -143,4 +143,14 @@ trait DocumentWithProjectTrail {
 
         return $query->getOneOrNullResult();
     }
+
+    function findWith($id, ?array $params = null)
+    {
+        if(empty($params) || !key_exists('document-with-user', $params)) {
+            return parent::findWith($id, $params);
+        }
+
+        $withUser = $params['document-with-user'];
+        return $this->findWithUser($id, $withUser['user'], $withUser['types']);
+    }
 }

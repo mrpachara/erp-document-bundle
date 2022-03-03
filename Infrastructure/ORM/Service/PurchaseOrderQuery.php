@@ -14,8 +14,8 @@ abstract class PurchaseOrderQuery extends PurchaseQuery implements QueryInterfac
         return $this->purchaseRequestQueryService->searchRemain($params, $context);
     }
 
-    public function getPurchaseRequestRemain($id)
+    public function getPurchaseRequestRemain($id, ?array $params = null)
     {
-        return $this->purchaseRequestQueryService->getRemain($id);
+        return $this->purchaseRequestQueryService->getRemain($id, $params);
     }
 }

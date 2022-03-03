@@ -33,6 +33,42 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         $this->projectBoqSummaryQuery = $projectBoqSummaryQuery;
     }
 
+    protected function assignWithUserSearchRule($queryParams, $rules)
+    {
+        $withUser = $this->tryGrant($rules);
+
+        if($withUser instanceof AccessDeniedException) {
+            throw new AccessDeniedException("Access denied!!!");
+        }
+
+        if(!empty($withUser)) {
+            $queryParams['document-with-user'] = [
+                'user' => $this->getUser(),
+                'types' => $withUser,
+            ];
+        }
+
+        return $queryParams;
+    }
+
+    protected function getListWithUserRules()
+    {
+        return [
+            'list-all' => function($grants) {
+                return [];
+            },
+            'list-worker list-individual' => function($grants) {
+                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
+            },
+            'list-worker' => function($grants) {
+                return [ServiceInterface::WORKER];
+            },
+            'list-individual' => function($grants) {
+                return [ServiceInterface::OWNER];
+            }
+        ];
+    }
+
     /**
      * list action
      *
@@ -42,39 +78,31 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
      */
     public function listAction(ServerRequestInterface $request)
     {
-        try {
-            return parent::listAction($request);
-        } catch (AccessDeniedException $excp) {
-            // dummay
-        }
+        $queryParams = $this->assignWithUserSearchRule(
+            $request->getQueryParams(),
+            $this->getListWithUserRules()
+        );
+        $request = $request->withQueryParams($queryParams);
 
-        // TODO: allow action 'add' for 'add-worker' and 'and-individual'.
-        return $this->listQuery($request, [
-            'list-worker list-individual' => function($queryParams, &$context) {
-                /** @var SystemUser */
-                $user = $this->getUser();
+        return parent::listAction($request);
+    }
 
-                return $this->domainQuery->searchWithUser($queryParams, $user,
-                    [ServiceInterface::WORKER, ServiceInterface::OWNER]
-                , $context);
+    protected function getGetWithUserRules()
+    {
+        return [
+            'get-all' => function($grants) {
+                return [];
             },
-            'list-worker' => function($queryParams, &$context) {
-                /** @var SystemUser */
-                $user = $this->getUser();
-
-                return $this->domainQuery->searchWithUser($queryParams, $user,
-                    [ServiceInterface::WORKER]
-                , $context);
+            'get-worker get-individual' => function($grants) {
+                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
             },
-            'list-individual' => function($queryParams, &$context) {
-                /** @var SystemUser */
-                $user = $this->getUser();
-
-                return $this->domainQuery->searchWithUser($queryParams, $user,
-                    [ServiceInterface::OWNER]
-                , $context);
+            'get-worker' => function($grants) {
+                return [ServiceInterface::WORKER];
             },
-        ]);
+            'get-individual' => function($grants) {
+                return [ServiceInterface::OWNER];
+            }
+        ];
     }
 
     /**
@@ -87,12 +115,13 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
      */
     public function getAction($id, ServerRequestInterface $request)
     {
-        $response = null;
-        try {
-            $response = parent::getAction($id, $request);
-        } catch (AccessDeniedException $excp) {
-            // dummay
-        }
+        $queryParams = $this->assignWithUserSearchRule(
+            $request->getQueryParams(),
+            $this->getGetWithUserRules()
+        );
+        $request = $request->withQueryParams($queryParams);
+
+        $response = parent::getAction($id, $request);
 
         if($response === null) {
             $response = $this->getQuery($id, $request, [
@@ -140,10 +169,10 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         return $response;
     }
 
-    protected function getRemainRuleForFindFunction()
+    protected function getRemainWithUserRules()
     {
         return [
-            'add' => function($grants) {
+            'add-all' => function($grants) {
                 return [];
             },
             'add-worker add-individual' => function($grants) {
@@ -156,23 +185,5 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
                 return [ServiceInterface::OWNER];
             }
         ];
-    }
-
-    protected function assignRemainSearchRule($queryParams)
-    {
-        $withUser = $this->tryGrant($this->getRemainRuleForFindFunction());
-
-        if($withUser instanceof AccessDeniedException) {
-            throw new AccessDeniedException("Create is not allowed!!!");
-        }
-
-        if(!empty($withUser)) {
-            $queryParams['document-with-user'] = [
-                'user' => $this->getUser(),
-                'types' => $withUser,
-            ];
-        }
-
-        return $queryParams;
     }
 }

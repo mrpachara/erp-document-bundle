@@ -90,68 +90,68 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
 
     protected function getReplaceRuleForFindFunction($id)
     {
-        return array_merge(
-            parent::getReplaceRuleForFindFunction($id),
-            [
-                'replace-worker replace-individual' => function($class, &$data) use ($id) {
-                    /** @var SystemUser */
-                    $user = $this->getUser();
+        $parentRules = parent::getReplaceRuleForFindFunction($id);
 
-                    $doc = $this->domainQuery->findWithUser($id, $user,
-                        [ServiceInterface::WORKER, ServiceInterface::OWNER],
-                        LockMode::PESSIMISTIC_WRITE
-                    );
+        return [
+            'replace-all' => $parentRules['replace'],
+            'replace-worker replace-individual' => function($class, &$data) use ($id) {
+                /** @var SystemUser */
+                $user = $this->getUser();
 
-                    if(empty($doc) || !$this->grant(['replace-worker', 'replace-individual'], [$doc]))
-                        return null;
+                $doc = $this->domainQuery->findWithUser($id, $user,
+                    [ServiceInterface::WORKER, ServiceInterface::OWNER],
+                    LockMode::PESSIMISTIC_WRITE
+                );
+
+                if(empty($doc) || !$this->grant(['replace-worker', 'replace-individual'], [$doc]))
+                    return null;
 
 
-                    $item = new $class();
+                $item = new $class();
 
-                    $item->setUpdateOf($doc);
-                    $doc->addUpdatedBy($item);
+                $item->setUpdateOf($doc);
+                $doc->addUpdatedBy($item);
 
-                    return $item;
-                },
-                'replace-worker' => function($class, &$data) use ($id) {
-                    /** @var SystemUser */
-                    $user = $this->getUser();
+                return $item;
+            },
+            'replace-worker' => function($class, &$data) use ($id) {
+                /** @var SystemUser */
+                $user = $this->getUser();
 
-                    $doc = $this->domainQuery->findWithUser($id, $user,
-                        [ServiceInterface::WORKER],
-                        LockMode::PESSIMISTIC_WRITE
-                    );
+                $doc = $this->domainQuery->findWithUser($id, $user,
+                    [ServiceInterface::WORKER],
+                    LockMode::PESSIMISTIC_WRITE
+                );
 
-                    if(empty($doc) || !$this->grant(['replace-worker'], [$doc]))
-                        return null;
+                if(empty($doc) || !$this->grant(['replace-worker'], [$doc]))
+                    return null;
 
-                    $item = new $class();
+                $item = new $class();
 
-                    $item->setUpdateOf($doc);
-                    $doc->addUpdatedBy($item);
+                $item->setUpdateOf($doc);
+                $doc->addUpdatedBy($item);
 
-                    return $item;
-                },
-                'replace-individual' => function($class, &$data) use ($id) {
-                    /** @var SystemUser */
-                    $user = $this->getUser();
+                return $item;
+            },
+            'replace-individual' => function($class, &$data) use ($id) {
+                /** @var SystemUser */
+                $user = $this->getUser();
 
-                    $doc = $this->domainQuery->findWithUser($id, $user,
-                        [ServiceInterface::OWNER],
-                        LockMode::PESSIMISTIC_WRITE
-                    );
+                $doc = $this->domainQuery->findWithUser($id, $user,
+                    [ServiceInterface::OWNER],
+                    LockMode::PESSIMISTIC_WRITE
+                );
 
-                    if(empty($doc) || !$this->grant(['replace-individual'], [$doc]))
-                        return null;
+                if(empty($doc) || !$this->grant(['replace-individual'], [$doc]))
+                    return null;
 
-                    $item = new $class();
+                $item = new $class();
 
-                    $item->setUpdateOf($doc);
-                    $doc->addUpdatedBy($item);
+                $item->setUpdateOf($doc);
+                $doc->addUpdatedBy($item);
 
-                    return $item;
-                },
-            ]
-        );
+                return $item;
+            },
+        ];
     }
 }

@@ -103,7 +103,10 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
         $items = [];
         $context = [];
 
-        $queryParams = $this->assignRemainSearchRule($queryParams);
+        $queryParams = $this->assignWithUserSearchRule(
+            $queryParams,
+            $this->getRemainWithUserRules()
+        );
 
         $items = $this->domainQuery->searchPurchaseRequestRemain($queryParams, $context);
 
@@ -173,7 +176,16 @@ class PurchaseOrderApiQueryController extends PurchaseApiQuery
      */
     public function getPurchaseRequestRemainAction($id, ServerRequestInterface $request)
     {
-        $item = $this->domainQuery->getPurchaseRequestRemain($id);
+        $queryParams = $request->getQueryParams();
+        $items = [];
+        $context = [];
+
+        $queryParams = $this->assignWithUserSearchRule(
+            $queryParams,
+            $this->getRemainWithUserRules()
+        );
+
+        $item = $this->domainQuery->getPurchaseRequestRemain($id, $queryParams);
         if (empty($item)) {
             throw new HttpException(404, "Entity not found.");
         }

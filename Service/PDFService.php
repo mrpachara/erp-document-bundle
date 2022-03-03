@@ -54,7 +54,7 @@ class PDFService {
             $setting($mpdf);
         }
 
-        $mpdf->WriteHTML($html);
+        @$mpdf->WriteHTML($html);
 
         return $mpdf->Output(null, Destination::STRING_RETURN);
     }

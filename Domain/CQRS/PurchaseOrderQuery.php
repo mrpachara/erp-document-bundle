@@ -8,5 +8,5 @@ namespace Erp\Bundle\DocumentBundle\Domain\CQRS;
 interface PurchaseOrderQuery extends PurchaseQuery{
   public function searchPurchaseRequestRemain(array $params, array &$context = null);
 
-  public function getPurchaseRequestRemain($id);
+  public function getPurchaseRequestRemain($id, ?array $params = null);
 }
