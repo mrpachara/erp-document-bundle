@@ -14,6 +14,8 @@ use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as Servic
  * Purchase Api Query
  */
 abstract class PurchaseApiQuery extends DocumentApiQuery {
+    use AssignWithUserSearchTrait;
+
     /**
      * @var \Erp\Bundle\DocumentBundle\Authorization\PurchaseAuthorization
      */
@@ -31,24 +33,6 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
     public function setProjectBoqSummaryQuery(\Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery $projectBoqSummaryQuery)
     {
         $this->projectBoqSummaryQuery = $projectBoqSummaryQuery;
-    }
-
-    protected function assignWithUserSearchRule($queryParams, $rules)
-    {
-        $withUser = $this->tryGrant($rules);
-
-        if($withUser instanceof AccessDeniedException) {
-            throw new AccessDeniedException("Access denied!!!");
-        }
-
-        if(!empty($withUser)) {
-            $queryParams['document-with-user'] = [
-                'user' => $this->getUser(),
-                'types' => $withUser,
-            ];
-        }
-
-        return $queryParams;
     }
 
     protected function getListWithUserRules()
@@ -123,34 +107,34 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
 
         $response = parent::getAction($id, $request);
 
-        if($response === null) {
-            $response = $this->getQuery($id, $request, [
-                'get-worker get-individual' => function($id, $queryParams, &$context) {
-                    /** @var SystemUser */
-                    $user = $this->getUser();
+        // if($response === null) {
+        //     $response = $this->getQuery($id, $request, [
+        //         'get-worker get-individual' => function($id, $queryParams, &$context) {
+        //             /** @var SystemUser */
+        //             $user = $this->getUser();
 
-                    return $this->domainQuery->findWithUser($id, $user,
-                        [ServiceInterface::WORKER, ServiceInterface::OWNER]
-                    );
-                },
-                'get-worker' => function($id, $queryParams, &$context) {
-                    /** @var SystemUser */
-                    $user = $this->getUser();
+        //             return $this->domainQuery->findWithUser($id, $user,
+        //                 [ServiceInterface::WORKER, ServiceInterface::OWNER]
+        //             );
+        //         },
+        //         'get-worker' => function($id, $queryParams, &$context) {
+        //             /** @var SystemUser */
+        //             $user = $this->getUser();
 
-                    return $this->domainQuery->findWithUser($id, $user,
-                        [ServiceInterface::WORKER]
-                    );
-                },
-                'get-indidual' => function($id, $queryParams, &$context) {
-                    /** @var SystemUser */
-                    $user = $this->getUser();
+        //             return $this->domainQuery->findWithUser($id, $user,
+        //                 [ServiceInterface::WORKER]
+        //             );
+        //         },
+        //         'get-indidual' => function($id, $queryParams, &$context) {
+        //             /** @var SystemUser */
+        //             $user = $this->getUser();
 
-                    return $this->domainQuery->findWithUser($id, $user,
-                        [ServiceInterface::OWNER]
-                    );
-                },
-            ]);
-        }
+        //             return $this->domainQuery->findWithUser($id, $user,
+        //                 [ServiceInterface::OWNER]
+        //             );
+        //         },
+        //     ]);
+        // }
 
         $responseData = $response->getData();
         /** @var Purchase */

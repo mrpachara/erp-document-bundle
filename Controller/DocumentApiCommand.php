@@ -62,8 +62,15 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
     protected function getReplaceRuleForFindFunction($id)
     {
         return [
-            'replace' => function($class, &$data) use ($id) {
-                if(!($doc = $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE)) || !$this->grant('replace', [$doc]))
+            'replace' => function($class, &$data, array $queryParams) use ($id) {
+                $queryParams['lock'] = [
+                    'mode' => LockMode::PESSIMISTIC_WRITE,
+                ];
+
+                $doc = $this->domainQuery->findWith($id, $queryParams);
+
+                // TODO: change to specific array of grants, e.g. ['replace-worker', 'replace-individual']
+                if(empty($doc) || !$this->grant(['replace'], [$doc]))
                     return null;
 
                 $item = new $class();
@@ -86,7 +93,10 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
      */
     public function replaceAction($id, Request $request)
     {
-        return $this->createCommand($request, $this->getReplaceRuleForFindFunction($id));
+        return $this->createCommand(
+            $request,
+            $this->getReplaceRuleForFindFunction($id)
+        );
     }
 
     protected function prepareTerminatedDocumentData($data)

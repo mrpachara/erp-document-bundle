@@ -29,6 +29,21 @@ class ExpenseAuthorization extends AbstractPurchaseAuthorization
         return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_VIEW');
     }
 
+    public function getAll(...$args)
+    {
+        return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_VIEW_ALL');
+    }
+
+    public function getWorker(...$args)
+    {
+        return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_VIEW_WORKER');
+    }
+
+    public function getIndividual(...$args)
+    {
+        return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_VIEW_INDIVIDUAL');
+    }
+
     public function add(...$args)
     {
         return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_CREATE');

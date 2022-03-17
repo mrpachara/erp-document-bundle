@@ -12,7 +12,7 @@ abstract class GoodsReceiptQuery extends PurchaseQuery implements QueryInterface
     /** @var PurchaseOrderQueryService */
     protected $purchaseOrderQueryService;
 
-    public function find($id)
+    public function find($id, $lockMode = null, $lockVersion = null)
     {
         /**
          * @var \Erp\Bundle\DocumentBundle\Entity\GoodsReceipt $entity

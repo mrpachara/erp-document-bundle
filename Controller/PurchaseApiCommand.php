@@ -14,6 +14,8 @@ use Erp\Bundle\DocumentBundle\Entity\DetailStatusChanged;
  * Purchase Api Command
  */
 abstract class PurchaseApiCommand extends DocumentApiCommand {
+    use AssignWithUserSearchTrait;
+
     /**
      * @var \Erp\Bundle\DocumentBundle\Authorization\PurchaseAuthorization
      */
@@ -88,70 +90,95 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
         return $data;
     }
 
-    protected function getReplaceRuleForFindFunction($id)
+    protected function getCreateWithUserRules()
     {
-        $parentRules = parent::getReplaceRuleForFindFunction($id);
-
         return [
-            'replace-all' => $parentRules['replace'],
-            'replace-worker replace-individual' => function($class, &$data) use ($id) {
-                /** @var SystemUser */
-                $user = $this->getUser();
-
-                $doc = $this->domainQuery->findWithUser($id, $user,
-                    [ServiceInterface::WORKER, ServiceInterface::OWNER],
-                    LockMode::PESSIMISTIC_WRITE
-                );
-
-                if(empty($doc) || !$this->grant(['replace-worker', 'replace-individual'], [$doc]))
-                    return null;
-
-
-                $item = new $class();
-
-                $item->setUpdateOf($doc);
-                $doc->addUpdatedBy($item);
-
-                return $item;
+            'add-all' => function($grants) {
+                return [];
             },
-            'replace-worker' => function($class, &$data) use ($id) {
-                /** @var SystemUser */
-                $user = $this->getUser();
-
-                $doc = $this->domainQuery->findWithUser($id, $user,
-                    [ServiceInterface::WORKER],
-                    LockMode::PESSIMISTIC_WRITE
-                );
-
-                if(empty($doc) || !$this->grant(['replace-worker'], [$doc]))
-                    return null;
-
-                $item = new $class();
-
-                $item->setUpdateOf($doc);
-                $doc->addUpdatedBy($item);
-
-                return $item;
+            'add-worker add-individual' => function($grants) {
+                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
             },
-            'replace-individual' => function($class, &$data) use ($id) {
-                /** @var SystemUser */
-                $user = $this->getUser();
-
-                $doc = $this->domainQuery->findWithUser($id, $user,
-                    [ServiceInterface::OWNER],
-                    LockMode::PESSIMISTIC_WRITE
-                );
-
-                if(empty($doc) || !$this->grant(['replace-individual'], [$doc]))
-                    return null;
-
-                $item = new $class();
-
-                $item->setUpdateOf($doc);
-                $doc->addUpdatedBy($item);
-
-                return $item;
+            'add-worker' => function($grants) {
+                return [ServiceInterface::WORKER];
             },
+            'add-individual' => function($grants) {
+                return [ServiceInterface::OWNER];
+            }
         ];
+    }
+
+    protected function getReplaceWithUserRules()
+    {
+        return [
+            'replace-all' => function($grants) {
+                return [];
+            },
+            'replace-worker replace-individual' => function($grants) {
+                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
+            },
+            'replace-worker' => function($grants) {
+                return [ServiceInterface::WORKER];
+            },
+            'replace-individual' => function($grants) {
+                return [ServiceInterface::OWNER];
+            }
+        ];
+    }
+
+    /**
+     * create action
+     *
+     * @Rest\Put("")
+     *
+     * @param Request $request
+     */
+    public function createAction(Request $request)
+    {
+        $queryParams = $this->assignWithUserSearchRule(
+            $request->attributes->get('queryParams', []),
+            $this->getCreateWithUserRules()
+        );
+        $request->attributes->set('queryParams', $queryParams);
+
+        return parent::createAction($request);
+    }
+
+    /**
+     * replace action
+     *
+     * @Rest\Put("/{id}")
+     *
+     * @param string $id
+     * @param Request $request
+     */
+    public function replaceAction($id, Request $request)
+    {
+        $queryParams = $this->assignWithUserSearchRule(
+            $request->attributes->get('queryParams', []),
+            $this->getReplaceWithUserRules()
+        );
+        $request->attributes->set('queryParams', $queryParams);
+
+        return parent::replaceAction($id, $request);
+    }
+
+    /**
+     * terminate action
+     *
+     * @Rest\Put("/{id}/terminate")
+     *
+     * @param string $id
+     * @param Request $request
+     */
+    public function terminateAction($id, Request $request)
+    {
+        $queryParams = $this->assignWithUserSearchRule(
+            $request->attributes->get('queryParams', []),
+            $this->getReplaceWithUserRules()
+        );
+        $request->attributes->set('queryParams', $queryParams);
+
+        return parent::terminateAction($id, $request);
     }
 }

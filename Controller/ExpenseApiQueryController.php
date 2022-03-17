@@ -101,15 +101,20 @@ class ExpenseApiQueryController extends PurchaseApiQuery
         $items = [];
         $context = [];
 
+        $queryParams = $this->assignWithUserSearchRule(
+            $queryParams,
+            $this->getRemainWithUserRules()
+        );
+
         $items = $this->domainQuery->searchPurchaseOrderExpenseRemain($queryParams, $context);
-        
+
         $view = new View($this->listPurchaseOrderExpenseRemainResponse($items, $context));
-        
+
         $context = $view->getContext();
         $context
             ->addGroup('short')
         ;
-        
+
         return $view;
     }
 
@@ -133,7 +138,7 @@ class ExpenseApiQueryController extends PurchaseApiQuery
         $origin = $this->domainQuery->origin($purchase);
 
         $profile = $this->settingQuery->findOneByCode('profile')->getValue();
-        
+
         $logo = null;
         if(!empty($profile['logo'])) {
             $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
@@ -152,7 +157,7 @@ class ExpenseApiQueryController extends PurchaseApiQuery
                 $mpdf->SetWatermarkText($status);
                 $mpdf->showWatermarkText = true;
             }
-            
+
             $mpdf->imageVars['logo'] = $logo;
         });
 
@@ -169,7 +174,16 @@ class ExpenseApiQueryController extends PurchaseApiQuery
      */
     public function getPurchaseOrderExpenseRemainAction($id, ServerRequestInterface $request)
     {
-        $item = $this->domainQuery->getPurchaseOrderExpenseRemain($id);
+        $queryParams = $request->getQueryParams();
+        $items = [];
+        $context = [];
+
+        $queryParams = $this->assignWithUserSearchRule(
+            $queryParams,
+            $this->getRemainWithUserRules()
+        );
+
+        $item = $this->domainQuery->getPurchaseOrderExpenseRemain($id, $queryParams);
         if (empty($item)) {
             throw new HttpException(404, "Entity not found.");
         }

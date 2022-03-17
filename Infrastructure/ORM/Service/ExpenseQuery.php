@@ -14,8 +14,8 @@ abstract class ExpenseQuery extends PurchaseQuery implements QueryInterface
         return $this->purchaseOrderQueryService->searchRemain($params, $context);
     }
 
-    public function getPurchaseOrderExpenseRemain($id)
+    public function getPurchaseOrderExpenseRemain($id, ?array $params = null)
     {
-        return $this->purchaseOrderQueryService->getRemain($id);
+        return $this->purchaseOrderQueryService->getRemain($id, $params);
     }
 }

@@ -151,6 +151,10 @@ trait DocumentWithProjectTrail {
         }
 
         $withUser = $params['document-with-user'];
-        return $this->findWithUser($id, $withUser['user'], $withUser['types']);
+        $lock = array_merge([
+            'mode' => null,
+            'version' => null,
+        ], ($params && key_exists('lock', $params))? $params['lock'] : []);
+        return $this->findWithUser($id, $withUser['user'], $withUser['types'], $lock['mode']);
     }
 }
