@@ -59,10 +59,56 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
         return $item;
     }
 
-    protected function getReplaceRuleForFindFunction($id)
+    protected function replaceCommand(Request $request, $callbacks)
+    {
+        $newCallbacks = array_map(function($callback) use ($request) {
+            return function($grants) use ($request, $callback) {
+                $data = $this->extractData($request, self::FOR_CREATE);
+                $queryParams = $request->attributes->get('queryParams', []);
+
+                /********************************************************************
+                 * NOTE: MUST throw exception, unless transaction will be commited. *
+                 ********************************************************************/
+                $item = $this->commandHandler->execute(function ($em) use ($callback, $data, $queryParams, $grants) {
+                    $class = $this->domainQuery->getClassName();
+                    list($doc, $item) = $callback($class, $data, $queryParams);
+                    if (empty($doc) || empty($item)) {
+                        throw new AccessDeniedException("Create is not allowed.");
+                    }
+
+                    if($this instanceof InitialItem) $this->initialItem($item);
+                    $item = $this->patchExistedItem($item, $data);
+
+                    if (!$this->grant($grants, [$doc, $item])) {
+                        throw new AccessDeniedException("Create is not allowed.");
+                    }
+
+                    $item->setUpdateOf($doc);
+                    $doc->addUpdatedBy($item);
+
+                    $em->persist($item);
+
+                    return $item;
+                });
+
+                return $item;
+            };
+        }, $callbacks);
+
+        $result = $this->tryGrant($newCallbacks);
+
+        if($result instanceof AccessDeniedException) {
+            throw new AccessDeniedException("Create is not allowed.");
+        }
+
+        $item = $result;
+        return $this->view(['data' => $this->domainQuery->find($item->getId())], 200);
+    }
+
+    protected function getActionRuleForFindFunction($id, string $action)
     {
         return [
-            'replace' => function($class, &$data, array $queryParams) use ($id) {
+            "{$action}" => function($class, &$data, array $queryParams) use ($id, $action) {
                 $queryParams['lock'] = [
                     'mode' => LockMode::PESSIMISTIC_WRITE,
                 ];
@@ -70,15 +116,14 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
                 $doc = $this->domainQuery->findWith($id, $queryParams);
 
                 // TODO: change to specific array of grants, e.g. ['replace-worker', 'replace-individual']
-                if(empty($doc) || !$this->grant(['replace'], [$doc]))
-                    return null;
+                if(empty($doc) || !$this->grant([$action], [$doc]))
+                    return [null, null];
 
                 $item = new $class();
 
-                $item->setUpdateOf($doc);
-                $doc->addUpdatedBy($item);
+                // NOTE: Don't update $doc here, it will be granted later
 
-                return $item;
+                return [$doc, $item];
             },
         ];
     }
@@ -93,9 +138,9 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
      */
     public function replaceAction($id, Request $request)
     {
-        return $this->createCommand(
+        return $this->replaceCommand(
             $request,
-            $this->getReplaceRuleForFindFunction($id)
+            $this->getActionRuleForFindFunction($id, 'replace')
         );
     }
 
@@ -106,7 +151,7 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
 
     protected function extractTerminatedDocumentData(Request $request)
     {
-        return $data = $this->prepareTerminatedDocumentData(
+        return $this->prepareTerminatedDocumentData(
             $this->serializer->deserialize(
                 $request->getContent(),
                 'array',
@@ -212,11 +257,11 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
         // throw new AccessDeniedException("Terminate is not allowed.");
     }
 
-    protected function getTeminateCallback()
+    protected function getTeminateCallback(string $type)
     {
-        return function($id, &$data) {
+        return function($id, &$data) use ($type) {
             return $this->tryGrant(
-                $this->getReplaceRuleForFindFunction($id)
+                $this->getActionRuleForFindFunction($id, $type)
             );
 //            return $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE);
         };
@@ -225,14 +270,14 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
     protected function cancelAction($id, Request $request)
     {
         return $this->terminateCommand($id, $request, [
-            'cancel' => $this->getTeminateCallback(),
+            'cancel' => $this->getTeminateCallback('cancel'),
         ]);
     }
 
     protected function rejectAction($id, Request $request)
     {
         return $this->terminateCommand($id, $request, [
-            'reject' => $this->getTeminateCallback(),
+            'reject' => $this->getTeminateCallback('reject'),
         ]);
     }
 

@@ -90,37 +90,19 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
         return $data;
     }
 
-    protected function getCreateWithUserRules()
+    protected function getActionWithUserRules(string $action)
     {
         return [
-            'add-all' => function($grants) {
+            "{$action}-all" => function($grants) {
                 return [];
             },
-            'add-worker add-individual' => function($grants) {
-                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
-            },
-            'add-worker' => function($grants) {
+            // "{$action}-worker {$action}-individual" => function($grants) {
+            //     return [ServiceInterface::WORKER, ServiceInterface::OWNER];
+            // },
+            "{$action}-worker" => function($grants) {
                 return [ServiceInterface::WORKER];
             },
-            'add-individual' => function($grants) {
-                return [ServiceInterface::OWNER];
-            }
-        ];
-    }
-
-    protected function getReplaceWithUserRules()
-    {
-        return [
-            'replace-all' => function($grants) {
-                return [];
-            },
-            'replace-worker replace-individual' => function($grants) {
-                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
-            },
-            'replace-worker' => function($grants) {
-                return [ServiceInterface::WORKER];
-            },
-            'replace-individual' => function($grants) {
+            "{$action}-individual" => function($grants) {
                 return [ServiceInterface::OWNER];
             }
         ];
@@ -137,7 +119,7 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
     {
         $queryParams = $this->assignWithUserSearchRule(
             $request->attributes->get('queryParams', []),
-            $this->getCreateWithUserRules()
+            $this->getActionWithUserRules('add')
         );
         $request->attributes->set('queryParams', $queryParams);
 
@@ -156,7 +138,7 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
     {
         $queryParams = $this->assignWithUserSearchRule(
             $request->attributes->get('queryParams', []),
-            $this->getReplaceWithUserRules()
+            $this->getActionWithUserRules('replace')
         );
         $request->attributes->set('queryParams', $queryParams);
 
@@ -173,9 +155,12 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
      */
     public function terminateAction($id, Request $request)
     {
+        $data = $this->extractTerminatedDocumentData($request);
+        $action = strtolower($data['type']);
+
         $queryParams = $this->assignWithUserSearchRule(
             $request->attributes->get('queryParams', []),
-            $this->getReplaceWithUserRules()
+            $this->getActionWithUserRules($action)
         );
         $request->attributes->set('queryParams', $queryParams);
 
