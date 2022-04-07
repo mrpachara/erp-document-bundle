@@ -51,6 +51,16 @@ abstract class AbstractPurchaseAuthorization extends AbstractDocumentAuthorizati
 
     protected function isUserReferenceGranted(array $args, array $types): bool
     {
+        /** @var Purchase $item */
+        if((count($args) > 0) && ($item = $args[0]) instanceof Purchase) {
+            /** @var Purchase $referedItem */
+            $referedItem = $item->getTransferOf();
+            if(!empty($referedItem)) {
+                $args[0] = $referedItem;
+            } else {
+                array_shift($args);
+            }
+        }
         return $this->isUserGrantedByService($this->referenceQuery, $args, $types);
     }
 }

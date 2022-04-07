@@ -115,7 +115,6 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
 
                 $doc = $this->domainQuery->findWith($id, $queryParams);
 
-                // TODO: change to specific array of grants, e.g. ['replace-worker', 'replace-individual']
                 if(empty($doc) || !$this->grant([$action], [$doc]))
                     return [null, null];
 
@@ -175,40 +174,41 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
         ));
     }
 
-    protected function terminateCommand($id, Request $request, $callbacks)
+    protected function terminateCommand(Request $request, $callbacks)
     {
-        $newCallbacks = array_map(function($callback) use ($id, $request) {
-            return function($grants) use ($id, $request, $callback) {
+        $newCallbacks = array_map(function($callback) use ($request) {
+            return function($grants) use ($request, $callback) {
                 $data = $this->extractTerminatedDocumentData($request);
+                $queryParams = $request->attributes->get('queryParams', []);
 
                 /********************************************************************
                  * NOTE: MUST throw exception, unless transaction will be commited. *
                  ********************************************************************/
-                $item = $this->commandHandler->execute(function ($em) use ($callback, $id, $data, $grants) {
-                    if(!($item = $callback($id, $data)))
+                $doc = $this->commandHandler->execute(function ($em) use ($callback, $data, $queryParams, $grants) {
+                    /** @var TerminatedDocument $item */
+                    list($doc, $item) = $callback(TerminatedDocument::class, $data, $queryParams);
+                    if(empty($doc) || empty($item))
                         throw new NotFoundHttpException("Entity not found.");
-                    if (!$this->grant($grants, [$item])) {
+                    if (!$this->grant($grants, [$doc])) {
                         throw new AccessDeniedException("Terminate is not allowed.");
                     }
 
-                    /** @var TerminatedDocument */
-                    $termDoc = new TerminatedDocument();
-                    $termDoc = $this->patchTerminatedDocumentItem($termDoc, $data);
-                    $this->initialItem($termDoc);
-                    $em->persist($termDoc);
+                    $item = $this->patchTerminatedDocumentItem($item, $data);
+                    $this->initialItem($item);
+                    $em->persist($item);
 
-                    $item->setTerminated($termDoc);
+                    $doc->setTerminated($item);
 
-                    if ($termDoc->getType() === 'REJECT') {
-                        for ($affDoc = $item->getUpdateOf(); $affDoc !== null; $affDoc = $affDoc->getUpdateOf()) {
-                            $affDoc->setTerminated($termDoc);
+                    if ($item->getType() === 'REJECT') {
+                        for ($affDoc = $doc->getUpdateOf(); $affDoc !== null; $affDoc = $affDoc->getUpdateOf()) {
+                            $affDoc->setTerminated($item);
                         }
                     }
 
-                    return $item;
+                    return $doc;
                 });
 
-                return $item;
+                return $doc;
             };
         }, $callbacks);
 
@@ -257,28 +257,14 @@ abstract class DocumentApiCommand extends CoreAccountApiCommand implements Initi
         // throw new AccessDeniedException("Terminate is not allowed.");
     }
 
-    protected function getTeminateCallback(string $type)
-    {
-        return function($id, &$data) use ($type) {
-            return $this->tryGrant(
-                $this->getActionRuleForFindFunction($id, $type)
-            );
-//            return $this->domainQuery->find($id, LockMode::PESSIMISTIC_WRITE);
-        };
-    }
-
     protected function cancelAction($id, Request $request)
     {
-        return $this->terminateCommand($id, $request, [
-            'cancel' => $this->getTeminateCallback('cancel'),
-        ]);
+        return $this->terminateCommand($request, $this->getActionRuleForFindFunction($id, 'cancel'));
     }
 
     protected function rejectAction($id, Request $request)
     {
-        return $this->terminateCommand($id, $request, [
-            'reject' => $this->getTeminateCallback('reject'),
-        ]);
+        return $this->terminateCommand($request, $this->getActionRuleForFindFunction($id, 'reject'));
     }
 
     /**

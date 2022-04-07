@@ -5,9 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Erp\Bundle\DocumentBundle\Entity\Purchase;
-use Erp\Bundle\SystemBundle\Entity\SystemUser;
 use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
 
 /**
@@ -87,6 +85,24 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
                 return [ServiceInterface::OWNER];
             }
         ];
+    }
+
+    /**
+     * get allowed projects
+     *
+     * @Rest\Get("/allowed-project")
+     *
+     * @param string $id
+     * @param ServerRequestInterface $request
+     */
+    public function getAllAllowedProjects(ServerRequestInterface $request)
+    {
+        $queryParams = $this->assignWithUserSearchRule(
+            $request->getQueryParams(),
+            $this->getRemainWithUserRules()
+        );
+
+        return ['data' => $this->domainQuery->searchProjectWith($queryParams)];
     }
 
     /**

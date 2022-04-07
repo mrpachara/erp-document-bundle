@@ -4,12 +4,18 @@ namespace Erp\Bundle\DocumentBundle\Authorization;
 
 use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
 use Erp\Bundle\DocumentBundle\Domain\CQRS\ExpenseQuery;
+use Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery;
 
 class ExpenseAuthorization extends AbstractPurchaseAuthorization
 {
     /** @required */
     public function setDomainQuery(ExpenseQuery $domainQuery) {
         $this->domainQuery = $domainQuery;
+    }
+
+    /** @required */
+    public function setReferenceQuery(PurchaseOrderQuery $referenceQuery) {
+        $this->referenceQuery = $referenceQuery;
     }
 
     public function list(...$args)
@@ -90,7 +96,7 @@ class ExpenseAuthorization extends AbstractPurchaseAuthorization
     {
         return parent::add(...$args) &&
             $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_CREATE_WORKER') &&
-            $this->isUserGranted($args, [ServiceInterface::WORKER])
+            $this->isUserReferenceGranted($args, [ServiceInterface::WORKER])
         ;
     }
 
@@ -98,7 +104,7 @@ class ExpenseAuthorization extends AbstractPurchaseAuthorization
     {
         return parent::add(...$args) &&
             $this->authorizationChecker->isGranted('ROLE_PURCHASE_EP_CREATE_INDIVIDUAL') &&
-            $this->isUserGranted($args, [ServiceInterface::OWNER])
+            $this->isUserReferenceGranted($args, [ServiceInterface::OWNER])
         ;
     }
 

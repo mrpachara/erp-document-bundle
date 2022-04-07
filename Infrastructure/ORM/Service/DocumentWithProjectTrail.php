@@ -157,4 +157,30 @@ trait DocumentWithProjectTrail {
         ], ($params && key_exists('lock', $params))? $params['lock'] : []);
         return $this->findWithUser($id, $withUser['user'], $withUser['types'], $lock['mode']);
     }
+
+    function searchProjectsWithEmployees($params, $employees, ?array &$context = null)
+    {
+        $alias = 'allowed_project';
+        $qb = $this->projectQuery->memberOfWorkersQueryBuilder($alias, $employees);
+        $qb = $this->projectQuery->applySearchFilter($qb, $params, $alias, $context);
+
+        return $this->qh->execute($qb->getQuery(), $params, $context);
+    }
+
+    function searchProjectsWithUser($params, SystemUser $user, ?array &$context = null)
+    {
+        $employees = $this->employeeQuery->findByThing($user->getThing());
+        return $this->searchProjectsWithEmployees($params, $employees, $context);
+    }
+
+    function searchProjectWith($params, ?array &$context = null)
+    {
+        if(array_key_exists('document-with-user', $params)) {
+            $user = $params['document-with-user']['user'];
+            unset($params['document-with-user']);
+            return $this->searchProjectsWithUser($params, $user, $context);
+        } else {
+            return $this->projectQuery->search($params, $context);
+        }
+    }
 }

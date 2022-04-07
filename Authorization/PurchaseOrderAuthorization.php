@@ -4,12 +4,18 @@ namespace Erp\Bundle\DocumentBundle\Authorization;
 
 use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
 use Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery;
+use Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseRequestQuery;
 
 class PurchaseOrderAuthorization extends AbstractPurchaseAuthorization
 {
     /** @required */
     public function setDomainQuery(PurchaseOrderQuery $domainQuery) {
         $this->domainQuery = $domainQuery;
+    }
+
+    /** @required */
+    public function setReferenceQuery(PurchaseRequestQuery $referenceQuery) {
+        $this->referenceQuery = $referenceQuery;
     }
 
     public function list(...$args)
@@ -40,18 +46,18 @@ class PurchaseOrderAuthorization extends AbstractPurchaseAuthorization
 
     public function get(...$args)
     {
-        return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_VIEW');
-    }
-
-    public function getAll(...$args)
-    {
         return parent::get(...$args) &&
-            $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_VIEW_ALL') && (
+            $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_VIEW') && (
                 $this->getAll(...$args) ||
                 $this->getWorker(...$args) ||
                 $this->getIndividual(...$args)
             )
         ;
+    }
+
+    public function getAll(...$args)
+    {
+        return parent::get(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_VIEW_ALL');
     }
 
     public function getWorker(...$args)
@@ -86,16 +92,20 @@ class PurchaseOrderAuthorization extends AbstractPurchaseAuthorization
         return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE_ALL');
     }
 
-    // TODO: policy for add
-
     public function addWorker(...$args)
     {
-        return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE_WORKER');
+        return parent::add(...$args) &&
+            $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE_WORKER') &&
+            $this->isUserReferenceGranted($args, [ServiceInterface::WORKER])
+        ;
     }
 
     public function addIndividual(...$args)
     {
-        return parent::add(...$args) && $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE_INDIVIDUAL');
+        return parent::add(...$args) &&
+            $this->authorizationChecker->isGranted('ROLE_PURCHASE_PO_CREATE_INDIVIDUAL') &&
+            $this->isUserReferenceGranted($args, [ServiceInterface::OWNER])
+        ;
     }
 
     public function replace(...$args)

@@ -82,7 +82,7 @@ class ExpenseApiQueryController extends PurchaseApiQuery
             }
         }
 
-        $context['actions'] = $this->prepareActions($context['actions'], $data);
+        $context['actions'] = $this->prepareActions($context['actions']);
         $context['data'] = $data;
 
         return $context;
