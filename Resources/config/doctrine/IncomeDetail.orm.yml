@@ -17,6 +17,15 @@ Erp\Bundle\DocumentBundle\Entity\IncomeDetail:
         nullable: false
         onDelete: CASCADE
       fetch: EAGER
+  oneToOne:
+    statusChanged:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\IncomeDetailStatusChanged
+      cascade: ["persist", "refresh"]
+      joinColumn:
+        name: id_document_incomedetailstatuschanged
+        nullable: true
+        onDelete: RESTRICT
+      # fetch: EAGER
   fields:
     name:
       type: string

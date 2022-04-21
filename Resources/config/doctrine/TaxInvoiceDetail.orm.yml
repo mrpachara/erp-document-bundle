@@ -3,12 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail:
   #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\BillingNoteDetailRepository
   table: document_taxinvoicedetail
   inheritanceType: JOINED
-  oneToOne:
-    statusChanged:
-      targetEntity: Erp\Bundle\DocumentBundle\Entity\BillingNoteDetailStatusChanged
-      cascade: ["persist", "refresh"]
-      joinColumn:
-        name: id_document_billingnotedetailstatuschanged
-        nullable: true
-        onDelete: RESTRICT
-      fetch: EAGER

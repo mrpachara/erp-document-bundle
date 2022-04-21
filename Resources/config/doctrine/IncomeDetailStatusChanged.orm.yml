@@ -1,0 +1,21 @@
+Erp\Bundle\DocumentBundle\Entity\IncomeDetailStatusChanged:
+  type: entity
+  #repositoryClass: Erp\Bundle\DocumentBundle\Infrastructure\ORM\Repository\IncomeDetailRepository
+  table: document_incomedetailstatuschanged
+  inheritanceType: JOINED
+  indexes:
+    document_incomedetailstatuschanged_type_idx:
+      columns: [ type ]
+  manyToOne:
+    detail:
+      targetEntity: Erp\Bundle\DocumentBundle\Entity\IncomeDetail
+      joinColumn:
+        name: id_document_incomedetail
+        nullable: true
+        onDelete: RESTRICT
+      fetch: EAGER
+  fields:
+    type:
+      type: string
+      length: 64
+      nullable: false

@@ -20,7 +20,7 @@ abstract class IncomeDetail {
    * @var string
    */
   protected $name;
-  
+
   /**
    * unit
    *
@@ -55,6 +55,13 @@ abstract class IncomeDetail {
    * @var string
    */
   protected $remark;
+
+  /**
+   * status changed
+   *
+   * @var IncomeDetailStatusChanged
+   */
+  protected $statusChanged;
 
   /**
    * constructor
@@ -104,7 +111,7 @@ abstract class IncomeDetail {
   public function getName() {
       return $this->name;
   }
-  
+
   /**
    * set name
    *
@@ -114,10 +121,10 @@ abstract class IncomeDetail {
    */
   public function setName(string $name) {
       $this->name = $name;
-      
+
       return $this;
   }
-  
+
   /**
    * get unit
    *
@@ -126,7 +133,7 @@ abstract class IncomeDetail {
   public function getUnit() {
       return $this->unit;
   }
-  
+
   /**
    * set unit
    *
@@ -136,11 +143,11 @@ abstract class IncomeDetail {
    */
   public function setUnit(string $unit) {
       $this->unit = $unit;
-      
+
       return $this;
   }
-  
-  
+
+
   /**
    * get price
    *
@@ -225,6 +232,16 @@ abstract class IncomeDetail {
    */
   public function setRemark(string $remark) {
     $this->remark = $remark;
+
+    return $this;
+  }
+
+  public function getStatusChanged() {
+    return $this->statusChanged;
+  }
+
+  public function setStatusChanged($statusChanged) {
+    $this->statusChanged = $statusChanged;
 
     return $this;
   }
