@@ -9,7 +9,6 @@ class RevenueQueryService extends RevenueQuery
     {
         $this->repository = $doctrine->getRepository('ErpDocumentBundle:Revenue');
         $this->detailRepository = $doctrine->getRepository('ErpDocumentBundle:RevenueDetail');
-        $this->taxInvoiceDetailStatusChangedRepository = $doctrine->getRepository('ErpDocumentBundle:TaxInvoiceDetailStatusChanged');
     }
 
     /** @required */

@@ -9,7 +9,6 @@ class TaxInvoiceQueryService extends TaxInvoiceQuery
     {
         $this->repository = $doctrine->getRepository('ErpDocumentBundle:TaxInvoice');
         $this->detailRepository = $doctrine->getRepository('ErpDocumentBundle:TaxInvoiceDetail');
-        $this->billingNoteDetailStatusChangedRepository = $doctrine->getRepository('ErpDocumentBundle:BillingNoteDetailStatusChanged');
     }
 
     /** @required */

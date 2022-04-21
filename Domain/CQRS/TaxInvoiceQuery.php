@@ -8,5 +8,5 @@ namespace Erp\Bundle\DocumentBundle\Domain\CQRS;
 interface TaxInvoiceQuery extends IncomeQuery{
   public function searchBillingNoteRemain(array $params, array &$context = null);
 
-  public function getBillingNoteRemain($id);
+  public function getBillingNoteRemain($id, ?array $params = null);
 }
