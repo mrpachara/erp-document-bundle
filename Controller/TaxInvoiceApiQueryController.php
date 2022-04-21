@@ -101,15 +101,20 @@ class TaxInvoiceApiQueryController extends IncomeApiQuery
         $items = [];
         $context = [];
 
+        $queryParams = $this->assignWithUserSearchRule(
+            $queryParams,
+            $this->getRemainWithUserRules()
+        );
+
         $items = $this->domainQuery->searchBillingNoteRemain($queryParams, $context);
 
         $view = new View($this->listBillingNoteRemainResponse($items, $context));
-        
+
         $context = $view->getContext();
         $context
             ->addGroup('short')
         ;
-        
+
         return $view;
     }
 
@@ -133,9 +138,9 @@ class TaxInvoiceApiQueryController extends IncomeApiQuery
         $origin = $this->domainQuery->origin($income);
 
         $profile = $this->settingQuery->findOneByCode('profile')->getValue();
-        
+
         $bankAccounts = $this->settingQuery->findOneByCode('bankaccount')->getValue()['bankAccounts'];
-        
+
         $logo = null;
         if(!empty($profile['logo'])) {
             $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
@@ -155,7 +160,7 @@ class TaxInvoiceApiQueryController extends IncomeApiQuery
                 $mpdf->SetWatermarkText($status);
                 $mpdf->showWatermarkText = true;
             }
-            
+
             $mpdf->imageVars['logo'] = $logo;
         });
 
@@ -172,7 +177,16 @@ class TaxInvoiceApiQueryController extends IncomeApiQuery
      */
     public function getBillingNoteRemainAction($id, ServerRequestInterface $request)
     {
-        $item = $this->domainQuery->getBillingNoteRemain($id);
+        $queryParams = $request->getQueryParams();
+        $items = [];
+        $context = [];
+
+        $queryParams = $this->assignWithUserSearchRule(
+            $queryParams,
+            $this->getRemainWithUserRules()
+        );
+
+        $item = $this->domainQuery->getBillingNoteRemain($id, $queryParams);
         if (empty($item)) {
             throw new HttpException(404, "Entity not found.");
         }

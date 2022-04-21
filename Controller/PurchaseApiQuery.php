@@ -87,6 +87,24 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         ];
     }
 
+    protected function getRemainWithUserRules()
+    {
+        return [
+            'add-all' => function($grants) {
+                return [];
+            },
+            'add-worker add-individual' => function($grants) {
+                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
+            },
+            'add-worker' => function($grants) {
+                return [ServiceInterface::WORKER];
+            },
+            'add-individual' => function($grants) {
+                return [ServiceInterface::OWNER];
+            }
+        ];
+    }
+
     /**
      * get allowed projects
      *
@@ -123,35 +141,6 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
 
         $response = parent::getAction($id, $request);
 
-        // if($response === null) {
-        //     $response = $this->getQuery($id, $request, [
-        //         'get-worker get-individual' => function($id, $queryParams, &$context) {
-        //             /** @var SystemUser */
-        //             $user = $this->getUser();
-
-        //             return $this->domainQuery->findWithUser($id, $user,
-        //                 [ServiceInterface::WORKER, ServiceInterface::OWNER]
-        //             );
-        //         },
-        //         'get-worker' => function($id, $queryParams, &$context) {
-        //             /** @var SystemUser */
-        //             $user = $this->getUser();
-
-        //             return $this->domainQuery->findWithUser($id, $user,
-        //                 [ServiceInterface::WORKER]
-        //             );
-        //         },
-        //         'get-indidual' => function($id, $queryParams, &$context) {
-        //             /** @var SystemUser */
-        //             $user = $this->getUser();
-
-        //             return $this->domainQuery->findWithUser($id, $user,
-        //                 [ServiceInterface::OWNER]
-        //             );
-        //         },
-        //     ]);
-        // }
-
         $responseData = $response->getData();
         /** @var Purchase */
         $purchase = $responseData['data'];
@@ -167,23 +156,5 @@ abstract class PurchaseApiQuery extends DocumentApiQuery {
         }
 
         return $response;
-    }
-
-    protected function getRemainWithUserRules()
-    {
-        return [
-            'add-all' => function($grants) {
-                return [];
-            },
-            'add-worker add-individual' => function($grants) {
-                return [ServiceInterface::WORKER, ServiceInterface::OWNER];
-            },
-            'add-worker' => function($grants) {
-                return [ServiceInterface::WORKER];
-            },
-            'add-individual' => function($grants) {
-                return [ServiceInterface::OWNER];
-            }
-        ];
     }
 }

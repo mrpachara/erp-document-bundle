@@ -7,8 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use FOS\RestBundle\View\View;
 use Erp\Bundle\DocumentBundle\Entity\Purchase;
-use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * PurchaseOrder Api Controller
