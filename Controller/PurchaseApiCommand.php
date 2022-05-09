@@ -4,16 +4,14 @@ namespace Erp\Bundle\DocumentBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Erp\Bundle\CoreBundle\Domain\Adapter\LockMode;
-use Erp\Bundle\SystemBundle\Entity\SystemUser;
 use Erp\Bundle\DocumentBundle\Domain\CQRS\DocumentWithProjectInterface as ServiceInterface;
 use Erp\Bundle\DocumentBundle\Entity\DetailStatusChanged;
 
 /**
  * Purchase Api Command
  */
-abstract class PurchaseApiCommand extends DocumentApiCommand {
+abstract class PurchaseApiCommand extends DocumentApiCommand
+{
     use AssignWithUserSearchTrait;
 
     /**
@@ -31,35 +29,36 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
     //  */
     // protected $commandHandler;
 
-    protected function prepareData($data, $for) {
-        if(isset($data['id'])) unset($data['id']);
-        if(!empty($data['project'])) $data['project'] = array_intersect_key($data['project'], array_flip(['id', 'dtype']));
-        if(!empty($data['requester'])) $data['requester'] = array_intersect_key($data['requester'], array_flip(['id', 'dtype']));
-        if(!empty($data['vendor'])) $data['vendor'] = array_intersect_key($data['vendor'], array_flip(['id', 'dtype']));
-        if(!empty($data['boq'])) $data['boq'] = array_intersect_key($data['boq'], array_flip(['id', 'dtype']));
-        if(!empty($data['budgetType'])) $data['budgetType'] = array_intersect_key($data['budgetType'], array_flip(['id', 'dtype']));
+    protected function prepareData($data, $for)
+    {
+        if (isset($data['id'])) unset($data['id']);
+        if (!empty($data['project'])) $data['project'] = array_intersect_key($data['project'], array_flip(['id', 'dtype']));
+        if (!empty($data['requester'])) $data['requester'] = array_intersect_key($data['requester'], array_flip(['id', 'dtype']));
+        if (!empty($data['vendor'])) $data['vendor'] = array_intersect_key($data['vendor'], array_flip(['id', 'dtype']));
+        if (!empty($data['boq'])) $data['boq'] = array_intersect_key($data['boq'], array_flip(['id', 'dtype']));
+        if (!empty($data['budgetType'])) $data['budgetType'] = array_intersect_key($data['budgetType'], array_flip(['id', 'dtype']));
         $data['approved'] = !empty($data['approved']);
 
         // TODO: move docTotal to Purchase.total
-        $docTotal = (key_exists('docTotal', $data))? $data['docTotal'] : null;
+        $docTotal = (key_exists('docTotal', $data)) ? $data['docTotal'] : null;
         $total = $data['total'];
 
-        if(empty($total)) throw new \Exception("Invalid data format!!!");
+        if (empty($total)) throw new \Exception("Invalid data format!!!");
 
-        $totalValue = (double) $total;
-        foreach($data['details'] as $index => $detail) {
-            if(isset($detail['id'])) unset($detail['id']);
-            if(!empty($detail['boqData']))
+        $totalValue = (float) $total;
+        foreach ($data['details'] as $index => $detail) {
+            if (isset($detail['id'])) unset($detail['id']);
+            if (!empty($detail['boqData']))
                 $detail['boqData'] = array_intersect_key($detail['boqData'], array_flip(['id', 'dtype']));
-            if(!empty($detail['statusChanged'])) {
-                if(empty($detail['statusChanged']['type'])) {
+            if (!empty($detail['statusChanged'])) {
+                if (empty($detail['statusChanged']['type'])) {
                     unset($detail['statusChanged']);
                 } else {
-                    if(isset($detail['statusChanged']['id'])) unset($detail['statusChanged']['id']);
-                    if(!empty($detail['statusChanged']['detail'])) {
+                    if (isset($detail['statusChanged']['id'])) unset($detail['statusChanged']['id']);
+                    if (!empty($detail['statusChanged']['detail'])) {
                         $detail['statusChanged']['detail'] = array_intersect_key($detail['statusChanged']['detail'], array_flip(['id', 'dtype']));
                     }
-                    if($detail['statusChanged']['type'] === DetailStatusChanged::REMOVED) {
+                    if ($detail['statusChanged']['type'] === DetailStatusChanged::REMOVED) {
                         $detail['costItem'] = null;
                         $detail['price'] = null;
                         $detail['quantity'] = null;
@@ -69,15 +68,15 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
                 }
             }
 
-            if(empty($detail['_total'])) throw new \Exception("Invalid data format!!!");
+            if (empty($detail['_total'])) throw new \Exception("Invalid data format!!!");
 
-            if(
+            if (
                 (!empty($detail['statusChanged']) && ($detail['statusChanged']['type'] === DetailStatusChanged::REMOVED)) ||
                 ($totalValue === 0)
             ) {
                 $detail['total'] = 0;
             } else {
-                if($docTotal === null) {
+                if ($docTotal === null) {
                     $detail['total'] = $detail['_total'];
                 } else {
                     $detail['total'] = ($detail['_total'] / $totalValue) * $docTotal;
@@ -93,16 +92,16 @@ abstract class PurchaseApiCommand extends DocumentApiCommand {
     protected function getActionWithUserRules(string $action)
     {
         return [
-            "{$action}-all" => function($grants) {
+            "{$action}-all" => function ($grants) {
                 return [];
             },
             // "{$action}-worker {$action}-individual" => function($grants) {
             //     return [ServiceInterface::WORKER, ServiceInterface::OWNER];
             // },
-            "{$action}-worker" => function($grants) {
+            "{$action}-worker" => function ($grants) {
                 return [ServiceInterface::WORKER];
             },
-            "{$action}-individual" => function($grants) {
+            "{$action}-individual" => function ($grants) {
                 return [ServiceInterface::OWNER];
             }
         ];
