@@ -40,7 +40,7 @@ abstract class IncomeApiCommand extends DocumentApiCommand
         $data['approved'] = !empty($data['approved']);
 
         // TODO: move docTotal to Income.total
-        $docTotal = $data['docTotal'];
+        $docTotal = (key_exists('docTotal', $data)) ? $data['docTotal'] : null;
         $total = $data['total'];
 
         $totalValue = (float) $total;
