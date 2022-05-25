@@ -166,7 +166,7 @@ table.cl-layout-cell {
           </tr>
         </thead>
         <tbody>
-{% for detail in model.details if (detail.statusChanged|default is null) or (not detail.statusChanged.type == 'REMOVED') %}
+{% for detail in model.details if (detail.statusChanged is empty) or (detail.statusChanged.type != 'REMOVED') %}
           <tr>
             <td style="text-align: center;">{{ loop.index }}</td>
             <td>{{ (detail.costItem.name) ?? detail.name }}</td>
