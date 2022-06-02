@@ -25,7 +25,7 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
 
         $activePurchaseQb = $this->purchaseQuery->getAliveDocumentQueryBuilder('_activeDocument');
         $purchaseDetailQb = $this->purchaseQuery->createDetailQueryBuilder('_purchaseDetail');
-        $excepts = array_map(function($value) use ($purchaseDetailQb) {
+        $excepts = array_map(function ($value) use ($purchaseDetailQb) {
             return $purchaseDetailQb->expr()->literal($value);
         }, $excepts);
         $purchaseDetailQb
@@ -38,16 +38,15 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
                         '_purchase.id',
                         $activePurchaseQb->select('_activeDocument.id')->getDQL()
                     ),
-                    (empty($excepts))? '1 = 1' :
-                    $purchaseDetailQb->expr()->notIn(
-                        '_purchase.id',
-                        $excepts
-                    )
+                    (empty($excepts)) ? '1 = 1' :
+                        $purchaseDetailQb->expr()->notIn(
+                            '_purchase.id',
+                            $excepts
+                        )
                 )
             )
             ->andWhere('_purchaseDetail.boqData = :boqDataId')
-            ->setParameter('boqDataId', $boqData->getId())
-        ;
+            ->setParameter('boqDataId', $boqData->getId());
 
         $purchaseDetails = $purchaseDetailQb->getQuery()->getResult();
 
@@ -74,14 +73,14 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
 
             if ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail) {
                 if ($purchase->updatable()) {
-                    $budgets[$purchase->getBudgetType()->getId()]->cost['request'][$purchase->getApproved()? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
+                    $budgets[$purchase->getBudgetType()->getId()]->cost['request'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
                 }
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail) {
                 if ($purchase->updatable()) {
-                    $budgets[$purchase->getBudgetType()->getId()]->cost['order'][$purchase->getApproved()? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
+                    $budgets[$purchase->getBudgetType()->getId()]->cost['order'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
                 }
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\ExpenseDetail) {
-                $budgets[$purchase->getBudgetType()->getId()]->cost['expense'][$purchase->getApproved()? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
+                $budgets[$purchase->getBudgetType()->getId()]->cost['expense'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
             }
         }
 
@@ -90,7 +89,7 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
 
             foreach ($childResult->getBudgets() as $childBudget) {
                 foreach ($childBudget->cost as $costKey => $costWithTypes) {
-                    foreach($costWithTypes as $costType => $costValue)
+                    foreach ($costWithTypes as $costType => $costValue)
                         $boqData->getBudgets()[$childBudget->getBoqBudgetType()->getId()]->cost[$costKey][$costType] += $costValue;
                 }
             }
@@ -99,11 +98,15 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
         return $boqData;
     }
 
+    public function getNewProjectBoqDataSummary($id, $excepts = null)
+    {
+    }
+
     function getProjectBoqsSummary($idProject, $excepts = null)
     {
         $projectBoqs = $this->projectBoqRepository->findByProject($idProject);
 
-        foreach($projectBoqs as $projectBoq) {
+        foreach ($projectBoqs as $projectBoq) {
             $this->getProjectBoqDataSummary($projectBoq->getId(), $excepts);
         }
 
