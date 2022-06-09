@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\IncomeDetailStatusChanged:
+  access_type: property
+  properties:
+    detail:
+      type: Erp\Bundle\DocumentBundle\Entity\IncomeDetail

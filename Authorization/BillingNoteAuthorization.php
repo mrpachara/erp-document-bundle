@@ -74,10 +74,12 @@ class BillingNoteAuthorization extends AbstractIncomeAuthorization
 
     public function add(...$args)
     {
-        $this->authorizationChecker->isGranted('ROLE_INCOME_BN_CREATE') && ($this->addAll(...$args) ||
-            $this->addWorker(...$args) ||
-            $this->addIndividual(...$args)
-        );
+        return parent::add(...$args) &&
+            $this->authorizationChecker->isGranted('ROLE_INCOME_BN_CREATE') && (
+                ($this->addAll(...$args)) ||
+                $this->addWorker(...$args) ||
+                $this->addIndividual(...$args)
+            );
     }
 
     public function addAll(...$args)

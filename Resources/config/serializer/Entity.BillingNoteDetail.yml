@@ -3,6 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail:
   properties:
     income:
       type: Erp\Bundle\DocumentBundle\Entity\BillingNote
-    statusChanged:
-      type: Erp\Bundle\DocumentBundle\Entity\DeliveryNoteDetailStatusChanged
-      

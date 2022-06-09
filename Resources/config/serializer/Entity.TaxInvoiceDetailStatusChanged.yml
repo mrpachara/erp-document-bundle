@@ -1,5 +1,0 @@
-Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetailStatusChanged:
-  access_type: property
-  properties:
-    taxInvoiceDetail:
-      type: Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail

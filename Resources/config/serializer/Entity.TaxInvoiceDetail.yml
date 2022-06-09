@@ -3,6 +3,3 @@ Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail:
   properties:
     income:
       type: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
-    statusChanged:
-      type: Erp\Bundle\DocumentBundle\Entity\BillingNoteDetailStatusChanged
-      

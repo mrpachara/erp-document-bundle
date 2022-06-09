@@ -5,6 +5,7 @@ namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service;
 use Erp\Bundle\DocumentBundle\Domain\CQRS\ProjectBoqSummaryQuery as QueryInterface;
 
 use Doctrine\ORM\EntityRepository;
+use Erp\Bundle\DocumentBundle\Entity\DetailStatusChanged;
 
 abstract class ProjectBoqSummaryQuery implements QueryInterface
 {
@@ -23,8 +24,36 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
         /** @var \Erp\Bundle\MasterBundle\Entity\ProjectBoqData */
         $boqData = $this->projectBoqDataRepository->find($id);
 
+        $transActivePurchaseQb = $this->purchaseQuery->getAliveDocumentQueryBuilder('_transActiveDocument');
+        $transPurchaseDetailQb = $this->purchaseQuery->createDetailQueryBuilder('_transPurchaseDetail');
+
+        $transPurchaseDetailQb
+            ->innerJoin(
+                '_transPurchaseDetail.purchase',
+                '_transPurchase',
+                'WITH',
+                $transPurchaseDetailQb->expr()->in(
+                    '_transPurchase.id',
+                    $transActivePurchaseQb->select('_transActiveDocument.id')->getDQL()
+                )
+            )
+            ->innerJoin(
+                '_transPurchaseDetail.statusChanged',
+                '_transPurchaseDetail_statusChanged',
+                'WITH',
+                $transPurchaseDetailQb->expr()->in(
+                    '_transPurchaseDetail_statusChanged.type',
+                    [
+                        $transPurchaseDetailQb->expr()->literal(DetailStatusChanged::FINISH),
+                        $transPurchaseDetailQb->expr()->literal(DetailStatusChanged::REMOVED),
+                        // TODO: add rule for DetailStatusChanged::SPRITTED
+                    ]
+                )
+            );
+
         $activePurchaseQb = $this->purchaseQuery->getAliveDocumentQueryBuilder('_activeDocument');
         $purchaseDetailQb = $this->purchaseQuery->createDetailQueryBuilder('_purchaseDetail');
+
         $excepts = array_map(function ($value) use ($purchaseDetailQb) {
             return $purchaseDetailQb->expr()->literal($value);
         }, $excepts);
@@ -43,6 +72,15 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
                             '_purchase.id',
                             $excepts
                         )
+                )
+            )
+            ->andWhere(
+                $purchaseDetailQb->expr()->not(
+                    $purchaseDetailQb->expr()->exists(
+                        $transPurchaseDetailQb
+                            ->andWhere('_purchaseDetail.id = _transPurchaseDetail_statusChanged.detail')
+                            ->getDQL()
+                    )
                 )
             )
             ->andWhere('_purchaseDetail.boqData = :boqDataId')
@@ -72,13 +110,9 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
             $budgets = $boqData->getBudgets();
 
             if ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail) {
-                if ($purchase->updatable()) {
-                    $budgets[$purchase->getBudgetType()->getId()]->cost['request'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
-                }
+                $budgets[$purchase->getBudgetType()->getId()]->cost['request'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail) {
-                if ($purchase->updatable()) {
-                    $budgets[$purchase->getBudgetType()->getId()]->cost['order'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
-                }
+                $budgets[$purchase->getBudgetType()->getId()]->cost['order'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
             } elseif ($purchaseDetail instanceof \Erp\Bundle\DocumentBundle\Entity\ExpenseDetail) {
                 $budgets[$purchase->getBudgetType()->getId()]->cost['expense'][$purchase->getApproved() ? 'approved' : 'nonapproved'] += $purchaseDetail->getTotal();
             }
@@ -96,10 +130,6 @@ abstract class ProjectBoqSummaryQuery implements QueryInterface
         }
 
         return $boqData;
-    }
-
-    public function getNewProjectBoqDataSummary($id, $excepts = null)
-    {
     }
 
     function getProjectBoqsSummary($idProject, $excepts = null)
