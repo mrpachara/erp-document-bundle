@@ -82,7 +82,7 @@ class BillingNoteApiQueryController extends IncomeApiQuery
             }
         }
 
-        $context['actions'] = $this->prepareActions($context['actions'], $data);
+        $context['actions'] = $this->prepareActions($context['actions']);
         $context['data'] = $data;
 
         return $context;
@@ -112,8 +112,7 @@ class BillingNoteApiQueryController extends IncomeApiQuery
 
         $context = $view->getContext();
         $context
-            ->addGroup('short')
-        ;
+            ->addGroup('short');
 
         return $view;
     }
@@ -142,7 +141,7 @@ class BillingNoteApiQueryController extends IncomeApiQuery
         $bankAccounts = $this->settingQuery->findOneByCode('bankaccount')->getValue()['bankAccounts'];
 
         $logo = null;
-        if(!empty($profile['logo'])) {
+        if (!empty($profile['logo'])) {
             $logo = stream_get_contents($this->fileQuery->get($profile['logo'])->getData());
         }
 
@@ -153,10 +152,10 @@ class BillingNoteApiQueryController extends IncomeApiQuery
             'bankAccounts' => $bankAccounts,
         ]);
 
-        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function($mpdf) use ($income, $logo) {
+        $output = $this->get(\Erp\Bundle\DocumentBundle\Service\PDFService::class)->generatePdf($view, ['format' => 'A4'], function ($mpdf) use ($income, $logo) {
             $status = $income->getStatus();
 
-            if(!empty($status)) {
+            if (!empty($status)) {
                 $mpdf->SetWatermarkText($status);
                 $mpdf->showWatermarkText = true;
             }

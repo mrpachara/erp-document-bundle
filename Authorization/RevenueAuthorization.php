@@ -103,7 +103,8 @@ class RevenueAuthorization extends AbstractIncomeAuthorization
     public function replace(...$args)
     {
         return parent::replace(...$args) &&
-            $this->authorizationChecker->isGranted('ROLE_INCOME_RV_EDIT') && ($this->replaceAll(...$args) ||
+            $this->authorizationChecker->isGranted('ROLE_INCOME_RV_EDIT') && (
+                ($this->replaceAll(...$args)) ||
                 $this->replaceWorker(...$args) ||
                 $this->replaceIndividual(...$args)
             );

@@ -101,15 +101,17 @@ class BillingNoteAuthorization extends AbstractIncomeAuthorization
 
     public function replace(...$args)
     {
-        return parent::replace(...$args) && $this->authorizationChecker->isGranted('ROLE_INCOME_BN_EDIT');
+        return parent::replace(...$args) &&
+            $this->authorizationChecker->isGranted('ROLE_INCOME_BN_EDIT') && (
+                ($this->replaceAll(...$args)) ||
+                $this->replaceWorker(...$args) ||
+                $this->replaceIndividual(...$args)
+            );
     }
 
     public function replaceAll(...$args)
     {
-        $this->authorizationChecker->isGranted('ROLE_INCOME_BN_EDIT') && ($this->replaceAll(...$args) ||
-            $this->replaceWorker(...$args) ||
-            $this->replaceIndividual(...$args)
-        );
+        return parent::replace(...$args) && $this->authorizationChecker->isGranted('ROLE_INCOME_BN_EDIT_ALL');
     }
 
     public function replaceWorker(...$args)
