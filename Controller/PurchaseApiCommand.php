@@ -46,9 +46,11 @@ abstract class PurchaseApiCommand extends DocumentApiCommand
         $docTotal = (
             (key_exists('docTotal', $data)) &&
             ($data['docTotal'] != $total)
-        ) ? $data['docTotal'] : null;
+        ) ? (float) $data['docTotal'] : null;
 
         $totalValue = (float) $total;
+        $lastKey = \array_key_last($data['details']);
+        $sumTotal = 0;
         foreach ($data['details'] as $index => $detail) {
             if (isset($detail['id'])) unset($detail['id']);
             if (!empty($detail['boqData']))
@@ -82,7 +84,12 @@ abstract class PurchaseApiCommand extends DocumentApiCommand
                 if ($docTotal === null) {
                     $detail['total'] = $detail['_total'];
                 } else {
-                    $detail['total'] = ($detail['_total'] / $totalValue) * $docTotal;
+                    if ($index !== $lastKey) {
+                        $detail['total'] = ($detail['_total'] / $totalValue) * $docTotal;
+                        $sumTotal += $detail['total'];
+                    } else {
+                        $detail['total'] = $docTotal - $sumTotal;
+                    }
                 }
             }
 
