@@ -39,11 +39,14 @@ abstract class PurchaseApiCommand extends DocumentApiCommand
         if (!empty($data['budgetType'])) $data['budgetType'] = array_intersect_key($data['budgetType'], array_flip(['id', 'dtype']));
         $data['approved'] = !empty($data['approved']);
 
-        // TODO: move docTotal to Purchase.total
-        $docTotal = (key_exists('docTotal', $data)) ? $data['docTotal'] : null;
         $total = $data['total'];
 
         if (empty($total)) throw new \Exception("Invalid data format!!!");
+
+        $docTotal = (
+            (key_exists('docTotal', $data)) &&
+            ($data['docTotal'] != $total)
+        ) ? $data['docTotal'] : null;
 
         $totalValue = (float) $total;
         foreach ($data['details'] as $index => $detail) {
