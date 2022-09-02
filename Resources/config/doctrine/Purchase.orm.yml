@@ -76,7 +76,7 @@ Erp\Bundle\DocumentBundle\Entity\Purchase:
     deliveryDate:
       type: datetime_immutable
       nullable: true
-    total:
+    docTotal:
       type: decimal
       precision: 15
       scale: 2

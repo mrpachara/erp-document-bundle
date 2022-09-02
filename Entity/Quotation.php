@@ -12,6 +12,11 @@ class Quotation extends Purchase
     /**
      * @var string
      */
+    protected $total;     // summation of cost-items
+
+    /**
+     * @var string
+     */
     protected $discount;
 
     /**
@@ -44,10 +49,7 @@ class Quotation extends Purchase
      */
     protected $excludeVat;   // exclude vat
 
-    /**
-     * @var string
-     */
-    protected $docTotal;     // include vat
+    //protected $docTotal;     // include vat, inherit
 
     /**
      * @var string
@@ -116,6 +118,18 @@ class Quotation extends Purchase
     public function __construct(Thing $thing = null)
     {
         parent::__construct($thing);
+    }
+
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
     }
 
     public function getDiscount()
@@ -198,18 +212,6 @@ class Quotation extends Purchase
     public function setExcludeVat($excludeVat)
     {
         $this->excludeVat = $excludeVat;
-
-        return $this;
-    }
-
-    public function getDocTotal()
-    {
-        return $this->docTotal;
-    }
-
-    public function setDocTotal($docTotal)
-    {
-        $this->docTotal = $docTotal;
 
         return $this;
     }
@@ -369,5 +371,4 @@ class Quotation extends Purchase
 
         return $this;
     }
-
 }

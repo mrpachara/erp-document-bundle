@@ -11,6 +11,11 @@ Erp\Bundle\DocumentBundle\Entity\Quotation:
 #    details:
 #      targetEntity: Erp\Bundle\DocumentBundle\Entity\QuotationDetail
   fields:
+    total:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
     discount:
       type: decimal
       precision: 15
@@ -38,11 +43,6 @@ Erp\Bundle\DocumentBundle\Entity\Quotation:
       scale: 2
       nullable: true
     excludeVat:
-      type: decimal
-      precision: 15
-      scale: 2
-      nullable: true
-    docTotal:
       type: decimal
       precision: 15
       scale: 2

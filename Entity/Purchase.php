@@ -108,11 +108,11 @@ abstract class Purchase extends Document
     protected $budgetType;
 
     /**
-     * total
+     * document total
      *
      * @var string
      */
-    protected $total;
+    protected $docTotal;
 
     /**
      * details
@@ -426,24 +426,25 @@ abstract class Purchase extends Document
     }
 
     /**
-     * get total
+     * get document total
      *
      * @return string
      */
-    public function getTotal()
+    public function getDocTotal()
     {
-        return $this->total;
+        return $this->docTotal;
     }
 
     /**
-     * set total
-     * @param string $total
+     * set document total
+     *
+     * @param string $docTotal
      *
      * @return static
      */
-    public function setTotal($total)
+    public function setDocTotal($docTotal)
     {
-        $this->total = $total;
+        $this->docTotal = $docTotal;
 
         return $this;
     }
@@ -484,7 +485,8 @@ abstract class Purchase extends Document
         $this->details->removeElement($detail);
     }
 
-    public function setDetails(ArrayCollection $details) {
+    public function setDetails(ArrayCollection $details)
+    {
         $this->details = $details;
 
         return $this;
