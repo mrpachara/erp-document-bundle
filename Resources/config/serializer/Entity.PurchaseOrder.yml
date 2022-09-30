@@ -7,5 +7,5 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseOrder:
       type: Erp\Bundle\DocumentBundle\Entity\PurchaseOrder
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\PurchaseOrderDetail>
-    dueDate:
-      type: DateTimeImmutable
+    # dueDate:
+    #   type: DateTimeImmutable

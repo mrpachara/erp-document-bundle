@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\PurchaseFinance:
+  access_type: property
+  properties:
+    dueDate:
+      type: DateTimeImmutable

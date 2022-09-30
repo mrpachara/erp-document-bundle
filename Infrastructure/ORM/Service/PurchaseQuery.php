@@ -16,7 +16,8 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
     protected $detailQueryService;
 
     /** @required */
-    public function setDetailQueryService(PurchaseQueryService $detailQueryService){
+    public function setDetailQueryService(PurchaseQueryService $detailQueryService)
+    {
         $this->detailQueryService = $detailQueryService;
     }
 
@@ -25,7 +26,7 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
 
     public function createDetailQueryBuilder($alias = null): QueryBuilder
     {
-        $alias = ($alias)? $alias : '_entity_detail';
+        $alias = ($alias) ? $alias : '_entity_detail';
         return $this->detailRepository->createQueryBuilder($alias);
     }
 
@@ -46,23 +47,23 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
         return $options;
     }
 
-    public function assignDetailRemainFilter(QueryBuilder $qb, $alias) : QueryBuilder
-    {
+    public function assignDetailRemainFilter(
+        QueryBuilder $qb,
+        string $alias
+    ): QueryBuilder {
         $boundDetailAlias = "{$alias}_boundDetail";
         $boundHeaderAlias = "{$alias}_boundHeader";
         $statusChangedAlias = "{$alias}_statusChanged";
         $boundDetailQb = $this->detailQueryService->createDetailQueryBuilder($boundDetailAlias)
             ->leftJoin("{$boundDetailAlias}.statusChanged", $statusChangedAlias)
-            ->leftJoin("{$boundDetailAlias}.purchase", $boundHeaderAlias)
-        ;
+            ->leftJoin("{$boundDetailAlias}.purchase", $boundHeaderAlias);
 
         $boundDetailQb = $this->assignAliveDocumentQuery($boundDetailQb, $boundHeaderAlias);
 
         $expr = $qb->expr();
         $statusOrX = $expr->orX()
             ->add($expr->eq("{$statusChangedAlias}.type", $expr->literal(DetailStatusChanged::FINISH)))
-            ->add($expr->eq("{$statusChangedAlias}.type", $expr->literal(DetailStatusChanged::REMOVED)))
-        ;
+            ->add($expr->eq("{$statusChangedAlias}.type", $expr->literal(DetailStatusChanged::REMOVED)));
         $boundDetailQb->andWhere($statusOrX);
 
         return $qb
@@ -76,12 +77,13 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
                             ->getDQL()
                     )
                 )
-            )
-        ;
+            );
     }
 
-    public function assignHeaderRemainFilter(QueryBuilder $qb, $alias) : QueryBuilder
-    {
+    public function assignHeaderRemainFilter(
+        QueryBuilder $qb,
+        string $alias
+    ): QueryBuilder {
         $detailAlias = "{$alias}_detail";
         $detailQb = $this->createDetailQueryBuilder($detailAlias);
         $detailQb = $this->assignDetailRemainFilter($detailQb, $detailAlias);
@@ -96,11 +98,11 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
                         $expr->eq("{$detailAlias}.purchase", $alias)
                     )
                 )
-            )
-        ;
+            );
     }
 
-    public function searchRemain(array $params, array &$context = null) {
+    public function searchRemain(array $params, array &$context = null)
+    {
         $context = (array)$context;
 
         $alias = '_doc_remain';
@@ -110,7 +112,8 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
         return $this->qh->execute($qb->getQuery(), $params, $context);
     }
 
-    public function getRemain($id, ?array $params = null) {
+    public function getRemain($id, ?array $params = null)
+    {
         $purchase = $this->findWith($id, $params);
         if (empty($purchase)) {
             return $purchase;
@@ -125,7 +128,7 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
         $detailRemainQb->setParameter('purchaseRequest', $purchase);
 
         $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($detailRemainQb->getQuery()->getResult());
-        if(count($details) == 0) return null;
+        if (count($details) == 0) return null;
         $purchase->setDetails($details);
 
         return $purchase;

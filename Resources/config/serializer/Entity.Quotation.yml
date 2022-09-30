@@ -7,5 +7,5 @@ Erp\Bundle\DocumentBundle\Entity\Quotation:
       type: Erp\Bundle\DocumentBundle\Entity\Quotation
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\QuotationDetail>
-    dueDate:
-      type: DateTimeImmutable
+    # dueDate:
+    #   type: DateTimeImmutable

@@ -7,5 +7,5 @@ Erp\Bundle\DocumentBundle\Entity\Expense:
       type: Erp\Bundle\DocumentBundle\Entity\Expense
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\ExpenseDetail>
-    dueDate:
-      type: DateTimeImmutable
+    # dueDate:
+    #   type: DateTimeImmutable

@@ -4,7 +4,7 @@ namespace Erp\Bundle\DocumentBundle\Infrastructure\ORM\Service;
 
 use Erp\Bundle\DocumentBundle\Domain\CQRS\PurchaseOrderQuery as QueryInterface;
 
-abstract class PurchaseOrderQuery extends PurchaseQuery implements QueryInterface
+abstract class PurchaseOrderQuery extends PurchaseFinanceQuery implements QueryInterface
 {
     /** @var PurchaseRequestQueryService */
     protected $purchaseRequestQueryService;
