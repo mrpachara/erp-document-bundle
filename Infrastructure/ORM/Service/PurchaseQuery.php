@@ -82,7 +82,8 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
 
     public function assignHeaderRemainFilter(
         QueryBuilder $qb,
-        string $alias
+        string $alias,
+        bool $unapprovedIncluded = false
     ): QueryBuilder {
         $detailAlias = "{$alias}_detail";
         $detailQb = $this->createDetailQueryBuilder($detailAlias);
@@ -90,7 +91,9 @@ abstract class PurchaseQuery extends DocumentQuery implements QueryInterface, Do
 
         $expr = $qb->expr();
         $qb = $this->assignAliveDocumentQuery($qb, $alias);
-        $qb = $this->assignApprovedDocumentQuery($qb, $alias);
+        if (!$unapprovedIncluded) {
+            $qb = $this->assignApprovedDocumentQuery($qb, $alias);
+        }
         return $qb
             ->andWhere(
                 $expr->exists(
