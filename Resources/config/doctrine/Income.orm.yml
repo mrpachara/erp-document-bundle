@@ -50,7 +50,7 @@ Erp\Bundle\DocumentBundle\Entity\Income:
     deliveryDate:
       type: date_immutable
       nullable: true
-    total:
+    docTotal:
       type: decimal
       precision: 15
       scale: 2

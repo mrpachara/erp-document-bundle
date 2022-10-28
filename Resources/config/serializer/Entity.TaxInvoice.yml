@@ -7,5 +7,3 @@ Erp\Bundle\DocumentBundle\Entity\TaxInvoice:
       type: Erp\Bundle\DocumentBundle\Entity\TaxInvoice
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\TaxInvoiceDetail>
-    paymentDate:
-      type: DateTimeImmutable

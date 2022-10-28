@@ -7,5 +7,3 @@ Erp\Bundle\DocumentBundle\Entity\Revenue:
       type: Erp\Bundle\DocumentBundle\Entity\Revenue
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\RevenueDetail>
-    paymentDate:
-      type: DateTimeImmutable

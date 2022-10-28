@@ -15,6 +15,11 @@ abstract class IncomeFinance extends Income implements PaymentProperties, Retent
     /**
      * @var string
      */
+    protected $total;     // summation of cost-items
+
+    /**
+     * @var string
+     */
     protected $discount;
 
     /**
@@ -46,6 +51,8 @@ abstract class IncomeFinance extends Income implements PaymentProperties, Retent
      * @var string
      */
     protected $excludeVat;   // exclude vat
+
+    //protected $docTotal;     // include vat, inherit
 
     /**
      * @var string
@@ -121,6 +128,18 @@ abstract class IncomeFinance extends Income implements PaymentProperties, Retent
     {
         parent::__construct($thing);
         $this->transferMoney = [];
+    }
+
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
     }
 
     public function getDiscount()
@@ -203,18 +222,6 @@ abstract class IncomeFinance extends Income implements PaymentProperties, Retent
     public function setExcludeVat($excludeVat)
     {
         $this->excludeVat = $excludeVat;
-
-        return $this;
-    }
-
-    public function getDocTotal()
-    {
-        return $this->docTotal;
-    }
-
-    public function setDocTotal($docTotal)
-    {
-        $this->docTotal = $docTotal;
 
         return $this;
     }

@@ -4,6 +4,11 @@ Erp\Bundle\DocumentBundle\Entity\IncomeFinance:
   table: document_incomefinance
   inheritanceType: JOINED
   fields:
+    total:
+      type: decimal
+      precision: 15
+      scale: 2
+      nullable: true
     discount:
       type: decimal
       precision: 15
@@ -31,11 +36,6 @@ Erp\Bundle\DocumentBundle\Entity\IncomeFinance:
       scale: 2
       nullable: true
     excludeVat:
-      type: decimal
-      precision: 15
-      scale: 2
-      nullable: true
-    docTotal:
       type: decimal
       precision: 15
       scale: 2

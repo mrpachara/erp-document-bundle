@@ -7,7 +7,5 @@ Erp\Bundle\DocumentBundle\Entity\BillingNote:
       type: Erp\Bundle\DocumentBundle\Entity\BillingNote
     details:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\DocumentBundle\Entity\BillingNoteDetail>
-    paymentDate:
-      type: DateTimeImmutable
     transferMoney:
       type: array<string>

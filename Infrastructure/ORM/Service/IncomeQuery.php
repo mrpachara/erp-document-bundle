@@ -16,7 +16,8 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
     protected $detailQueryService;
 
     /** @required */
-    public function setDetailQueryService(IncomeQueryService $detailQueryService){
+    public function setDetailQueryService(IncomeQueryService $detailQueryService)
+    {
         $this->detailQueryService = $detailQueryService;
     }
 
@@ -25,7 +26,7 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
 
     public function createDetailQueryBuilder($alias = null): QueryBuilder
     {
-        $alias = ($alias)? $alias : '_entity_detail';
+        $alias = ($alias) ? $alias : '_entity_detail';
         return $this->detailRepository->createQueryBuilder($alias);
     }
 
@@ -46,23 +47,21 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
         return $options;
     }
 
-    public function assignDetailRemainFilter(QueryBuilder $qb, $alias) : QueryBuilder
+    public function assignDetailRemainFilter(QueryBuilder $qb, $alias): QueryBuilder
     {
         $boundDetailAlias = "{$alias}_boundDetail";
         $boundHeaderAlias = "{$alias}_boundHeader";
         $statusChangedAlias = "{$alias}_statusChanged";
         $boundDetailQb = $this->detailQueryService->createDetailQueryBuilder($boundDetailAlias)
             ->leftJoin("{$boundDetailAlias}.statusChanged", $statusChangedAlias)
-            ->leftJoin("{$boundDetailAlias}.income", $boundHeaderAlias)
-        ;
+            ->leftJoin("{$boundDetailAlias}.income", $boundHeaderAlias);
 
         $boundDetailQb = $this->assignAliveDocumentQuery($boundDetailQb, $boundHeaderAlias);
 
         $expr = $qb->expr();
         $statusOrX = $expr->orX()
             ->add($expr->eq("{$statusChangedAlias}.type", $expr->literal(DetailStatusChanged::FINISH)))
-            ->add($expr->eq("{$statusChangedAlias}.type", $expr->literal(DetailStatusChanged::REMOVED)))
-        ;
+            ->add($expr->eq("{$statusChangedAlias}.type", $expr->literal(DetailStatusChanged::REMOVED)));
         $boundDetailQb->andWhere($statusOrX);
 
         return $qb
@@ -76,19 +75,23 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
                             ->getDQL()
                     )
                 )
-            )
-        ;
+            );
     }
 
-    public function assignHeaderRemainFilter(QueryBuilder $qb, $alias) : QueryBuilder
-    {
+    public function assignHeaderRemainFilter(
+        QueryBuilder $qb,
+        string $alias,
+        bool $unapprovedIncluded = false
+    ): QueryBuilder {
         $detailAlias = "{$alias}_detail";
         $detailQb = $this->createDetailQueryBuilder($detailAlias);
         $detailQb = $this->assignDetailRemainFilter($detailQb, $detailAlias);
 
         $expr = $qb->expr();
         $qb = $this->assignAliveDocumentQuery($qb, $alias);
-        $qb = $this->assignApprovedDocumentQuery($qb, $alias);
+        if (!$unapprovedIncluded) {
+            $qb = $this->assignApprovedDocumentQuery($qb, $alias);
+        }
         return $qb
             ->andWhere(
                 $expr->exists(
@@ -96,11 +99,11 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
                         $expr->eq("{$detailAlias}.income", $alias)
                     )
                 )
-            )
-        ;
+            );
     }
 
-    public function searchRemain(array $params, array &$context = null) {
+    public function searchRemain(array $params, array &$context = null)
+    {
         $context = (array)$context;
 
         $alias = '_doc_remain';
@@ -110,7 +113,8 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
         return $this->qh->execute($qb->getQuery(), $params, $context);
     }
 
-    public function getRemain($id, ?array $params = null) {
+    public function getRemain($id, ?array $params = null)
+    {
         $income = $this->findWith($id, $params);
         if (empty($income)) {
             return $income;
@@ -125,7 +129,7 @@ abstract class IncomeQuery extends DocumentQuery implements QueryInterface, Docu
         $detailRemainQb->setParameter('incomeRequest', $income);
 
         $details = new \Erp\Bundle\CoreBundle\Collection\ArrayCollection($detailRemainQb->getQuery()->getResult());
-        if(count($details) == 0) return null;
+        if (count($details) == 0) return null;
         $income->setDetails($details);
 
         return $income;

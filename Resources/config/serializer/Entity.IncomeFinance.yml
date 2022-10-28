@@ -1,0 +1,5 @@
+Erp\Bundle\DocumentBundle\Entity\IncomeFinance:
+  access_type: property
+  properties:
+    paymentDate:
+      type: DateTimeImmutable
