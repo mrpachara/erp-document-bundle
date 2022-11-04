@@ -63,6 +63,8 @@ class DeliveryNoteApiCommandController extends IncomeApiCommand
             throw new \Exception("Invalid data format!!!");
         }
 
+        $data['docTotal'] = $total;
+
         foreach ($data['details'] as $index => $detail) {
             if (isset($detail['id'])) {
                 unset($detail['id']);
