@@ -6,12 +6,3 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseRequestDetail:
   # associationOverride:
   #   purchase:
   #     targetEntity: Erp\Bundle\DocumentBundle\Entity\PurchaseRequest
-  fields:
-    name:
-      type: string
-      length: 255
-      nullable: false
-    unit:
-      type: string
-      length: 255
-      nullable: false

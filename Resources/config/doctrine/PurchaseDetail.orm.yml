@@ -42,6 +42,14 @@ Erp\Bundle\DocumentBundle\Entity\PurchaseDetail:
         onDelete: RESTRICT
       # fetch: EAGER
   fields:
+    name:
+      type: string
+      length: 255
+      nullable: false
+    unit:
+      type: string
+      length: 255
+      nullable: false
     price:
       type: decimal
       precision: 15

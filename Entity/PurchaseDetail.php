@@ -5,246 +5,327 @@ namespace Erp\Bundle\DocumentBundle\Entity;
 use Erp\Bundle\MasterBundle\Entity\CostItem;
 use Erp\Bundle\MasterBundle\Entity\ProjectBoqData;
 
-abstract class PurchaseDetail implements DetailStatusChanged {
-  /**
-  * @var string
-  */
-  private $id;
+abstract class PurchaseDetail implements DetailStatusChanged
+{
+    /**
+     * @var string
+     */
+    private $id;
 
-  /**
-   * purchase
-   * @var Purchase
-   */
-  protected $purchase;
+    /**
+     * purchase
+     * @var Purchase
+     */
+    protected $purchase;
 
-  /**
-   * costItem
-   *
-   * @var CostItem
-   */
-  protected $costItem;
+    /**
+     * costItem
+     *
+     * @var CostItem
+     */
+    protected $costItem;
 
-  /**
-   * price
-   *
-   * @var string
-   */
-  protected $price;
+    /**
+     * name
+     *
+     * @var string
+     */
+    protected $name;
 
-  /**
-   * quantity
-   *
-   * @var string
-   */
-  protected $quantity;
+    /**
+     * unit
+     *
+     * @var string
+     */
+    protected $unit;
 
-  /**
-   * total
-   *
-   * @var string
-   */
-  protected $total;
+    /**
+     * price
+     *
+     * @var string
+     */
+    protected $price;
 
-  /**
-   * boqData
-   *
-   * @var ProjectBoqData
-   */
-  protected $boqData;
+    /**
+     * quantity
+     *
+     * @var string
+     */
+    protected $quantity;
 
-  /**
-   * remark
-   *
-   * @var string
-   */
-  protected $remark;
+    /**
+     * total
+     *
+     * @var string
+     */
+    protected $total;
 
-  /**
-   * status changed
-   *
-   * @var PurchaseDetailStatusChanged
-   */
-  protected $statusChanged;
+    /**
+     * boqData
+     *
+     * @var ProjectBoqData
+     */
+    protected $boqData;
 
-  /**
-   * constructor
-   *
-   * @param Purchase|null $thing
-   */
-  public function __construct(Purchase $purchase = null) {
-    $this->purchase = $purchase;
-  }
+    /**
+     * remark
+     *
+     * @var string
+     */
+    protected $remark;
 
-  /**
-   * Get id
-   *
-   * @return string
-   */
-  public function getId(){
-    return $this->id;
-  }
+    /**
+     * status changed
+     *
+     * @var PurchaseDetailStatusChanged
+     */
+    protected $statusChanged;
 
-  /**
-   * get purchase
-   *
-   * @return Purchase
-   */
-  public function getPurchase() {
-    return $this->purchase;
-  }
+    /**
+     * constructor
+     *
+     * @param Purchase|null $thing
+     */
+    public function __construct(Purchase $purchase = null)
+    {
+        $this->purchase = $purchase;
+    }
 
-  /**
-   * set purchase
-   *
-   * @param Purchase $purchase
-   *
-   * @return static
-   */
-  public function setPurchase(Purchase $purchase) {
-    $this->purchase = $purchase;
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-    return $this;
-  }
+    /**
+     * get purchase
+     *
+     * @return Purchase
+     */
+    public function getPurchase()
+    {
+        return $this->purchase;
+    }
 
-  /**
-   * get costItem
-   *
-   * @return CostItem
-   */
-  public function getCostItem() {
-    return $this->costItem;
-  }
+    /**
+     * set purchase
+     *
+     * @param Purchase $purchase
+     *
+     * @return static
+     */
+    public function setPurchase(Purchase $purchase)
+    {
+        $this->purchase = $purchase;
 
-  /**
-   * set costItem
-   *
-   * @param CostItem $costItem
-   *
-   * @return static
-   */
-  public function setCostItem(?CostItem $costItem) {
-    $this->costItem = $costItem;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get costItem
+     *
+     * @return CostItem
+     */
+    public function getCostItem()
+    {
+        return $this->costItem;
+    }
 
-  /**
-   * get price
-   *
-   * @return string
-   */
-  public function getPrice() {
-    return $this->price;
-  }
+    /**
+     * set costItem
+     *
+     * @param CostItem $costItem
+     *
+     * @return static
+     */
+    public function setCostItem(?CostItem $costItem)
+    {
+        $this->costItem = $costItem;
 
-  /**
-   * set price
-   *
-   * @param string $price
-   *
-   * @return static
-   */
-  public function setPrice(string $price) {
-    $this->price = $price;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-  /**
-   * get quantity
-   *
-   * @return string
-   */
-  public function getQuantity() {
-    return $this->quantity;
-  }
+    /**
+     * set name
+     *
+     * @param string $name
+     *
+     * @return static
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
 
-  /**
-   * set quantity
-   *
-   * @param string $quantity
-   *
-   * @return static
-   */
-  public function setQuantity(string $quantity) {
-    $this->quantity = $quantity;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get unit
+     *
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
 
-  /**
-   * get total
-   *
-   * @return string
-   */
-  public function getTotal() {
-    return $this->total;
-  }
+    /**
+     * set unit
+     *
+     * @param string $unit
+     *
+     * @return static
+     */
+    public function setUnit(string $unit)
+    {
+        $this->unit = $unit;
 
-  /**
-   * set total
-   *
-   * @param string $total
-   *
-   * @return static
-   */
-  public function setTotal(string $total) {
-    $this->total = $total;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get price
+     *
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
 
-  /**
-   * get boqData
-   *
-   * @return ProjectBoqData
-   */
-  public function getBoqData() {
-    return $this->boqData;
-  }
+    /**
+     * set price
+     *
+     * @param string $price
+     *
+     * @return static
+     */
+    public function setPrice(string $price)
+    {
+        $this->price = $price;
 
-  /**
-   * set boqData
-   *
-   * @param ProjectBoqData $boqData
-   *
-   * @return static
-   */
-  public function setBoqData(ProjectBoqData $boqData) {
-    $this->boqData = $boqData;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get quantity
+     *
+     * @return string
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
 
-  /**
-   * get remark
-   *
-   * @return string
-   */
-  public function getRemark() {
-    return $this->remark;
-  }
+    /**
+     * set quantity
+     *
+     * @param string $quantity
+     *
+     * @return static
+     */
+    public function setQuantity(string $quantity)
+    {
+        $this->quantity = $quantity;
 
-  /**
-   * set remark
-   *
-   * @param string $remark
-   *
-   * @return static
-   */
-  public function setRemark(string $remark) {
-    $this->remark = $remark;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get total
+     *
+     * @return string
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
 
-  public function getStatusChanged() {
-    return $this->statusChanged;
-  }
+    /**
+     * set total
+     *
+     * @param string $total
+     *
+     * @return static
+     */
+    public function setTotal(string $total)
+    {
+        $this->total = $total;
 
-  public function setStatusChanged($statusChanged) {
-    $this->statusChanged = $statusChanged;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * get boqData
+     *
+     * @return ProjectBoqData
+     */
+    public function getBoqData()
+    {
+        return $this->boqData;
+    }
+
+    /**
+     * set boqData
+     *
+     * @param ProjectBoqData $boqData
+     *
+     * @return static
+     */
+    public function setBoqData(ProjectBoqData $boqData)
+    {
+        $this->boqData = $boqData;
+
+        return $this;
+    }
+
+    /**
+     * get remark
+     *
+     * @return string
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * set remark
+     *
+     * @param string $remark
+     *
+     * @return static
+     */
+    public function setRemark(string $remark)
+    {
+        $this->remark = $remark;
+
+        return $this;
+    }
+
+    public function getStatusChanged()
+    {
+        return $this->statusChanged;
+    }
+
+    public function setStatusChanged($statusChanged)
+    {
+        $this->statusChanged = $statusChanged;
+
+        return $this;
+    }
 }
