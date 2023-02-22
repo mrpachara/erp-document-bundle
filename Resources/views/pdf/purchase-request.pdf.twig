@@ -93,7 +93,7 @@ table.cl-layout-cell {
               </tr>
           </table>
       </htmlpagefooter>
-      
+
       <h1 class="cl-title">ใบขอซื้อ (PURCHASE REQUEST)</h1>
       <table style="width: 100%;">
         <tr>
@@ -195,9 +195,9 @@ table.cl-layout-cell {
 {% for detail in model.details %}
           <tr>
             <td style="text-align: center;">{{ loop.index }}</td>
-            <td>{{ (detail.costItem.name) ?? detail.name }}</td>
+            <td>{{ detail.name }}</td>
             <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
-            <td style="text-align: center;">{{ detail.costItem.unit ?? detail.unit }}</td>
+            <td style="text-align: center;">{{ detail.unit }}</td>
           </tr>
 {% endfor %}
         </tbody>
@@ -219,7 +219,7 @@ table.cl-layout-cell {
         <tr>
           <td colspan="2"></td>
         </tr>
-        
+
       </table>
       <div style="position: fixed; bottom: 0px;">
         <table class="cl-layout-cell" style="width: 100%;">

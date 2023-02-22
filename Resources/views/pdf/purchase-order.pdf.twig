@@ -194,9 +194,9 @@ table.cl-layout-cell {
 {% for detail in model.details if (detail.statusChanged is empty) or (detail.statusChanged.type != 'REMOVED') %}
           <tr>
             <td style="text-align: center;">{{ loop.index }}</td>
-            <td>{{ detail.costItem.name ?? '' }}</td>
+            <td>{{ detail.name }}</td>
             <td class="cl-number">{{ detail.quantity|number_format(2) }}</td>
-            <td style="text-align: center;">{{ detail.costItem.unit ?? '' }}</td>
+            <td style="text-align: center;">{{ detail.unit }}</td>
             <td class="cl-number">{{ detail.price|number_format(2) }}</td>
             <td class="cl-number">{{ (detail.price * detail.quantity)|number_format(2) }}</td>
           </tr>
